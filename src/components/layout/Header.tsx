@@ -70,15 +70,11 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative pb-2 text-sm font-medium transition ${
-                  isActive
-                    ? 'text-[var(--primary)]'
-                    : 'text-[var(--foreground)] hover:text-[var(--primary)]'
-                }`}
+                className={`nav-link relative pb-2 text-base font-medium ${isActive ? 'active' : ''}`}
               >
                 {item.label}
                 <span
-                  className={`absolute bottom-0 left-0 h-[2px] rounded-full bg-[var(--primary)] transition-all duration-300 ${
+                  className={`absolute bottom-0 left-0 h-[2px] rounded-full bg-[#2f56c9] transition-all duration-300 ${
                     isActive ? 'w-full' : 'w-0'
                   }`}
                 />
@@ -87,16 +83,12 @@ export default function Header() {
           })}
         </nav>
 
-        {/* Botón WhatsApp desktop */}
+        {/* Botón Solicitar Cotización desktop */}
         <a
-          href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
-            siteConfig.whatsappMessage
-          )}`}
-          target="_blank"
-          rel="noreferrer"
-          className="hidden rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 md:inline-flex"
+          href="/contacto"
+          className="hidden rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 hover:scale-105 active:scale-95 md:inline-flex"
         >
-          WhatsApp
+          Solicitar cotización
         </a>
 
         {/* Botón hamburguesa mobile — aria-label fijo para evitar hydration mismatch */}

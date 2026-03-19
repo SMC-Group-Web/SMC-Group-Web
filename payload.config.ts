@@ -2,6 +2,8 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 import { Media } from './src/collections/Media'
 import { Projects } from './src/collections/Projects'
@@ -10,6 +12,9 @@ import { Users } from './src/collections/Users'
 import { AboutPage } from './src/globals/AboutPage'
 import { ContactPage } from './src/globals/ContactPage'
 import { HomePage } from './src/globals/HomePage'
+
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
 export default buildConfig({
   editor: lexicalEditor(),
@@ -24,5 +29,11 @@ export default buildConfig({
   sharp,
   admin: {
     user: 'users',
+    components: {
+      graphics: {
+        Logo: '/src/components/payload/logo#Logo',
+        Icon: '/src/components/payload/logo#Icon',
+      },
+    },
   },
 })

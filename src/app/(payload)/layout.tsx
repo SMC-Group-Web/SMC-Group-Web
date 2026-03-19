@@ -1,5 +1,6 @@
 import type { ServerFunctionClient } from 'payload'
 import '@payloadcms/next/css'
+import './custom.css'  // ✅ Agrega esta línea
 import React from 'react'
 
 type Args = {

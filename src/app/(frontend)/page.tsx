@@ -92,7 +92,13 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <HomeHeroCarousel slides={homePage.heroSlides || []} />
+      <HomeHeroCarousel
+  slides={(homePage.heroSlides || []).map((slide) => ({
+    ...slide,
+    image: typeof slide.image === 'object' ? slide.image : null,
+  }))}
+  stats={homePage.stats || []}
+/>
 
       <section className="mx-auto w-full max-w-7xl px-6 pb-20 pt-20 md:px-10">
         <div className="mb-8 flex items-end justify-between gap-4">

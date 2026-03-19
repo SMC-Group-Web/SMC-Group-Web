@@ -86,5 +86,26 @@ export const HomePage: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'stats',
+      type: 'array',
+      label: 'Estadísticas',
+      minRows: 1,
+      maxRows: 6,
+      fields: [
+        {
+          name: 'value',
+          type: 'text',
+          label: 'Valor (ej: 10+, 100%)',
+          required: true,
+        },
+        {
+          name: 'label',
+          type: 'text',
+          label: 'Descripción (ej: Años de experiencia)',
+          required: true,
+        },
+      ],
+    },
   ],
 }

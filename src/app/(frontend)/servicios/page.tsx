@@ -24,8 +24,7 @@ export default async function ServiciosPage() {
   })
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <section className="mx-auto w-full max-w-7xl px-6 py-16 md:px-10">
+<main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-[var(--header-height)]">      <section className="mx-auto w-full max-w-7xl px-6 py-16 md:px-10">
         <div className="space-y-4">
           <span className="inline-flex rounded-full border border-[var(--border)] px-4 py-1 text-sm text-[var(--muted)]">
             Servicios

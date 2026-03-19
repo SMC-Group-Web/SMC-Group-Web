@@ -483,6 +483,13 @@ export interface HomePage {
         id?: string | null;
       }[]
     | null;
+  stats?:
+    | {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -550,6 +557,13 @@ export interface HomePageSelect<T extends boolean = true> {
         secondButtonText?: T;
         secondButtonLink?: T;
         isActive?: T;
+        id?: T;
+      };
+  stats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
         id?: T;
       };
   updatedAt?: T;
