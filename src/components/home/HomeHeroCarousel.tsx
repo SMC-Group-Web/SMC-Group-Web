@@ -4,9 +4,13 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 
 type Slide = {
+  mediaType?: 'image' | 'video' | null
   image?: {
     url?: string | null
     alt?: string | null
+  } | null
+  video?: {
+    url?: string | null
   } | null
   eyebrow?: string | null
   title?: string | null
@@ -138,7 +142,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
 
   const titleWords = currentSlide.title?.split(' ') ?? []
   const titleTop = titleWords.slice(0, -1).join(' ')
-  const titleBottom = titleWords.slice(-1).join(' ')
+  const titleBottom = titleWords.slice(-1)[0] ?? ''
 
   return (
     <>
@@ -163,27 +167,39 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        {currentSlide.image?.url ? (
-          <>
-            <Image
-              key={currentSlide.image.url}
-              src={currentSlide.image.url}
-              alt={currentSlide.image.alt || currentSlide.title || 'Slide'}
-              fill
-              className="object-cover animate-fade-in"
-              priority={current === 0}
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/75" />
-          </>
-        ) : (
-          <div className="absolute inset-0 bg-[var(--charcoal)]" />
-        )}
+        {currentSlide.mediaType === 'video' && currentSlide.video?.url ? (
+  <>
+    <video
+      key={currentSlide.video.url}
+      autoPlay
+      muted
+      loop
+      playsInline
+      className="absolute inset-0 h-full w-full object-cover"
+      src={currentSlide.video.url}
+    />
+    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/75" />
+  </>
+) : currentSlide.image?.url ? (
+  <>
+    <Image
+      key={currentSlide.image.url}
+      src={currentSlide.image.url}
+      alt={currentSlide.image.alt || currentSlide.title || 'Slide'}
+      fill
+      className="object-cover animate-fade-in"
+      priority={current === 0}
+      sizes="100vw"
+    />
+    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/75" />
+  </>
+) : (
+  <div className="absolute inset-0 bg-[var(--charcoal)]" />
+)}
 
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-6 pb-0 pt-0 md:px-10">
-
+<div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-8 pb-0 pt-0 md:px-16 lg:px-20">
           {/* Contenido hero */}
-          <div className="flex flex-1 items-center">
+          <div className="flex flex-1 items-center pb-8">
             <div key={animKey} className="w-full max-w-3xl space-y-4 text-white md:space-y-6">
 
               {currentSlide.eyebrow && (
@@ -193,18 +209,18 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
                 </span>
               )}
 
-              <h1 className="hero-in hero-d2 hero-text-shadow text-3xl font-extrabold leading-tight sm:text-4xl md:text-6xl lg:text-7xl">
+              <h1 className="hero-in hero-d2 hero-text-shadow text-3xl font-extrabold uppercase tracking-tight leading-tight sm:text-4xl md:text-6xl lg:text-7xl" style={{ fontFamily: 'var(--font-heading)' }}>
                 <span className="text-white">{titleTop}</span>
                 {titleBottom && (
                   <>
                     {' '}
-                    <span className="text-white/40">{titleBottom}</span>
+                    <span className="text-[var(--primary)]">{titleBottom}</span>  {/* ← azul SMC, visible */}
                   </>
                 )}
               </h1>
 
               {currentSlide.description && (
-                <p className="hero-in hero-d3 hero-text-shadow max-w-xl text-sm leading-6 text-white/75 md:text-base md:leading-7">
+                <p className="hero-in hero-d3 hero-text-shadow max-w-xl text-base leading-7 text-white/90 md:text-lg md:leading-8">
                   {currentSlide.description}
                 </p>
               )}

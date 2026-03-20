@@ -10,28 +10,34 @@ export default function Header() {
   const headerRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  const isHome = pathname === '/'
+  const isTransparent = isHome && !scrolled
 
   useEffect(() => {
     const el = headerRef.current
     if (!el) return
-
     const observer = new ResizeObserver(([entry]) => {
       document.documentElement.style.setProperty(
         '--header-height',
         `${entry.contentRect.height}px`
       )
     })
-
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
 
-  // Cerrar menú al cambiar de ruta
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   useEffect(() => {
     setMenuOpen(false)
   }, [pathname])
 
-  // Bloquear scroll cuando el menú está abierto
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
     return () => {
@@ -41,19 +47,23 @@ export default function Header() {
 
   return (
     <header
-  ref={headerRef}
-  className="fixed top-0 z-50 w-full border-b border-[var(--border)] bg-white/95 backdrop-blur"
->
+      ref={headerRef}
+      className={`fixed top-0 z-50 w-full transition-all duration-500 ${
+        isTransparent
+          ? 'border-b border-white/10 bg-transparent backdrop-blur-sm'
+          : 'border-b border-[var(--border)] bg-white/95 backdrop-blur shadow-sm'
+      }`}
+    >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 md:px-10">
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <Image
-            src="/logo-smc.png"
+            src={isTransparent ? '/logo-smc.png' : '/logo-smc.png'}
             alt="SMC GROUP"
             width={170}
             height={52}
-            className="h-10 w-auto object-contain"
+            className="h-10 w-auto object-contain transition-opacity duration-300"
             priority
           />
         </Link>
@@ -70,13 +80,22 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`nav-link relative pb-2 text-base font-medium ${isActive ? 'active' : ''}`}
+                className="relative pb-2 text-base font-medium transition-colors duration-300"
+                style={{
+                  color: isTransparent
+                    ? 'white'
+                    : isActive
+                      ? 'var(--primary)'
+                      : 'var(--foreground)',
+                }}
               >
                 {item.label}
                 <span
-                  className={`absolute bottom-0 left-0 h-[2px] rounded-full bg-[#2f56c9] transition-all duration-300 ${
-                    isActive ? 'w-full' : 'w-0'
-                  }`}
+                  className="absolute bottom-0 left-0 h-[2px] rounded-full transition-all duration-300"
+                  style={{
+                    width: isActive ? '100%' : '0%',
+                    background: isTransparent ? 'white' : 'var(--primary)',
+                  }}
                 />
               </Link>
             )
@@ -86,32 +105,41 @@ export default function Header() {
         {/* Botón Solicitar Cotización desktop */}
         <a
           href="/contacto"
-          className="hidden rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 hover:scale-105 active:scale-95 md:inline-flex"
+          className="hidden rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition hover:scale-105 active:scale-95 md:inline-flex"
+          style={{
+            background: isTransparent ? 'rgba(255,255,255,0.15)' : 'var(--primary)',
+            border: isTransparent ? '1px solid rgba(255,255,255,0.3)' : 'none',
+          }}
         >
           Solicitar cotización
         </a>
 
-        {/* Botón hamburguesa mobile — aria-label fijo para evitar hydration mismatch */}
+        {/* Botón hamburguesa mobile */}
         <button
           type="button"
           onClick={() => setMenuOpen((prev) => !prev)}
           aria-label="Menú"
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-lg transition hover:bg-gray-100 md:hidden"
+          className={`flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-lg transition md:hidden ${
+            isTransparent ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+          }`}
         >
           <span
-            className={`block h-0.5 w-6 rounded-full bg-[var(--foreground)] transition-all duration-300 ${
+            className={`block h-0.5 w-6 rounded-full transition-all duration-300 ${
               menuOpen ? 'translate-y-2 rotate-45' : ''
             }`}
+            style={{ background: isTransparent ? 'white' : 'var(--foreground)' }}
           />
           <span
-            className={`block h-0.5 w-6 rounded-full bg-[var(--foreground)] transition-all duration-300 ${
+            className={`block h-0.5 w-6 rounded-full transition-all duration-300 ${
               menuOpen ? 'opacity-0' : ''
             }`}
+            style={{ background: isTransparent ? 'white' : 'var(--foreground)' }}
           />
           <span
-            className={`block h-0.5 w-6 rounded-full bg-[var(--foreground)] transition-all duration-300 ${
+            className={`block h-0.5 w-6 rounded-full transition-all duration-300 ${
               menuOpen ? '-translate-y-2 -rotate-45' : ''
             }`}
+            style={{ background: isTransparent ? 'white' : 'var(--foreground)' }}
           />
         </button>
       </div>
@@ -144,7 +172,6 @@ export default function Header() {
             )
           })}
 
-          {/* WhatsApp en mobile */}
           <a
             href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
               siteConfig.whatsappMessage

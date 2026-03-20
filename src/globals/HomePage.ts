@@ -30,11 +30,34 @@ export const HomePage: GlobalConfig = {
       minRows: 1,
       fields: [
         {
+          name: 'mediaType',
+          type: 'radio',
+          label: 'Tipo de media',
+          defaultValue: 'image',
+          options: [
+            { label: 'Imagen', value: 'image' },
+            { label: 'Video', value: 'video' },
+          ],
+        },
+        {
           name: 'image',
           type: 'upload',
           relationTo: 'media',
           label: 'Imagen',
-          required: true,
+          required: false,
+          admin: {
+            condition: (_, siblingData) => siblingData?.mediaType !== 'video',
+          },
+        },
+        {
+          name: 'video',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Video (.mp4)',
+          required: false,
+          admin: {
+            condition: (_, siblingData) => siblingData?.mediaType === 'video',
+          },
         },
         {
           name: 'eyebrow',

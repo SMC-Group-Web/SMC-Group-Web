@@ -471,7 +471,9 @@ export interface HomePage {
   heroSubtitle: string;
   heroSlides?:
     | {
-        image: number | Media;
+        mediaType?: ('image' | 'video') | null;
+        image?: (number | null) | Media;
+        video?: (number | null) | Media;
         eyebrow?: string | null;
         title: string;
         description?: string | null;
@@ -548,7 +550,9 @@ export interface HomePageSelect<T extends boolean = true> {
   heroSlides?:
     | T
     | {
+        mediaType?: T;
         image?: T;
+        video?: T;
         eyebrow?: T;
         title?: T;
         description?: T;
