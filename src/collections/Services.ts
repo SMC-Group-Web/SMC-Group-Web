@@ -23,6 +23,16 @@ export const Services: CollectionConfig = {
       required: true,
       unique: true,
     },
+    // 🆕 Eyebrow de la card (ej: INGENIERÍA, MONTAJE)
+    {
+      name: 'category',
+      type: 'text',
+      label: 'Categoría',
+      required: false,
+      admin: {
+        description: 'Texto superior de la card. Ej: INGENIERÍA, CONSTRUCCIÓN, MONTAJE',
+      },
+    },
     {
       name: 'summary',
       type: 'textarea',
@@ -34,6 +44,35 @@ export const Services: CollectionConfig = {
       type: 'textarea',
       label: 'Descripción',
       required: true,
+    },
+    // 🆕 Bullets del servicio
+    {
+      name: 'features',
+      type: 'array',
+      label: 'Características',
+      maxRows: 6,
+      admin: {
+        description: 'Lista de características que aparecen en la card',
+      },
+      fields: [
+        {
+          name: 'text',
+          type: 'text',
+          label: 'Característica',
+          required: true,
+        },
+      ],
+    },
+    // 🆕 Link del botón CTA
+    {
+      name: 'ctaLink',
+      type: 'text',
+      label: 'Link del botón',
+      required: false,
+      defaultValue: '/contacto',
+      admin: {
+        description: 'Ej: /contacto o /servicios/ingenieria',
+      },
     },
     {
       name: 'image',

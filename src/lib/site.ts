@@ -8,8 +8,8 @@ export const siteConfig = {
     'Hola, deseo información sobre los servicios de SMC GROUP.',
   nav: [
     { label: 'Inicio', href: '/' },
-    { label: 'Servicios', href: '/servicios' },
-    { label: 'Proyectos', href: '/proyectos' },
+    { label: 'Servicios', href: '/#servicios', external: '/servicios' },
+    { label: 'Proyectos', href: '/#proyectos', external: '/proyectos' },
     { label: 'Quiénes somos', href: '/quienes-somos' },
     { label: 'Contacto', href: '/contacto' },
   ],

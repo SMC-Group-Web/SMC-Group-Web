@@ -10,7 +10,7 @@
   --theme-elevation-800: #374151;
   --theme-elevation-1000: #1f2937;
   --theme-success-500: #2f56c9;
-  --theme-success-600: #1f3f9a;
+  --theme-success-600: var(--primary-dark);
   --theme-text: #1f2937;
 }
 
@@ -28,8 +28,8 @@
 }
 
 [data-theme] .btn--style-primary:hover {
-  background-color: #1f3f9a;
-  border-color: #1f3f9a;
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
 }
 
 /* ===== LOGO EN LOGIN ===== */

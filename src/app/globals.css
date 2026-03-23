@@ -2,7 +2,7 @@
 
 :root {
   --primary: #2f56c9;
-  --primary-dark: #1f3f9a;
+  --primary-dark: var(--primary-dark);
   --charcoal: #2b2f33;
   --dark-gray: #4a4f55;
   --light-gray: #d9dee5;
@@ -79,4 +79,11 @@ select {
 }
 .nav-link.active {
   color: #2f56c9;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

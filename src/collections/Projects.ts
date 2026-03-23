@@ -54,6 +54,15 @@ export const Projects: CollectionConfig = {
           label: 'Imagen',
           required: true,
         },
+        {
+          name: 'caption',
+          type: 'text',
+          label: 'Descripción de la foto',
+          required: false,
+          admin: {
+            description: 'Ej: Instalación de estructura metálica - Planta Lima Norte',
+          },
+        },
       ],
     },
     {

@@ -12,13 +12,14 @@ import { Users } from './src/collections/Users'
 import { AboutPage } from './src/globals/AboutPage'
 import { ContactPage } from './src/globals/ContactPage'
 import { HomePage } from './src/globals/HomePage'
+import { Clients } from './src/collections/Clients'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   editor: lexicalEditor(),
-  collections: [Users, Media, Services, Projects],
+  collections: [Users, Media, Services, Projects, Clients],
   globals: [HomePage, AboutPage, ContactPage],
   secret: process.env.PAYLOAD_SECRET || '',
   db: postgresAdapter({

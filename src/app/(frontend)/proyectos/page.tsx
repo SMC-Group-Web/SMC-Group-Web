@@ -1,5 +1,6 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
+import ProjectGallery from '@/components/proyectos/ProjectGallery'
 
 type MediaType = {
   id: string | number
@@ -8,39 +9,41 @@ type MediaType = {
   filename?: string | null
 }
 
+type GalleryItem = {
+  image?: MediaType | number | null
+  caption?: string | null
+  id?: string | null
+}
+
 export default async function ProyectosPage() {
   const payload = await getPayload({ config })
 
   const projects = await payload.find({
     collection: 'projects',
-    where: {
-      isActive: {
-        equals: true,
-      },
-    },
-    sort: 'order',
+    where: { isActive: { equals: true } },
+    sort: '-isFeatured,order',
     limit: 100,
-    depth: 1,
+    depth: 2,
   })
 
   return (
-<main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] pt-[var(--header-height)]">      <section className="mx-auto w-full max-w-7xl px-6 py-16 md:px-10">
-        <div className="space-y-4">
-          <span className="inline-flex rounded-full border border-[var(--border)] px-4 py-1 text-sm text-[var(--muted)]">
-            Proyectos
-          </span>
-          <h1 className="text-4xl font-bold md:text-5xl">Proyectos ejecutados</h1>
-          <p className="max-w-3xl text-[var(--muted)]">
-            Conoce los proyectos desarrollados por SMC GROUP en el ámbito de
-            ingeniería y construcción.
-          </p>
-        </div>
+    <main className="min-h-screen bg-white text-[#0f172a] pt-[var(--header-height)]">
+
+      <section className="mx-auto w-full max-w-7xl px-6 py-16 md:px-10">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-[var(--primary)]">
+          Proyectos
+        </p>
+        <h1 className="text-4xl font-bold md:text-5xl">Proyectos ejecutados</h1>
+        <p className="mt-4 max-w-3xl text-slate-500">
+          Conoce los proyectos desarrollados por SMC GROUP en el ámbito de
+          ingeniería y construcción.
+        </p>
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-6 pb-24 md:px-10">
         {projects.docs.length === 0 ? (
-          <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8">
-            <p className="text-[var(--muted)]">
+          <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+            <p className="text-slate-500">
               Aún no hay proyectos activos registrados en el panel.
             </p>
           </div>
@@ -52,49 +55,57 @@ export default async function ProyectosPage() {
                   ? (project.coverImage as MediaType)
                   : null
 
+              const galleryItems = ((project.gallery || []) as GalleryItem[])
+                .filter((item) => item.image && typeof item.image === 'object')
+                .map((item) => ({
+                  image: item.image as MediaType,
+                  caption: item.caption ?? null,
+                }))
+
+              // Cover + galería sin duplicados
+              const allItems = [
+                ...(cover ? [{ image: cover, caption: null }] : []),
+                ...galleryItems.filter((g) => g.image.url !== cover?.url),
+              ]
+
+              const allImages = allItems.map((i) => i.image)
+              const allCaptions = allItems.map((i) => i.caption)
+
               return (
                 <article
                   key={project.id}
-                  className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-xl"
+                  className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)] hover:shadow-[0_20px_40px_rgba(37,99,235,0.12)]"
                 >
-                  {cover?.url ? (
-                    <div className="h-64 w-full overflow-hidden border-b border-[var(--border)] bg-black/5">
-                      <img
-                        src={cover.url}
-                        alt={cover.alt || project.title}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex h-64 w-full items-center justify-center border-b border-[var(--border)] bg-black/5 text-sm text-[var(--muted)]">
-                      Sin imagen
-                    </div>
-                  )}
+                  <ProjectGallery
+                    images={allImages}
+                    captions={allCaptions}
+                    title={project.title}
+                    isFeatured={project.isFeatured}
+                  />
 
-                  <div className="space-y-4 p-6">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--muted)]">
-                        Proyecto
-                      </span>
+                  <div className="p-6">
+                    <h2 className="mb-2 text-xl font-bold text-[#0f172a]">
+                      {project.title}
+                    </h2>
+                    <p className="mb-2 text-sm leading-6 text-slate-500">
+                      {project.summary}
+                    </p>
 
-                      {project.isFeatured && (
-                        <span className="rounded-full bg-[var(--primary)] px-3 py-1 text-xs font-medium text-white">
-                          Destacado
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="space-y-3">
-                      <h2 className="text-xl font-semibold">{project.title}</h2>
-                      <p className="text-sm leading-6 text-[var(--muted)]">
-                        {project.summary}
+                    {project.description && (
+                      <p className="mb-4 text-sm leading-6 text-slate-400 border-l-2 border-[var(--primary)] pl-3 mt-2">
+                        {project.description}
                       </p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-3 pt-2 text-sm text-[var(--muted)]">
-                      {project.client && <span>Cliente: {project.client}</span>}
-                      {project.location && <span>Ubicación: {project.location}</span>}
-                      {project.year && <span>Año: {project.year}</span>}
+                    )}
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-100 pt-4 text-xs text-slate-400">
+                      {project.client && (
+                        <span>Cliente: <span className="font-semibold text-slate-600">{project.client}</span></span>
+                      )}
+                      {project.location && (
+                        <span>Ubicación: <span className="font-semibold text-slate-600">{project.location}</span></span>
+                      )}
+                      {project.year && (
+                        <span>Año: <span className="font-semibold text-slate-600">{project.year}</span></span>
+                      )}
                     </div>
                   </div>
                 </article>

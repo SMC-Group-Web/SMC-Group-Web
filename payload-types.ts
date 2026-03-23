@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     services: Service;
     projects: Project;
+    clients: Client;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -199,8 +201,25 @@ export interface Service {
   id: number;
   title: string;
   slug: string;
+  /**
+   * Texto superior de la card. Ej: INGENIERÍA, CONSTRUCCIÓN, MONTAJE
+   */
+  category?: string | null;
   summary: string;
   description: string;
+  /**
+   * Lista de características que aparecen en la card
+   */
+  features?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Ej: /contacto o /servicios/ingenieria
+   */
+  ctaLink?: string | null;
   image?: (number | null) | Media;
   order: number;
   isFeatured?: boolean | null;
@@ -222,6 +241,10 @@ export interface Project {
   gallery?:
     | {
         image: number | Media;
+        /**
+         * Ej: Instalación de estructura metálica - Planta Lima Norte
+         */
+        caption?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -230,6 +253,23 @@ export interface Project {
   year?: number | null;
   order: number;
   isFeatured?: boolean | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  name: string;
+  logo: number | Media;
+  /**
+   * Ej: https://www.cliente.com
+   */
+  website?: string | null;
+  order: number;
   isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -273,6 +313,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -387,8 +431,16 @@ export interface MediaSelect<T extends boolean = true> {
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  category?: T;
   summary?: T;
   description?: T;
+  features?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  ctaLink?: T;
   image?: T;
   order?: T;
   isFeatured?: T;
@@ -410,6 +462,7 @@ export interface ProjectsSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
+        caption?: T;
         id?: T;
       };
   client?: T;
@@ -417,6 +470,19 @@ export interface ProjectsSelect<T extends boolean = true> {
   year?: T;
   order?: T;
   isFeatured?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  website?: T;
+  order?: T;
   isActive?: T;
   updatedAt?: T;
   createdAt?: T;
