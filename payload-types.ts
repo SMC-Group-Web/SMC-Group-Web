@@ -238,6 +238,10 @@ export interface Project {
   summary: string;
   description: string;
   coverImage?: (number | null) | Media;
+  /**
+   * Ej: Vista frontal del proyecto terminado
+   */
+  coverCaption?: string | null;
   gallery?:
     | {
         image: number | Media;
@@ -458,6 +462,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   summary?: T;
   description?: T;
   coverImage?: T;
+  coverCaption?: T;
   gallery?:
     | T
     | {

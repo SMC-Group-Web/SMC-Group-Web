@@ -43,6 +43,15 @@ export const Projects: CollectionConfig = {
       required: false,
     },
     {
+      name: 'coverCaption',
+      type: 'text',
+      label: 'Descripción de la imagen de portada',
+      required: false,
+      admin: {
+        description: 'Ej: Vista frontal del proyecto terminado',
+      },
+    },
+    {
       name: 'gallery',
       type: 'array',
       label: 'Galería',

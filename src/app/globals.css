@@ -2,7 +2,7 @@
 
 :root {
   --primary: #2f56c9;
-  --primary-dark: var(--primary-dark);
+  --primary-dark: #1f3f9a; /* ← corregido */
   --charcoal: #2b2f33;
   --dark-gray: #4a4f55;
   --light-gray: #d9dee5;
@@ -66,23 +66,29 @@ select {
 .animate-fade-in {
   animation: fade-in 0.7s ease-in-out;
 }
+
 .hero-text-shadow {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
+
 .nav-link {
-  color: #1f2937;
+  color: var(--foreground);
   transition: color 0.2s;
   font-weight: 600;
 }
+
 .nav-link:hover {
-  color: #2f56c9;
+  color: var(--primary);
 }
+
 .nav-link.active {
-  color: #2f56c9;
+  color: var(--primary);
 }
+
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
