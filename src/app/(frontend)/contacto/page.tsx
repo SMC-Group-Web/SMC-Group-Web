@@ -499,7 +499,7 @@ export default async function ContactoPage() {
                 <label className="flex cursor-pointer items-center gap-3">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 accent-[var(--primary)]"
+                    className="h-4 w-4 rounded border-gray-300 accent-(--primary)"
                   />
                   <span className="text-sm text-slate-500">
                     Este proyecto es de carácter{" "}

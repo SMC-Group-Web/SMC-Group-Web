@@ -123,7 +123,7 @@ export default function Header() {
         className={`fixed top-0 z-50 w-full transition-all duration-500 ${
           isTransparent
             ? "border-b border-white/10 bg-transparent backdrop-blur-sm"
-            : "border-b border-[var(--border)] bg-white/95 shadow-sm backdrop-blur"
+            : "border-b border-(--border) bg-white/95 shadow-sm backdrop-blur"
         }`}
       >
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 md:px-10">
@@ -189,7 +189,7 @@ export default function Header() {
             className={`relative z-70 flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-2xl border backdrop-blur transition md:hidden ${
               isTransparent
                 ? "border-white/20 bg-white/10 hover:bg-white/15"
-                : "border-[var(--border)] bg-white/80 hover:bg-white"
+                : "border-(--border) bg-white/80 hover:bg-white"
             }`}
           >
             <span

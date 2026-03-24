@@ -138,7 +138,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
 
   if (activeSlides.length === 0) {
     return (
-      <div className="flex h-[calc(100vh-var(--header-height))] items-center justify-center bg-[var(--charcoal)] text-white">
+      <div className="flex h-[calc(100vh-var(--header-height))] items-center justify-center bg-(--charcoal) text-white">
         No hay slides activos cargados en el panel.
       </div>
     );
@@ -169,7 +169,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
       `}</style>
 
       <section
-        className="relative h-screen min-h-[640px] w-full overflow-hidden bg-[var(--charcoal)]"
+        className="relative h-screen min-h-[640px] w-full overflow-hidden bg-(--charcoal)"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -200,7 +200,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
             <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/50 to-black/75" />
           </>
         ) : (
-          <div className="absolute inset-0 bg-[var(--charcoal)]" />
+          <div className="absolute inset-0 bg-(--charcoal)" />
         )}
 
         <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-8 pb-0 pt-0 md:px-16 lg:px-20">
@@ -241,7 +241,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
                 {currentSlide.buttonText && currentSlide.buttonLink && (
                   <a
                     href={currentSlide.buttonLink}
-                    className="inline-flex items-center rounded-xl bg-(--primary) px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[var(--primary-dark)] hover:scale-105 active:scale-95 md:px-7 md:py-3.5"
+                    className="inline-flex items-center rounded-xl bg-(--primary) px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-(--primary-dark) hover:scale-105 active:scale-95 md:px-7 md:py-3.5"
                   >
                     {currentSlide.buttonText}
                   </a>

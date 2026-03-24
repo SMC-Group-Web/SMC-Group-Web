@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(cat /Users/tonydzpineda/SMC-Group-Web/src/app/\\\\\\(payload\\\\\\)/admin/importMap.js)",
+      "Bash(git mv:*)"
+    ]
+  }
+}
