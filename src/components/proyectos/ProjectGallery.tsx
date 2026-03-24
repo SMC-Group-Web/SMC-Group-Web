@@ -75,7 +75,7 @@ export default function ProjectGallery({
 
   const lightbox = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/95 backdrop-blur-sm"
       onClick={closeLightbox}
     >
       <div

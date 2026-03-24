@@ -169,7 +169,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
       `}</style>
 
       <section
-        className="relative h-screen min-h-[640px] w-full overflow-hidden bg-(--charcoal)"
+        className="relative h-screen min-h-160 w-full overflow-hidden bg-(--charcoal)"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >

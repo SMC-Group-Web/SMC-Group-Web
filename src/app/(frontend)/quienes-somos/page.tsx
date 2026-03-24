@@ -169,7 +169,7 @@ export default async function QuienesSomosPage() {
                 />
               ) : (
                 <div
-                  className="relative flex min-h-[420px] items-center justify-center overflow-hidden"
+                  className="relative flex min-h-105 items-center justify-center overflow-hidden"
                   style={{
                     background:
                       "linear-gradient(135deg, #0a1628 0%, #0f2233 100%)",
