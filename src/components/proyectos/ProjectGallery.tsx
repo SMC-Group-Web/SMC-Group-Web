@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 
 type MediaType = {
   id?: string | number;
@@ -90,6 +91,7 @@ export default function ProjectGallery({
         {/* Cerrar */}
         <button
           onClick={closeLightbox}
+          aria-label="Cerrar galería"
           className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition hover:bg-white/25"
         >
           <svg
@@ -107,18 +109,25 @@ export default function ProjectGallery({
           </svg>
         </button>
 
-        {/* Imagen actual */}
-        <img
-          src={images[currentIndex].url!}
-          alt={currentCaption || title}
-          className="max-h-[70vh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
-        />
+        {/* ✅ Imagen lightbox — next/image con fill */}
+        <div className="relative max-h-[70vh] w-full flex items-center justify-center">
+          <div className="relative w-full h-[70vh]">
+            <Image
+              src={images[currentIndex].url!}
+              alt={currentCaption || title}
+              fill
+              sizes="100vw"
+              className="object-contain rounded-xl shadow-2xl"
+              priority
+            />
+          </div>
+        </div>
 
         {/* Caption */}
         {currentCaption && (
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-white/10 px-5 py-2.5 backdrop-blur-sm">
             <svg
-              className="h-4 w-4 shrink-0 text-(--primary)"
+              className="h-4 w-4 shrink-0 text-white"
               fill="none"
               stroke="currentColor"
               strokeWidth={2}
@@ -139,6 +148,7 @@ export default function ProjectGallery({
           <>
             <button
               onClick={prev}
+              aria-label="Foto anterior"
               className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition hover:bg-white/25"
             >
               <svg
@@ -157,6 +167,7 @@ export default function ProjectGallery({
             </button>
             <button
               onClick={next}
+              aria-label="Siguiente foto"
               className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition hover:bg-white/25"
             >
               <svg
@@ -176,25 +187,25 @@ export default function ProjectGallery({
           </>
         )}
 
-        {/* Miniaturas abajo */}
+        {/* ✅ Miniaturas lightbox — next/image con fill */}
         {images.length > 1 && (
-          // DESPUÉS
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 px-4 max-w-[90vw] overflow-x-auto scrollbar-none">
-            {" "}
             {images.map((img, idx) => (
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
                   idx === currentIndex
-                    ? "border-(--primary) opacity-100 scale-110"
+                    ? "border-white opacity-100 scale-110"
                     : "border-white/20 opacity-50 hover:opacity-80"
                 }`}
               >
-                <img
+                <Image
                   src={img.url!}
                   alt={captions[idx] || img.alt || `Foto ${idx + 1}`}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="56px"
+                  className="object-cover"
                 />
               </button>
             ))}
@@ -211,28 +222,32 @@ export default function ProjectGallery({
         className="relative h-56 w-full cursor-pointer overflow-hidden bg-gray-100"
         onClick={() => openLightbox(0)}
       >
-        <img
+        <Image
           src={images[0].url!}
           alt={captions[0] || images[0].alt || title}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
-        {/* Miniaturas esquina */}
+        {/* ✅ Miniaturas esquina — next/image con fill */}
         {images.length > 1 && (
           <div className="absolute bottom-2 right-2 flex gap-1.5">
             {images.slice(1, 4).map((img, idx) => (
               <div
                 key={idx}
-                className="h-12 w-12 overflow-hidden rounded-lg border-2 border-white shadow-md"
+                className="relative h-12 w-12 overflow-hidden rounded-lg border-2 border-white shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   openLightbox(idx + 1);
                 }}
               >
-                <img
+                <Image
                   src={img.url!}
                   alt={captions[idx + 1] || img.alt || `Foto ${idx + 2}`}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="48px"
+                  className="object-cover"
                 />
               </div>
             ))}
@@ -253,7 +268,7 @@ export default function ProjectGallery({
         {/* Badges */}
         <div className="absolute left-3 top-3 flex gap-2">
           {isFeatured && (
-            <span className="rounded-full bg-(--primary) px-3 py-1 text-xs font-bold text-white shadow">
+            <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white shadow">
               Destacado
             </span>
           )}

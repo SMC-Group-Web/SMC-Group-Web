@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
 import config from "@payload-config";
 import { getPayload } from "payload";
+import { siteConfig } from "@/lib/site";
+
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "Contacto — Solicita un Presupuesto",
+  description: `Contacta a SMC GROUP para solicitar cotización de proyectos de ingeniería y construcción en Lima, Perú. Teléfono: ${siteConfig.phone}.`,
+  openGraph: {
+    title: "Contacto y Cotizaciones | SMC GROUP",
+    description: "Solicita cotización para tu proyecto de ingeniería o construcción. Respuesta en menos de 24 horas.",
+    images: [{ url: "/fondo.png", width: 1200, height: 630, alt: "Contacto SMC GROUP" }],
+  },
+};
 
 export default async function ContactoPage() {
   const payload = await getPayload({ config });
@@ -15,10 +29,8 @@ export default async function ContactoPage() {
       )}`
     : null;
 
-  const mapsLink =
-    "https://www.google.com/maps/place/Gaviotas+132,+Lima+15047/@-12.1040084,-77.0241048,17z";
-  const mapsEmbed =
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.8!2d-77.0241048!3d-12.1040084!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c87279c1f0d3%3A0xb8849b5b5633b9ac!2sGaviotas%20132%2C%20Lima%2015047!5e0!3m2!1ses!2spe!4v1234567890";
+  const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteConfig.address.full)}`;
+  const mapsEmbed = `https://maps.google.com/maps?q=${siteConfig.coordinates.lat},${siteConfig.coordinates.lng}&z=17&output=embed`;
 
   return (
     <main className="min-h-screen bg-[#f7f9fc] text-[#0f172a]">
@@ -102,7 +114,6 @@ export default async function ContactoPage() {
             backgroundImage: "url('/fondo.png')",
             backgroundSize: "cover",
             backgroundPosition: "center",
-            backgroundAttachment: "fixed",
           }}
         >
           <div className="absolute inset-0 bg-white/88" />
@@ -368,7 +379,7 @@ export default async function ContactoPage() {
               <div className="flex items-center justify-between bg-white px-4 py-3">
                 <div>
                   <p className="text-xs font-bold text-[#0f172a]">
-                    Gaviotas 132, Lima 15047
+                    {siteConfig.address.full}
                   </p>
                   <p className="text-xs text-slate-400">Lima, Perú</p>
                 </div>
@@ -391,7 +402,7 @@ export default async function ContactoPage() {
             <div className="flex items-center gap-3">
               <p className="text-xs text-slate-400">Síguenos en</p>
               <a
-                href="https://www.linkedin.com/company/smc-group"
+                href={siteConfig.social.linkedin}
                 target="_blank"
                 rel="noreferrer"
                 className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-400 shadow-sm transition hover:border-(--primary) hover:bg-(--primary) hover:text-white"
@@ -426,20 +437,22 @@ export default async function ContactoPage() {
               <form className="space-y-5">
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <label htmlFor="nombre" className="text-xs font-bold uppercase tracking-wider text-slate-500">
                       Nombre Completo
                     </label>
                     <input
+                      id="nombre"
                       type="text"
                       placeholder="Ej: Juan Pérez"
                       className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <label htmlFor="empresa" className="text-xs font-bold uppercase tracking-wider text-slate-500">
                       Empresa
                     </label>
                     <input
+                      id="empresa"
                       type="text"
                       placeholder="Nombre de su organización"
                       className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
@@ -449,21 +462,23 @@ export default async function ContactoPage() {
 
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <label htmlFor="correo" className="text-xs font-bold uppercase tracking-wider text-slate-500">
                       Correo Electrónico
                     </label>
                     <input
+                      id="correo"
                       type="email"
                       placeholder="email@empresa.com"
                       className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    <label htmlFor="telefono" className="text-xs font-bold uppercase tracking-wider text-slate-500">
                       Teléfono de Contacto
                     </label>
                     <input
-                      type="text"
+                      id="telefono"
+                      type="tel"
                       placeholder="+51 999 999 999"
                       className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
                     />
@@ -471,10 +486,10 @@ export default async function ContactoPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  <label htmlFor="tipo-proyecto" className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     Tipo de Proyecto
                   </label>
-                  <select className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm text-slate-500 outline-none transition focus:border-(--primary) focus:bg-white">
+                  <select id="tipo-proyecto" className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm text-slate-500 outline-none transition focus:border-(--primary) focus:bg-white">
                     <option value="">Selecciona una opción</option>
                     <option>Ingeniería estructural</option>
                     <option>Construcción industrial</option>
@@ -486,18 +501,20 @@ export default async function ContactoPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  <label htmlFor="descripcion" className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     Descripción del Requerimiento
                   </label>
                   <textarea
+                    id="descripcion"
                     placeholder="Cuéntenos sobre su proyecto, dimensiones, materiales o plazos estimados..."
                     rows={5}
                     className="w-full resize-none rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
                   />
                 </div>
 
-                <label className="flex cursor-pointer items-center gap-3">
+                <label htmlFor="urgente" className="flex cursor-pointer items-center gap-3">
                   <input
+                    id="urgente"
                     type="checkbox"
                     className="h-4 w-4 rounded border-gray-300 accent-(--primary)"
                   />

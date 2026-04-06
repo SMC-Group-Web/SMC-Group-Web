@@ -30,15 +30,17 @@ body {
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading), Arial, Helvetica, sans-serif;
-  color: var(--foreground);
-  margin: 0;
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading), Arial, Helvetica, sans-serif;
+    color: var(--foreground);
+    margin: 0;
+  }
 }
 
 a {
@@ -67,6 +69,27 @@ select {
   animation: fade-in 0.7s ease-in-out;
 }
 
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-in {
+  opacity: 0;
+  animation: heroIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-d1 { animation-delay: 100ms; }
+.hero-d2 { animation-delay: 250ms; }
+.hero-d3 { animation-delay: 400ms; }
+.hero-d4 { animation-delay: 550ms; }
+.hero-d5 { animation-delay: 700ms; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 .hero-text-shadow {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
@@ -92,4 +115,9 @@ select {
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.hero-in,
+.animate-fade-in {
+  will-change: opacity, transform;
 }

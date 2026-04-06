@@ -42,18 +42,27 @@ export const AboutPage: GlobalConfig = {
       type: 'array',
       label: 'Fortalezas',
       fields: [
-        {
-          name: 'title',
-          type: 'text',
-          label: 'Título',
-          required: true,
-        },
-        {
-          name: 'description',
-          type: 'textarea',
-          label: 'Descripción',
-          required: true,
-        },
+        { name: 'title',       type: 'text',     label: 'Título',      required: true },
+        { name: 'description', type: 'textarea', label: 'Descripción', required: true },
+      ],
+    },
+    {
+      name: 'values',
+      type: 'array',
+      label: 'Valores de la empresa (badges)',
+      maxRows: 10,
+      admin: {
+        description: 'Etiquetas de valores que aparecen debajo del texto principal. Ej: Calidad, Precisión, Compromiso.',
+      },
+      defaultValue: [
+        { label: 'Calidad' },
+        { label: 'Precisión' },
+        { label: 'Compromiso' },
+        { label: 'Innovación' },
+        { label: 'Seguridad' },
+      ],
+      fields: [
+        { name: 'label', type: 'text', label: 'Valor', required: true },
       ],
     },
   ],

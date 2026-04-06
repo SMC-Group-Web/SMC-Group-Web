@@ -24,6 +24,22 @@ export const Projects: CollectionConfig = {
       unique: true,
     },
     {
+      name: 'projectType',
+      type: 'select',
+      label: 'Tipo de proyecto',
+      required: false,
+      defaultValue: 'construccion-comercial',
+      options: [
+        { label: 'Construcción Comercial', value: 'construccion-comercial' },
+        { label: 'Obra Civil',             value: 'obra-civil' },
+        { label: 'Mantenimiento',          value: 'mantenimiento' },
+        { label: 'Instalaciones Eléctricas', value: 'instalaciones-electricas' },
+        { label: 'Instalaciones Mecánicas',  value: 'instalaciones-mecanicas' },
+        { label: 'Instalaciones Sanitarias', value: 'instalaciones-sanitarias' },
+        { label: 'Estructuras Metálicas',    value: 'estructuras-metalicas' },
+      ],
+    },
+    {
       name: 'summary',
       type: 'textarea',
       label: 'Resumen corto',
@@ -110,6 +126,18 @@ export const Projects: CollectionConfig = {
       type: 'checkbox',
       label: 'Activo',
       defaultValue: true,
+    },
+    {
+      name: 'seo',
+      type: 'group',
+      label: '🔍 SEO',
+      admin: { description: 'Controla cómo aparece esta página en Google' },
+      fields: [
+        { name: 'titulo',      type: 'text',     label: 'Título para Google (máx. 60 caracteres)' },
+        { name: 'descripcion', type: 'textarea', label: 'Descripción para Google (máx. 160 caracteres)' },
+        { name: 'imagen',      type: 'upload',   relationTo: 'media', label: 'Imagen para redes sociales (1200×630px)' },
+        { name: 'noIndex',     type: 'checkbox', label: 'Ocultar de Google', defaultValue: false },
+      ],
     },
   ],
 }

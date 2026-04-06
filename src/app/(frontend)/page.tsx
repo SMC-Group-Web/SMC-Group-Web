@@ -1,123 +1,80 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import config from "@payload-config";
 import HomeHeroCarousel from "@/components/home/HomeHeroCarousel";
 import RevealWrapper from "@/components/home/RevealWrapper";
 import ClientsMarquee from "@/components/home/ClientsMarquee";
+import ServiciosMapa from "@/components/servicios/ServiciosMapa";
+import type { ServicioItem } from "@/components/servicios/ServiciosMapa";
 import { getPayload } from "payload";
+import type { MediaType } from "@/lib/types";
 
-type MediaType = {
-  id: string | number;
-  url?: string | null;
-  alt?: string | null;
-  filename?: string | null;
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "Ingeniería y Construcción en Lima",
+  description:
+    "SMC GROUP, empresa especializada en ingeniería estructural, construcción industrial y fabricación metalmecánica en Lima, Perú.",
+  openGraph: {
+    title: "SMC GROUP | Ingeniería y Construcción — Lima, Perú",
+    description: "Empresa especializada en ingeniería estructural, construcción industrial y fabricación metalmecánica en Lima, Perú.",
+    images: [{ url: "/fondo.png", width: 1200, height: 630, alt: "SMC GROUP" }],
+  },
 };
-
-const IconCalidad = () => (
-  <svg
-    className="h-6 w-6"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.5}
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.745 3.745 0 0 1 3.296-1.043A3.745 3.745 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.745 3.745 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z"
-    />
-  </svg>
-);
-
-const IconPrecision = () => (
-  <svg
-    className="h-6 w-6"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.5}
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z"
-    />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z"
-    />
-  </svg>
-);
-
-const IconSeguridad = () => (
-  <svg
-    className="h-6 w-6"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.5}
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
-    />
-  </svg>
-);
-
-const HIGHLIGHTS = [
-  {
-    icon: <IconCalidad />,
-    title: "Calidad Certificada",
-    description:
-      "Ejecutamos cada proyecto bajo estándares técnicos con control de calidad en cada etapa.",
-  },
-  {
-    icon: <IconPrecision />,
-    title: "Ingeniería de Precisión",
-    description:
-      "Equipo técnico especializado con herramientas de última generación para resultados exactos.",
-  },
-  {
-    icon: <IconSeguridad />,
-    title: "Seguridad y Cumplimiento",
-    description:
-      "Protocolos rigurosos de seguridad industrial y cumplimiento normativo en todos nuestros servicios.",
-  },
-];
 
 export default async function HomePage() {
   const payload = await getPayload({ config });
 
-  const homePage = await payload.findGlobal({ slug: "home-page", depth: 1 });
+  const [homePage, projects, clients, servicesRaw] = await Promise.all([
+    payload.findGlobal({ slug: "home-page", depth: 1 }),
+    payload.find({
+      collection: "projects",
+      where: {
+        and: [
+          { isActive: { equals: true } },
+          { isFeatured: { equals: true } },
+        ],
+      },
+      sort: "order",
+      limit: 6,
+      depth: 1,
+      select: { title: true, slug: true, client: true, coverImage: true },
+    }),
+    payload.find({
+      collection: "clients",
+      where: { isActive: { equals: true } },
+      sort: "order",
+      limit: 50,
+      depth: 1,
+      select: { name: true, website: true, logo: true },
+    }),
+    payload.find({
+      collection: "services",
+      where: { isActive: { equals: true } },
+      sort: "order",
+      limit: 10,
+      depth: 0,
+      select: { title: true, slug: true, category: true, summary: true, description: true, features: true, color: true },
+    }),
+  ]);
 
-  const services = await payload.find({
-    collection: "services",
-    where: { isActive: { equals: true } },
-    sort: "-isFeatured,order",
-    limit: 4,
-    depth: 1,
-  });
+  // Map services to ServiciosMapa format
+  const mapaServices: ServicioItem[] = servicesRaw.docs.map((s) => ({
+    slug: s.slug as string,
+    title: s.title,
+    cat: (s.category as string | null) ?? null,
+    color: (s.color as string | null) ?? null,
+    desc: (s.summary as string) || (s.description as string) || "",
+    specs: ((s.features || []) as { text: string }[]).map((f) => f.text),
+  }));
 
-  const projects = await payload.find({
-    collection: "projects",
-    where: { isActive: { equals: true } },
-    sort: "-isFeatured,order",
-    limit: 4,
-    depth: 1,
-  });
-
-  const clients = await payload.find({
-    collection: "clients",
-    where: { isActive: { equals: true } },
-    sort: "order",
-    limit: 50,
-    depth: 1,
-  });
+  // Highlights from CMS (fallback to empty array if not yet configured)
+  const highlights = (homePage.highlights || []) as { title: string; description: string }[];
 
   return (
-    <main className="min-h-screen bg-white text-[#0f172a]">
-      {/* ── HERO ── */}
+    <main className="min-h-screen text-[#0f172a]">
+      {/* ══ HERO ══ */}
       <HomeHeroCarousel
         slides={(homePage.heroSlides || []).map((slide) => ({
           ...slide,
@@ -127,323 +84,149 @@ export default async function HomePage() {
         stats={homePage.stats || []}
       />
 
-      {/* ══ SECCIÓN CON FONDO.PNG ══ */}
+      {/* ══ FONDO CONTINUO ══ */}
       <div
         className="relative w-full"
         style={{
           backgroundImage: "url('/fondo.png')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          backgroundAttachment: "fixed",
+          backgroundPosition: "center top",
         }}
       >
-        {/* Overlay blanco */}
-        <div className="absolute inset-0 bg-white/70" />
+        <div className="absolute inset-0 bg-white/72" />
 
-        {/* ── 3 CAJITAS HIGHLIGHTS ── */}
-        <section className="relative mx-auto w-full max-w-7xl px-6 pt-20 pb-10 md:px-10">
-          <div className="grid gap-5 md:grid-cols-3">
-            {HIGHLIGHTS.map((h, i) => (
-              <RevealWrapper key={h.title} delay={i * 120}>
-                <div className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-(--primary) hover:shadow-[0_20px_40px_rgba(47,86,201,0.12)]">
-                  <div className="mb-4 inline-flex rounded-xl bg-blue-50 p-3 text-(--primary)">
-                    {h.icon}
-                  </div>
-                  <h3 className="mb-2 text-base font-bold text-[#0f172a]">
-                    {h.title}
-                  </h3>
-                  <p className="text-sm leading-6 text-slate-500">
-                    {h.description}
-                  </p>
-                </div>
-              </RevealWrapper>
-            ))}
-          </div>
-        </section>
-
-        {/* ── SERVICIOS DESTACADOS ── */}
-        <section
-          id="servicios"
-          className="relative mx-auto w-full max-w-7xl px-6 py-16 md:px-10"
-        >
+        {/* ══ PROYECTOS DESTACADOS ══ */}
+        <section id="proyectos" className="relative mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
           <RevealWrapper>
-            <div className="mb-10 flex items-end justify-between gap-4">
-              <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-(--primary)">
-                  Servicios
-                </p>
-                <h2 className="text-3xl font-bold text-[#0f172a] md:text-4xl">
-                  Servicios destacados
-                </h2>
-                <p className="mt-3 max-w-xl text-sm leading-6 text-slate-500">
-                  Soluciones especializadas para proyectos de ingeniería y
-                  construcción.
-                </p>
-              </div>
-              <Link
-                href="/servicios"
-                className="hidden shrink-0 rounded-xl px-5 py-3 text-sm font-semibold transition hover:opacity-90 hover:scale-105 active:scale-95 md:inline-flex"
-                style={{ background: "var(--primary)", color: "white" }}
-              >
-                Ver todos los servicios →
-              </Link>
+            <div className="mb-8 text-center">
+              <h2 className="text-4xl font-bold text-[#0f172a] md:text-5xl">PROYECTOS</h2>
+              <div className="mx-auto mt-3 h-0.5 w-10" style={{ background: "var(--primary)" }} />
             </div>
           </RevealWrapper>
 
-          {services.docs.length === 0 ? (
-            <RevealWrapper>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-                <p className="text-slate-500">
-                  Aún no hay servicios activos registrados en el panel.
-                </p>
-              </div>
-            </RevealWrapper>
-          ) : (
-            <>
-              <div className="grid gap-5 md:grid-cols-2">
-                {services.docs.map((service, i) => {
-                  const features = (service.features || []) as {
-                    text: string;
-                  }[];
-                  const num = String(i + 1).padStart(2, "0");
-                  return (
-                    <RevealWrapper key={service.id} delay={i * 100}>
-                      <article className="group relative h-full overflow-hidden rounded-2xl border border-gray-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-(--primary) hover:shadow-[0_20px_40px_rgba(47,86,201,0.12)]">
-                        <span className="absolute right-5 top-4 select-none text-7xl font-black leading-none text-gray-100 transition-colors duration-300 group-hover:text-blue-50">
-                          {num}
-                        </span>
-                        <div className="mb-5 flex items-center justify-between">
-                          <span className="text-xs font-bold uppercase tracking-[0.25em] text-(--primary)">
-                            {(service.category as string) || "Servicio"}
-                          </span>
-                          <span className="text-xs text-gray-300">{num}</span>
+          {projects.docs.length > 0 && (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {projects.docs.map((project, i) => {
+                const cover =
+                  project.coverImage && typeof project.coverImage === "object"
+                    ? (project.coverImage as MediaType)
+                    : null;
+                return (
+                  <RevealWrapper key={project.id} delay={i * 80}>
+                    <Link href={`/proyectos/${project.slug}`}>
+                      <article className="group relative overflow-hidden rounded-2xl">
+                        <div className="relative h-80 w-full overflow-hidden bg-slate-200 md:h-96">
+                          {cover?.url ? (
+                            <Image
+                              src={cover.url}
+                              alt={cover.alt || project.title}
+                              fill
+                              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                              className="object-cover transition-transform duration-700 group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="h-full w-full" style={{ background: "linear-gradient(135deg, #0a1628 0%, #0f2233 100%)" }} />
+                          )}
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0a1628]/80 px-8 py-10 text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            {project.client && (
+                              <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
+                                {project.client}
+                              </p>
+                            )}
+                            <h3 className="mb-7 max-w-[85%] text-2xl font-bold leading-snug text-white">{project.title}</h3>
+                            <span className="inline-flex items-center gap-2 rounded-xl px-7 py-3 text-sm font-semibold text-white" style={{ background: "var(--primary)" }}>
+                              Ver proyecto →
+                            </span>
+                          </div>
                         </div>
-                        <h3 className="mb-3 text-xl font-bold text-[#0f172a]">
-                          {service.title}
-                        </h3>
-                        <p className="mb-5 text-sm leading-6 text-slate-500">
-                          {service.summary}
-                        </p>
-                        {features.length > 0 && (
-                          <ul className="mb-6 space-y-2">
-                            {features.map((f, fi) => (
-                              <li
-                                key={fi}
-                                className="flex items-center gap-2 text-sm text-slate-600"
-                              >
-                                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-(--primary)" />
-                                {f.text}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                        <div className="mb-5 h-px w-0 bg-(--primary) transition-all duration-500 group-hover:w-full" />
-                        <Link
-                          href={(service.ctaLink as string) || "/contacto"}
-                          className="inline-flex items-center gap-2 text-sm font-bold text-(--primary) transition-all hover:gap-3"
-                        >
-                          Solicitar Cotización <span>→</span>
-                        </Link>
                       </article>
-                    </RevealWrapper>
-                  );
-                })}
-              </div>
-              <div className="mt-6 md:hidden">
-                <Link
-                  href="/servicios"
-                  className="inline-flex rounded-xl px-5 py-3 text-sm font-semibold transition hover:opacity-90 hover:scale-105 active:scale-95"
-                  style={{ background: "var(--primary)", color: "white" }}
-                >
-                  Ver todos los servicios →
-                </Link>
-              </div>
-            </>
-          )}
-        </section>
-
-        {/* ── PROYECTOS DESTACADOS ── */}
-        <section
-          id="proyectos"
-          className="relative mx-auto w-full max-w-7xl px-6 pb-24 md:px-10"
-        >
-          <RevealWrapper>
-            <div className="mb-16 flex items-center gap-4">
-              <div
-                className="h-px flex-1"
-                style={{ background: "var(--primary)" }}
-              />
-              <span
-                className="text-xs font-bold uppercase tracking-widest"
-                style={{ color: "var(--primary)" }}
-              >
-                SMC Group
-              </span>
-              <div
-                className="h-px flex-1"
-                style={{ background: "var(--primary)" }}
-              />
+                    </Link>
+                  </RevealWrapper>
+                );
+              })}
             </div>
-          </RevealWrapper>
+          )}
 
           <RevealWrapper>
-            <div className="mb-10 flex items-end justify-between gap-4">
-              <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-(--primary)">
-                  Proyectos
-                </p>
-                <h2 className="text-3xl font-bold text-[#0f172a] md:text-4xl">
-                  Proyectos destacados
-                </h2>
-                <p className="mt-3 max-w-xl text-sm leading-6 text-slate-500">
-                  Una selección de proyectos ejecutados por SMC GROUP.
-                </p>
-              </div>
+            <div className="mt-12 flex justify-center">
               <Link
                 href="/proyectos"
-                className="hidden shrink-0 rounded-xl px-5 py-3 text-sm font-semibold transition hover:opacity-90 hover:scale-105 active:scale-95 md:inline-flex"
+                className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-sm font-semibold transition-all hover:scale-105 hover:opacity-90 active:scale-95"
                 style={{ background: "var(--primary)", color: "white" }}
               >
                 Ver todos los proyectos →
               </Link>
             </div>
           </RevealWrapper>
-
-          {projects.docs.length === 0 ? (
-            <RevealWrapper>
-              <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-                <p className="text-slate-500">
-                  Aún no hay proyectos activos registrados en el panel.
-                </p>
-              </div>
-            </RevealWrapper>
-          ) : (
-            <>
-              <div className="grid gap-5 md:grid-cols-2">
-                {projects.docs.map((project, i) => {
-                  const cover =
-                    project.coverImage && typeof project.coverImage === "object"
-                      ? (project.coverImage as MediaType)
-                      : null;
-                  const num = String(i + 1).padStart(2, "0");
-                  return (
-                    <RevealWrapper key={project.id} delay={i * 100}>
-                      <article className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-(--primary) hover:shadow-[0_20px_40px_rgba(47,86,201,0.12)]">
-                        {cover?.url ? (
-                          <div className="relative h-52 w-full overflow-hidden">
-                            <img
-                              src={cover.url}
-                              alt={cover.alt || project.title}
-                              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                            {project.isFeatured && (
-                              <span className="absolute left-4 top-4 rounded-full bg-(--primary) px-3 py-1 text-xs font-bold text-white shadow">
-                                Destacado
-                              </span>
-                            )}
-                            <span className="absolute right-4 top-4 rounded-lg bg-black/50 px-2 py-1 text-xs font-black text-white/70 backdrop-blur-sm">
-                              {num}
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="relative flex h-52 w-full items-center justify-center bg-gray-100">
-                            <span className="text-sm text-gray-400">
-                              Sin imagen
-                            </span>
-                            {project.isFeatured && (
-                              <span className="absolute left-4 top-4 rounded-full bg-(--primary) px-3 py-1 text-xs font-bold text-white">
-                                Destacado
-                              </span>
-                            )}
-                          </div>
-                        )}
-                        <div className="p-6">
-                          <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-(--primary)">
-                            Proyecto
-                          </p>
-                          <h3 className="mb-2 text-xl font-bold text-[#0f172a]">
-                            {project.title}
-                          </h3>
-                          <p className="mb-4 text-sm leading-6 text-slate-500">
-                            {project.summary}
-                          </p>
-                          <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-gray-100 pt-4 text-xs text-slate-400">
-                            {project.client && (
-                              <span>
-                                Cliente:{" "}
-                                <span className="font-semibold text-slate-600">
-                                  {project.client}
-                                </span>
-                              </span>
-                            )}
-                            {project.location && (
-                              <span>
-                                Ubicación:{" "}
-                                <span className="font-semibold text-slate-600">
-                                  {project.location}
-                                </span>
-                              </span>
-                            )}
-                            {project.year && (
-                              <span>
-                                Año:{" "}
-                                <span className="font-semibold text-slate-600">
-                                  {project.year}
-                                </span>
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </article>
-                    </RevealWrapper>
-                  );
-                })}
-              </div>
-              <div className="mt-6 md:hidden">
-                <Link
-                  href="/proyectos"
-                  className="inline-flex rounded-xl px-5 py-3 text-sm font-semibold transition hover:opacity-90 hover:scale-105 active:scale-95"
-                  style={{ background: "var(--primary)", color: "white" }}
-                >
-                  Ver todos los proyectos →
-                </Link>
-              </div>
-            </>
-          )}
         </section>
-      </div>
 
-      {/* ══ SECCIÓN CLIENTES ══ */}
-      {clients.docs.length > 0 && (
-        <div
-          className="relative w-full py-20"
-          style={{
-            backgroundImage: "url('/fondo.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundAttachment: "fixed",
-          }}
-        >
-          <div className="absolute inset-0 bg-white/70" />
+        {/* ══ HIGHLIGHTS (desde Payload) ══ */}
+        {highlights.length > 0 && (
+          <section className="relative mx-auto w-full max-w-7xl px-6 pb-10 md:px-10">
+            <div className="grid gap-5 md:grid-cols-3">
+              {highlights.map((h, i) => (
+                <RevealWrapper key={h.title} delay={i * 120}>
+                  <div className="h-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(47,86,201,0.12)]">
+                    <div className="mb-4 inline-flex rounded-xl p-3" style={{ background: "var(--primary)", opacity: 1 }}>
+                      <div className="h-6 w-6 rounded-full bg-white/80" />
+                    </div>
+                    <h3 className="mb-2 text-base font-bold text-[#0f172a]">{h.title}</h3>
+                    <p className="text-sm leading-6 text-slate-500">{h.description}</p>
+                  </div>
+                </RevealWrapper>
+              ))}
+            </div>
+          </section>
+        )}
 
-          <div className="relative mx-auto w-full max-w-7xl px-6 md:px-10">
+        {/* ══ SERVICIOS (mapa desde Payload) ══ */}
+        <section id="servicios" className="relative mx-auto w-full max-w-5xl px-6 py-20 md:px-10">
+          <RevealWrapper>
+            <div className="mb-4 flex items-center gap-3">
+              <div className="h-px w-10" style={{ background: "var(--primary)" }} />
+              <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
+                Capacidades técnicas
+              </p>
+            </div>
+            <h2 className="text-4xl font-black uppercase leading-tight text-[#0f172a] md:text-5xl">
+              Soluciones integrales{" "}
+              <span style={{ color: "var(--primary)" }}>de ingeniería</span>
+            </h2>
+            <p className="mt-3 text-sm text-slate-500">Selecciona un servicio para ver todos los detalles</p>
+          </RevealWrapper>
+
+          <div className="mt-10">
+            <ServiciosMapa services={mapaServices} />
+          </div>
+
+          <RevealWrapper>
+            <div className="mt-10 text-center">
+              <Link
+                href="/servicios"
+                className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-sm font-semibold transition-all hover:scale-105 hover:opacity-90 active:scale-95"
+                style={{ background: "var(--primary)", color: "white" }}
+              >
+                Ver todos los servicios →
+              </Link>
+            </div>
+          </RevealWrapper>
+        </section>
+
+        {/* ══ CLIENTES ══ */}
+        {clients.docs.length > 0 && (
+          <section className="relative mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
             <RevealWrapper>
               <div className="mb-12 text-center">
-                <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-(--primary)">
+                <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
                   Nuestros Clientes
                 </p>
-                <h2 className="text-3xl font-bold text-[#0f172a] md:text-4xl">
-                  Confían en Nosotros
-                </h2>
+                <h2 className="text-3xl font-bold text-[#0f172a] md:text-4xl">Confían en Nosotros</h2>
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500">
-                  Empresas líderes que confían en SMC GROUP para sus proyectos
-                  de ingeniería y construcción.
+                  Empresas líderes que confían en SMC GROUP para sus proyectos de ingeniería y construcción.
                 </p>
               </div>
             </RevealWrapper>
-
             <ClientsMarquee
               clients={clients.docs.map((c) => ({
                 id: c.id,
@@ -451,16 +234,13 @@ export default async function HomePage() {
                 website: (c.website as string | null) ?? null,
                 logo:
                   c.logo && typeof c.logo === "object"
-                    ? {
-                        url: (c.logo as MediaType).url ?? null,
-                        alt: (c.logo as MediaType).alt ?? null,
-                      }
+                    ? { url: (c.logo as MediaType).url ?? null, alt: (c.logo as MediaType).alt ?? null }
                     : null,
               }))}
             />
-          </div>
-        </div>
-      )}
+          </section>
+        )}
+      </div>
     </main>
   );
 }

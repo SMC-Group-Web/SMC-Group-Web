@@ -130,5 +130,23 @@ export const HomePage: GlobalConfig = {
         },
       ],
     },
+    {
+      name: 'highlights',
+      type: 'array',
+      label: 'Tarjetas de ventajas (sección ¿Por qué elegirnos?)',
+      maxRows: 6,
+      admin: {
+        description: 'Aparecen debajo de los proyectos en la home. Máximo 6.',
+      },
+      defaultValue: [
+        { title: 'Calidad Certificada',      description: 'Ejecutamos cada proyecto bajo estándares técnicos con control de calidad en cada etapa.' },
+        { title: 'Ingeniería de Precisión',  description: 'Equipo técnico especializado con herramientas de última generación para resultados exactos.' },
+        { title: 'Seguridad y Cumplimiento', description: 'Protocolos rigurosos de seguridad industrial y cumplimiento normativo en todos nuestros servicios.' },
+      ],
+      fields: [
+        { name: 'title',       type: 'text',     label: 'Título',       required: true },
+        { name: 'description', type: 'textarea', label: 'Descripción',  required: true },
+      ],
+    },
   ],
 }

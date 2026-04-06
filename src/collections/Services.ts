@@ -75,6 +75,16 @@ export const Services: CollectionConfig = {
       },
     },
     {
+      name: 'color',
+      type: 'text',
+      label: 'Color del mapa (hex)',
+      required: false,
+      defaultValue: '#2f56c9',
+      admin: {
+        description: 'Color hexadecimal para el nodo en el mapa de servicios. Ej: #2563EB, #059669',
+      },
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
@@ -99,6 +109,18 @@ export const Services: CollectionConfig = {
       type: 'checkbox',
       label: 'Activo',
       defaultValue: true,
+    },
+    {
+      name: 'seo',
+      type: 'group',
+      label: '🔍 SEO',
+      admin: { description: 'Controla cómo aparece esta página en Google' },
+      fields: [
+        { name: 'titulo', type: 'text', label: 'Título para Google (máx. 60 caracteres)' },
+        { name: 'descripcion', type: 'textarea', label: 'Descripción para Google (máx. 160 caracteres)' },
+        { name: 'imagen', type: 'upload', relationTo: 'media', label: 'Imagen para redes sociales (1200×630px)' },
+        { name: 'noIndex', type: 'checkbox', label: 'Ocultar de Google', defaultValue: false },
+      ],
     },
   ],
 }

@@ -79,7 +79,7 @@ export default function Footer() {
             {/* LinkedIn */}
             <div className="flex items-center gap-3 pt-1">
               <a
-                href="https://www.linkedin.com/company/smc-group"
+                href={siteConfig.social.linkedin}
                 target="_blank"
                 rel="noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/40 transition-all hover:border-(--primary) hover:bg-(--primary) hover:text-white"
@@ -158,7 +158,7 @@ export default function Footer() {
                   rel="noreferrer"
                   className="transition-colors hover:text-white"
                 >
-                  Gaviotas 132, Lima 15047, Perú
+                  {siteConfig.address.full}
                 </a>
               </li>
 

@@ -1,11 +1,22 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import config from "@payload-config";
 import { getPayload } from "payload";
 
-type MediaType = {
-  id: string | number;
-  url?: string | null;
-  alt?: string | null;
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "Quiénes Somos",
+  description:
+    "Conoce a SMC GROUP, empresa peruana de ingeniería y construcción con más de 10 años de trayectoria ejecutando proyectos con calidad y precisión.",
+  openGraph: {
+    title: "Quiénes Somos | SMC GROUP",
+    description: "Empresa peruana de ingeniería y construcción con más de 10 años ejecutando proyectos con calidad y precisión.",
+    images: [{ url: "/fondo.png", width: 1200, height: 630, alt: "SMC GROUP — Quiénes Somos" }],
+  },
 };
+
+import type { MediaType } from "@/lib/types";
 
 export default async function QuienesSomosPage() {
   const payload = await getPayload({ config });
@@ -129,16 +140,11 @@ export default async function QuienesSomosPage() {
             </div>
 
             {/* Badges de valores */}
+            {((aboutPage.values || []) as { label: string }[]).length > 0 && (
             <div className="flex flex-wrap gap-2 pt-2">
-              {[
-                "Calidad",
-                "Precisión",
-                "Compromiso",
-                "Innovación",
-                "Seguridad",
-              ].map((v) => (
+              {((aboutPage.values || []) as { label: string }[]).map((v) => (
                 <span
-                  key={v}
+                  key={v.label}
                   className="rounded-lg border px-3 py-1.5 text-xs font-bold uppercase tracking-wider"
                   style={{
                     borderColor: "var(--primary)" + "40",
@@ -146,10 +152,11 @@ export default async function QuienesSomosPage() {
                     background: "var(--primary)" + "08",
                   }}
                 >
-                  {v}
+                  {v.label}
                 </span>
               ))}
             </div>
+            )}
           </div>
 
           {/* Imagen */}
@@ -159,13 +166,14 @@ export default async function QuienesSomosPage() {
               className="absolute -right-3 -top-3 h-full w-full rounded-2xl"
               style={{ background: "var(--primary)", opacity: 0.15 }}
             />
-            <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+            <div className="relative min-h-105 overflow-hidden rounded-2xl shadow-2xl">
               {image?.url ? (
-                <img
+                <Image
                   src={image.url}
                   alt={image.alt || aboutPage.title || "SMC GROUP"}
-                  className="h-full w-full object-cover"
-                  style={{ minHeight: "420px" }}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
                 />
               ) : (
                 <div
@@ -202,7 +210,6 @@ export default async function QuienesSomosPage() {
           backgroundImage: "url('/fondo.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundAttachment: "fixed",
         }}
       >
         <div className="absolute inset-0 bg-white/88" />

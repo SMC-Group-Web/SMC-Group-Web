@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 
 type Client = {
   id: string | number;
@@ -31,9 +32,11 @@ export default function ClientsMarquee({ clients }: Props) {
         ref={trackRef}
         className="flex gap-8"
         style={{
-          animation: "marquee 18s linear infinite", // ← más rápido (era 30s)
+          animation: "marquee 18s linear infinite",
           width: "max-content",
         }}
+        onMouseEnter={() => { if (trackRef.current) trackRef.current.style.animationPlayState = 'paused' }}
+        onMouseLeave={() => { if (trackRef.current) trackRef.current.style.animationPlayState = 'running' }}
       >
         {doubled.map((client, i) => (
           <div
@@ -48,16 +51,22 @@ export default function ClientsMarquee({ clients }: Props) {
                   rel="noreferrer"
                   className="flex h-full w-full items-center justify-center"
                 >
-                  <img
+                  <Image
                     src={client.logo.url}
                     alt={client.logo.alt || client.name}
+                    width={160}
+                    height={80}
+                    loading="lazy"
                     className="max-h-20 max-w-full object-contain grayscale transition-all duration-300 hover:grayscale-0"
                   />
                 </a>
               ) : (
-                <img
+                <Image
                   src={client.logo.url}
                   alt={client.logo.alt || client.name}
+                  width={160}
+                  height={80}
+                  loading="lazy"
                   className="max-h-20 max-w-full object-contain grayscale transition-all duration-300 hover:grayscale-0"
                 />
               )
@@ -70,12 +79,6 @@ export default function ClientsMarquee({ clients }: Props) {
         ))}
       </div>
 
-      <style>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-      `}</style>
     </div>
   );
 }

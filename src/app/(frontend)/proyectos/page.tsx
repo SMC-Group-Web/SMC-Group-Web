@@ -1,34 +1,55 @@
+import type { Metadata } from "next";
 import config from "@payload-config";
 import { getPayload } from "payload";
+import Link from "next/link";
 import ProjectGallery from "@/components/proyectos/ProjectGallery";
+import type { MediaType, GalleryItem } from "@/lib/types";
 
-type MediaType = {
-  id: string | number;
-  url?: string | null;
-  alt?: string | null;
-  filename?: string | null;
-};
+export const revalidate = 3600;
 
-type GalleryItem = {
-  image?: MediaType | number | null;
-  caption?: string | null;
-  id?: string | null;
+export const metadata: Metadata = {
+  title: "Proyectos Realizados — Portafolio de Obras",
+  description:
+    "Portafolio de proyectos de ingeniería y construcción ejecutados por SMC GROUP en Lima y Perú. Más de 200 proyectos completados.",
+  openGraph: {
+    title: "Portafolio de Proyectos | SMC GROUP",
+    description: "Más de 200 proyectos de ingeniería y construcción ejecutados en Lima y Perú.",
+    images: [{ url: "/fondo.png", width: 1200, height: 630, alt: "SMC GROUP Proyectos" }],
+  },
 };
 
 export default async function ProyectosPage() {
   const payload = await getPayload({ config });
 
-  const projects = await payload.find({
-    collection: "projects",
-    where: { isActive: { equals: true } },
-    sort: "-isFeatured,order",
-    limit: 100,
-    depth: 2,
-  });
+  const [proyectosPage, projects] = await Promise.all([
+    payload.findGlobal({ slug: "proyectos-page", depth: 0 }),
+    payload.find({
+      collection: "projects",
+      where: { isActive: { equals: true } },
+      sort: "-isFeatured,order",
+      limit: 100,
+      depth: 1,
+      select: {
+        title: true,
+        slug: true,
+        summary: true,
+        description: true,
+        projectType: true,
+        year: true,
+        client: true,
+        location: true,
+        coverImage: true,
+        coverCaption: true,
+        gallery: true,
+        isFeatured: true,
+      },
+    }),
+  ]);
 
   return (
     <main className="min-h-screen bg-[#f7f9fc] text-[#0f172a]">
-      {/* ── HERO OSCURO CON TEXTURA TÉCNICA ── */}
+
+      {/* ── HERO ── */}
       <div
         className="relative overflow-hidden pt-(--header-height)"
         style={{
@@ -38,109 +59,53 @@ export default async function ProyectosPage() {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* Overlay oscuro azul marino */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, #0a1628ee 0%, #0f2233dd 60%, #0d1b2acc 100%)",
-          }}
-        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #0a1628f0 0%, #0f2233e0 60%, #0d1b2ad0 100%)" }} />
+        <div className="pointer-events-none absolute inset-0 opacity-10" style={{ backgroundImage: `linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px)`, backgroundSize: "60px 60px" }} />
+        <div className="absolute left-0 top-0 h-0.5 w-full" style={{ background: "var(--primary)" }} />
 
-        {/* Grid técnico tipo plano */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `
-              linear-gradient(var(--primary) 1px, transparent 1px),
-              linear-gradient(90deg, var(--primary) 1px, transparent 1px)
-            `,
-            backgroundSize: "60px 60px",
-          }}
-        />
-
-        {/* Círculos decorativos */}
-        <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full border border-white/5" />
-        <div
-          className="pointer-events-none absolute -right-16 top-10 h-72 w-72 rounded-full border"
-          style={{ borderColor: "var(--primary)" + "40" }}
-        />
-        <div className="pointer-events-none absolute right-20 top-20 h-48 w-48 rounded-full border border-white/5" />
-
-        {/* Línea superior azul */}
-        <div
-          className="absolute left-0 top-0 h-0.75 w-full"
-          style={{ background: "var(--primary)" }}
-        />
-
-        <div className="relative mx-auto w-full max-w-7xl px-6 py-14 md:px-10 md:py-16">
+        <div className="relative mx-auto w-full max-w-7xl px-6 py-16 md:px-10 md:py-24">
           <div className="max-w-2xl">
-            {/* Eyebrow */}
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
-              <span
-                className="h-1.5 w-1.5 rounded-full"
-                style={{ background: "var(--primary)" }}
-              />
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--primary)" }} />
               SMC GROUP — Proyectos
             </span>
-
-            {/* Título */}
-            <h1 className="text-white! mt-2 text-4xl font-black uppercase leading-tight tracking-tight md:text-6xl">
-              Nuestros{" "}
-              <span style={{ color: "var(--primary)" }}>Proyectos</span>
+            <h1 className="mt-3 text-4xl font-black uppercase leading-tight tracking-tight text-white md:text-6xl">
+              Nuestros <span style={{ color: "var(--primary)" }}>Proyectos</span>
             </h1>
-
-            <p className="mt-5 max-w-xl text-base leading-7 text-white/60">
-              Obras ejecutadas con precisión técnica, calidad y cumplimiento.
-              Cada proyecto refleja el compromiso de SMC GROUP con la
-              excelencia.
+            <p className="mt-4 max-w-xl text-base leading-7 text-white/60">
+              Obras ejecutadas con precisión técnica, calidad y cumplimiento. Cada proyecto refleja el compromiso de SMC GROUP con la excelencia.
             </p>
 
             {/* Stats */}
-            <div className="mt-8 flex flex-wrap gap-8 border-t border-white/10 pt-8">
-              {[
-                { value: "200+", label: "Proyectos realizados" },
-                { value: "10+", label: "Años de experiencia" },
-                { value: "100%", label: "Compromiso con calidad" },
-              ].map((s) => (
-                <div key={s.label}>
-                  <p className="text-2xl font-black text-white">{s.value}</p>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-white/40">
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
+            {((proyectosPage.heroStats || []) as { value: string; label: string }[]).length > 0 && (
+              <div className="mt-8 flex flex-wrap gap-8 border-t border-white/10 pt-8">
+                {((proyectosPage.heroStats || []) as { value: string; label: string }[]).map((s) => (
+                  <div key={s.label}>
+                    <p className="text-2xl font-black text-white">{s.value}</p>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-white/40">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Ola de transición */}
+        {/* Wave */}
         <div className="relative h-10 w-full">
-          <svg
-            className="absolute bottom-0 w-full"
-            viewBox="0 0 1440 40"
-            fill="none"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 40L1440 40L1440 0C1440 0 1080 40 720 40C360 40 0 0 0 0L0 40Z"
-              fill="#f7f9fc"
-            />
+          <svg className="absolute bottom-0 w-full" viewBox="0 0 1440 40" fill="none" preserveAspectRatio="none">
+            <path d="M0 40L1440 40L1440 0C1440 0 1080 40 720 40C360 40 0 0 0 0L0 40Z" fill="#f7f9fc" />
           </svg>
         </div>
       </div>
 
       {/* ── GRID DE PROYECTOS ── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-14 pb-24 md:px-10">
+      <section className="mx-auto w-full max-w-7xl px-6 py-16 pb-28 md:px-10">
         {projects.docs.length === 0 ? (
-          <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-            <p className="text-slate-500">
-              Aún no hay proyectos activos registrados en el panel.
-            </p>
+          <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center shadow-sm">
+            <p className="text-slate-400">Aún no hay proyectos activos registrados en el panel.</p>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {projects.docs.map((project) => {
               const cover =
                 project.coverImage && typeof project.coverImage === "object"
@@ -149,20 +114,10 @@ export default async function ProyectosPage() {
 
               const galleryItems = ((project.gallery || []) as GalleryItem[])
                 .filter((item) => item.image && typeof item.image === "object")
-                .map((item) => ({
-                  image: item.image as MediaType,
-                  caption: item.caption ?? null,
-                }));
+                .map((item) => ({ image: item.image as MediaType, caption: item.caption ?? null }));
 
               const allItems = [
-                ...(cover
-                  ? [
-                      {
-                        image: cover,
-                        caption: (project.coverCaption as string) ?? null,
-                      },
-                    ]
-                  : []),
+                ...(cover ? [{ image: cover, caption: (project.coverCaption as string) ?? null }] : []),
                 ...galleryItems,
               ];
 
@@ -172,66 +127,69 @@ export default async function ProyectosPage() {
               return (
                 <article
                   key={project.id}
-                  className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_24px_48px_rgba(47,86,201,0.15)]"
+                  className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-(--primary)/30"
                 >
-                  <ProjectGallery
-                    images={allImages}
-                    captions={allCaptions}
-                    title={project.title}
-                    isFeatured={project.isFeatured}
-                  />
+                  {/* Foto grande */}
+                  <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-100">
+                    <ProjectGallery
+                      images={allImages}
+                      captions={allCaptions}
+                      title={project.title}
+                      isFeatured={project.isFeatured}
+                    />
+                  </div>
 
-                  <div className="p-6">
-                    <p
-                      className="mb-2 text-xs font-bold uppercase tracking-[0.25em]"
-                      style={{ color: "var(--primary)" }}
-                    >
-                      Proyecto
-                    </p>
-
-                    <h2 className="mb-2 text-xl font-bold text-[#0f172a]">
-                      {project.title}
-                    </h2>
-
-                    <p className="mb-2 text-sm leading-6 text-slate-500">
-                      {project.summary}
-                    </p>
-
-                    {project.description && (
-                      <p
-                        className="mb-4 mt-2 border-l-2 pl-3 text-sm leading-6 text-slate-400"
-                        style={{ borderColor: "var(--primary)" }}
+                  {/* Contenido */}
+                  <div className="flex flex-1 flex-col p-5">
+                    {/* Tipo + año */}
+                    <div className="mb-3 flex items-center justify-between">
+                      <span
+                        className="rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider"
+                        style={{ background: "var(--primary)", color: "white" }}
                       >
-                        {project.description}
-                      </p>
+                        {project.projectType
+                          ? project.projectType.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+                          : "Proyecto"}
+                      </span>
+                      {project.year && (
+                        <span className="text-xs font-semibold text-slate-400">{project.year}</span>
+                      )}
+                    </div>
+
+                    <h2 className="mb-2 text-lg font-bold leading-snug text-[#0f172a]">{project.title}</h2>
+
+                    {project.summary && (
+                      <p className="mb-4 text-sm leading-6 text-slate-500 line-clamp-2">{project.summary}</p>
                     )}
 
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-100 pt-4 text-xs text-slate-400">
+                    {/* Metadata cliente / ubicación */}
+                    <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-gray-100 pt-4 text-xs text-slate-400">
                       {project.client && (
-                        <span>
-                          Cliente:{" "}
-                          <span className="font-semibold text-slate-600">
-                            {project.client}
-                          </span>
+                        <span className="flex items-center gap-1.5">
+                          <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                          </svg>
+                          <span className="font-semibold text-slate-600">{project.client}</span>
                         </span>
                       )}
                       {project.location && (
-                        <span>
-                          Ubicación:{" "}
-                          <span className="font-semibold text-slate-600">
-                            {project.location}
-                          </span>
-                        </span>
-                      )}
-                      {project.year && (
-                        <span>
-                          Año:{" "}
-                          <span className="font-semibold text-slate-600">
-                            {project.year}
-                          </span>
+                        <span className="flex items-center gap-1.5">
+                          <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                          </svg>
+                          <span className="font-semibold text-slate-600">{project.location}</span>
                         </span>
                       )}
                     </div>
+
+                    <Link
+                      href={`/proyectos/${project.slug}`}
+                      className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold transition-all hover:gap-2.5"
+                      style={{ color: "var(--primary)" }}
+                    >
+                      Ver proyecto →
+                    </Link>
                   </div>
                 </article>
               );

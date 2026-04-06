@@ -97,11 +97,15 @@ export interface Config {
     'home-page': HomePage;
     'about-page': AboutPage;
     'contact-page': ContactPage;
+    'servicios-page': ServiciosPage;
+    'proyectos-page': ProyectosPage;
   };
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
     'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
+    'servicios-page': ServiciosPageSelect<false> | ServiciosPageSelect<true>;
+    'proyectos-page': ProyectosPageSelect<false> | ProyectosPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -191,6 +195,22 @@ export interface Media {
       filesize?: number | null;
       filename?: string | null;
     };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    og?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
   };
 }
 /**
@@ -220,10 +240,23 @@ export interface Service {
    * Ej: /contacto o /servicios/ingenieria
    */
   ctaLink?: string | null;
+  /**
+   * Color hexadecimal para el nodo en el mapa de servicios. Ej: #2563EB, #059669
+   */
+  color?: string | null;
   image?: (number | null) | Media;
   order: number;
   isFeatured?: boolean | null;
   isActive?: boolean | null;
+  /**
+   * Controla cómo aparece esta página en Google
+   */
+  seo?: {
+    titulo?: string | null;
+    descripcion?: string | null;
+    imagen?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -235,6 +268,17 @@ export interface Project {
   id: number;
   title: string;
   slug: string;
+  projectType?:
+    | (
+        | 'construccion-comercial'
+        | 'obra-civil'
+        | 'mantenimiento'
+        | 'instalaciones-electricas'
+        | 'instalaciones-mecanicas'
+        | 'instalaciones-sanitarias'
+        | 'estructuras-metalicas'
+      )
+    | null;
   summary: string;
   description: string;
   coverImage?: (number | null) | Media;
@@ -258,6 +302,15 @@ export interface Project {
   order: number;
   isFeatured?: boolean | null;
   isActive?: boolean | null;
+  /**
+   * Controla cómo aparece esta página en Google
+   */
+  seo?: {
+    titulo?: string | null;
+    descripcion?: string | null;
+    imagen?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -426,6 +479,26 @@ export interface MediaSelect<T extends boolean = true> {
               filesize?: T;
               filename?: T;
             };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
       };
 }
 /**
@@ -445,10 +518,19 @@ export interface ServicesSelect<T extends boolean = true> {
         id?: T;
       };
   ctaLink?: T;
+  color?: T;
   image?: T;
   order?: T;
   isFeatured?: T;
   isActive?: T;
+  seo?:
+    | T
+    | {
+        titulo?: T;
+        descripcion?: T;
+        imagen?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -459,6 +541,7 @@ export interface ServicesSelect<T extends boolean = true> {
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  projectType?: T;
   summary?: T;
   description?: T;
   coverImage?: T;
@@ -476,6 +559,14 @@ export interface ProjectsSelect<T extends boolean = true> {
   order?: T;
   isFeatured?: T;
   isActive?: T;
+  seo?:
+    | T
+    | {
+        titulo?: T;
+        descripcion?: T;
+        imagen?: T;
+        noIndex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -563,6 +654,16 @@ export interface HomePage {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Aparecen debajo de los proyectos en la home. Máximo 6.
+   */
+  highlights?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -580,6 +681,15 @@ export interface AboutPage {
     | {
         title: string;
         description: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Etiquetas de valores que aparecen debajo del texto principal. Ej: Calidad, Precisión, Compromiso.
+   */
+  values?:
+    | {
+        label: string;
         id?: string | null;
       }[]
     | null;
@@ -605,6 +715,44 @@ export interface ContactPage {
     | {
         title: string;
         description: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "servicios-page".
+ */
+export interface ServiciosPage {
+  id: number;
+  /**
+   * Cifras que aparecen en el hero de la página de servicios
+   */
+  heroStats?:
+    | {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "proyectos-page".
+ */
+export interface ProyectosPage {
+  id: number;
+  /**
+   * Cifras que aparecen en el hero de la página de proyectos
+   */
+  heroStats?:
+    | {
+        value: string;
+        label: string;
         id?: string | null;
       }[]
     | null;
@@ -641,6 +789,13 @@ export interface HomePageSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  highlights?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -659,6 +814,12 @@ export interface AboutPageSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+        id?: T;
+      };
+  values?:
+    | T
+    | {
+        label?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -684,6 +845,38 @@ export interface ContactPageSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "servicios-page_select".
+ */
+export interface ServiciosPageSelect<T extends boolean = true> {
+  heroStats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "proyectos-page_select".
+ */
+export interface ProyectosPageSelect<T extends boolean = true> {
+  heroStats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
         id?: T;
       };
   updatedAt?: T;

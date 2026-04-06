@@ -97,16 +97,18 @@ function AnimatedStat({
   const count = useCountUp(number, 1800, started);
 
   return (
-    <div ref={ref} className="flex items-stretch gap-4 md:gap-10">
+    <div ref={ref} className="flex items-stretch gap-5 md:gap-14">
       <div className="flex flex-col justify-center">
-        <p className="text-xl font-extrabold text-white md:text-3xl">
+        <p className="text-2xl font-extrabold text-white sm:text-3xl md:text-5xl">
           {started ? `${count}${suffix}` : value}
         </p>
-        <p className="mt-1 text-[9px] font-semibold uppercase tracking-widest text-white/50 md:text-[10px]">
+        <p className="mt-1 text-[9px] font-semibold uppercase tracking-widest text-white/50 sm:text-[10px] md:text-xs">
           {label}
         </p>
       </div>
-      {!isLast && <div className="w-px self-stretch bg-white/40" />}
+      {!isLast && (
+        <div className="hidden w-px self-stretch bg-white/40 md:block" />
+      )}
     </div>
   );
 }
@@ -152,22 +154,6 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
 
   return (
     <>
-      <style>{`
-        @keyframes heroIn {
-          from { opacity: 0; transform: translateY(24px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .hero-in {
-          opacity: 0;
-          animation: heroIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        .hero-d1 { animation-delay: 100ms; }
-        .hero-d2 { animation-delay: 250ms; }
-        .hero-d3 { animation-delay: 400ms; }
-        .hero-d4 { animation-delay: 550ms; }
-        .hero-d5 { animation-delay: 700ms; }
-      `}</style>
-
       <section
         className="relative h-screen min-h-160 w-full overflow-hidden bg-(--charcoal)"
         onMouseEnter={() => setPaused(true)}
@@ -274,10 +260,10 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
           </div>
 
           {/* Stats + explorar */}
-          <div className="hero-in hero-d5 relative z-10 border-t border-white/10 py-4 md:py-6">
+          <div className="hero-in hero-d5 relative z-10 border-t border-white/10 py-7 md:py-8">
             <div className="flex items-center justify-between gap-4">
-              {/* Stats en una sola fila horizontal */}
-              <div className="flex items-stretch gap-0 overflow-x-auto">
+              {/* Stats: 2×2 en mobile, fila en desktop */}
+              <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 sm:gap-y-0 md:flex md:items-stretch md:gap-0">
                 {activeStats.map((stat, index) => (
                   <AnimatedStat
                     key={stat.label}
