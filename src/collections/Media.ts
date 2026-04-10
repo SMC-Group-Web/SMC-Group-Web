@@ -10,7 +10,7 @@ export const Media: CollectionConfig = {
   },
   upload: {
     staticDir: 'media',
-    mimeTypes: ['image/*', 'video/mp4', 'video/webm', 'video/ogg'],
+    mimeTypes: ['image/*', 'video/mp4', 'video/webm', 'video/ogg', 'application/pdf'],
     imageSizes: [
       {
         name: 'thumbnail',
@@ -20,14 +20,14 @@ export const Media: CollectionConfig = {
       },
       {
         name: 'card',
-        width: 768,
-        height: 512,
+        width: 1200,   // antes: 768 — actualizado para evitar pixelado en contenedores grandes
+        height: 800,   // antes: 512
         position: 'centre',
       },
       {
         name: 'hero',
-        width: 1280,
-        height: 720,
+        width: 1920,   // antes: 1280 — actualizado para pantallas retina y full-width
+        height: 1080,  // antes: 720
         position: 'centre',
       },
       {
@@ -45,6 +45,12 @@ export const Media: CollectionConfig = {
       type: 'text',
       required: true,
       label: 'Texto alternativo (describe la imagen para Google y accesibilidad)',
+    },
+    {
+      name: 'description',
+      type: 'text',
+      required: false,
+      label: 'Descripción del archivo (opcional)',
     },
   ],
 }

@@ -236,23 +236,44 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
                   currentSlide.secondButtonLink && (
                     <a
                       href={currentSlide.secondButtonLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download={currentSlide.secondButtonLink.endsWith('.pdf') ? true : undefined}
                       className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20 hover:scale-105 active:scale-95 md:px-7 md:py-3.5"
                     >
                       {currentSlide.secondButtonText}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M10 8l4 4-4 4" />
-                      </svg>
+                      {currentSlide.secondButtonLink.endsWith('.pdf') ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                          <polyline points="7 10 12 15 17 10" />
+                          <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M10 8l4 4-4 4" />
+                        </svg>
+                      )}
                     </a>
                   )}
               </div>

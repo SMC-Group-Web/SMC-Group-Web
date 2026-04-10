@@ -226,7 +226,8 @@ export default function ProjectGallery({
           src={images[0].url!}
           alt={captions[0] || images[0].alt || title}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+          quality={90}
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
 

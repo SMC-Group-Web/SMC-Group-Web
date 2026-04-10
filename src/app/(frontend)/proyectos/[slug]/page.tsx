@@ -277,7 +277,9 @@ export default async function ProyectoDetailPage({ params }: Props) {
                         src={block.image.url}
                         alt={block.caption || block.image.alt || project.title}
                         fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 700px"
+                        quality={92}
+                        priority={i === 0}
                         className="object-cover"
                       />
                     ) : (
