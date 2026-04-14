@@ -4,7 +4,7 @@ import Image from "next/image";
 import config from "@payload-config";
 import HomeHeroCarousel from "@/components/home/HomeHeroCarousel";
 import RevealWrapper from "@/components/home/RevealWrapper";
-import ProjectsScrollGallery from "@/components/home/ProjectsScrollGallery"
+import ProjectsScrollGallery from "@/components/home/ProjectsScrollGallery";
 import ClientsMarquee from "@/components/home/ClientsMarquee";
 import ServiciosMapa from "@/components/servicios/ServiciosMapa";
 import type { ServicioItem } from "@/components/servicios/ServiciosMapa";
@@ -19,7 +19,8 @@ export const metadata: Metadata = {
     "SMC GROUP, empresa especializada en ingeniería estructural, construcción industrial y fabricación metalmecánica en Lima, Perú.",
   openGraph: {
     title: "SMC GROUP | Ingeniería y Construcción — Lima, Perú",
-    description: "Empresa especializada en ingeniería estructural, construcción industrial y fabricación metalmecánica en Lima, Perú.",
+    description:
+      "Empresa especializada en ingeniería estructural, construcción industrial y fabricación metalmecánica en Lima, Perú.",
     images: [{ url: "/fondo.png", width: 1200, height: 630, alt: "SMC GROUP" }],
   },
 };
@@ -32,10 +33,7 @@ export default async function HomePage() {
     payload.find({
       collection: "projects",
       where: {
-        and: [
-          { isActive: { equals: true } },
-          { isFeatured: { equals: true } },
-        ],
+        and: [{ isActive: { equals: true } }, { isFeatured: { equals: true } }],
       },
       sort: "order",
       limit: 6,
@@ -56,7 +54,15 @@ export default async function HomePage() {
       sort: "order",
       limit: 10,
       depth: 0,
-      select: { title: true, slug: true, category: true, summary: true, description: true, features: true, color: true },
+      select: {
+        title: true,
+        slug: true,
+        category: true,
+        summary: true,
+        description: true,
+        features: true,
+        color: true,
+      },
     }),
   ]);
 
@@ -71,7 +77,10 @@ export default async function HomePage() {
   }));
 
   // Highlights from CMS (fallback to empty array if not yet configured)
-  const highlights = (homePage.highlights || []) as { title: string; description: string }[];
+  const highlights = (homePage.highlights || []) as {
+    title: string;
+    description: string;
+  }[];
 
   return (
     <main className="min-h-screen text-[#0f172a]">
@@ -98,7 +107,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-white/72" />
 
         {/* ══ PROYECTOS DESTACADOS ══ */}
-        <section id="proyectos" className="relative py-20">
+        <section id="proyectos" className="relative pt-16 md:pt-0">
           <ProjectsScrollGallery
             projects={projects.docs.map((p) => ({
               id: p.id,
@@ -118,25 +127,58 @@ export default async function HomePage() {
 
         {/* ══ HIGHLIGHTS (desde Payload) ══ */}
         {highlights.length > 0 && (
-          <section className="relative mx-auto w-full max-w-7xl px-6 pb-16 md:px-10">
+          <section className="relative mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
             <div className="grid gap-5 md:grid-cols-3">
               {highlights.map((h, i) => {
                 const icons = [
                   // Experiencia técnica — casco de obra
-                  <svg key="0" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
+                  <svg
+                    key="0"
+                    className="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"
+                    />
                   </svg>,
                   // Cumplimiento — checklist
-                  <svg key="1" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  <svg
+                    key="1"
+                    className="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
                   </svg>,
                   // Calidad — estrella
-                  <svg key="2" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                  <svg
+                    key="2"
+                    className="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                    />
                   </svg>,
-                ]
-                const icon = icons[i % icons.length]
-                const numbers = ["01", "02", "03", "04", "05", "06"]
+                ];
+                const icon = icons[i % icons.length];
+                const numbers = ["01", "02", "03", "04", "05", "06"];
 
                 return (
                   <RevealWrapper key={h.title} delay={i * 120}>
@@ -158,23 +200,36 @@ export default async function HomePage() {
                         >
                           {icon}
                         </div>
-                        <h3 className="mb-2 text-base font-bold text-[#0f172a]">{h.title}</h3>
-                        <p className="text-sm leading-6 text-slate-500">{h.description}</p>
+                        <h3 className="mb-2 text-base font-bold text-[#0f172a]">
+                          {h.title}
+                        </h3>
+                        <p className="text-sm leading-6 text-slate-500">
+                          {h.description}
+                        </p>
                       </div>
                     </div>
                   </RevealWrapper>
-                )
+                );
               })}
             </div>
           </section>
         )}
 
         {/* ══ SERVICIOS (mapa desde Payload) ══ */}
-        <section id="servicios" className="relative mx-auto w-full max-w-5xl px-6 py-20 md:px-10">
+        <section
+          id="servicios"
+          className="relative mx-auto w-full max-w-5xl px-6 py-20 md:px-10"
+        >
           <RevealWrapper>
             <div className="mb-4 flex items-center gap-3">
-              <div className="h-px w-10" style={{ background: "var(--primary)" }} />
-              <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
+              <div
+                className="h-px w-10"
+                style={{ background: "var(--primary)" }}
+              />
+              <p
+                className="text-xs font-bold uppercase tracking-[0.3em]"
+                style={{ color: "var(--primary)" }}
+              >
                 Capacidades técnicas
               </p>
             </div>
@@ -182,7 +237,9 @@ export default async function HomePage() {
               Soluciones integrales{" "}
               <span style={{ color: "var(--primary)" }}>de ingeniería</span>
             </h2>
-            <p className="mt-3 text-sm text-slate-500">Selecciona un servicio para ver todos los detalles</p>
+            <p className="mt-3 text-sm text-slate-500">
+              Selecciona un servicio para ver todos los detalles
+            </p>
           </RevealWrapper>
 
           <div className="mt-10">
@@ -207,12 +264,18 @@ export default async function HomePage() {
           <section className="relative mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
             <RevealWrapper>
               <div className="mb-12 text-center">
-                <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
+                <p
+                  className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
+                  style={{ color: "var(--primary)" }}
+                >
                   Nuestros Clientes
                 </p>
-                <h2 className="text-3xl font-bold text-[#0f172a] md:text-4xl">Confían en Nosotros</h2>
+                <h2 className="text-3xl font-bold text-[#0f172a] md:text-4xl">
+                  Confían en Nosotros
+                </h2>
                 <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500">
-                  Empresas líderes que confían en SMC GROUP para sus proyectos de ingeniería y construcción.
+                  Empresas líderes que confían en SMC GROUP para sus proyectos
+                  de ingeniería y construcción.
                 </p>
               </div>
             </RevealWrapper>
@@ -223,7 +286,10 @@ export default async function HomePage() {
                 website: (c.website as string | null) ?? null,
                 logo:
                   c.logo && typeof c.logo === "object"
-                    ? { url: (c.logo as MediaType).url ?? null, alt: (c.logo as MediaType).alt ?? null }
+                    ? {
+                        url: (c.logo as MediaType).url ?? null,
+                        alt: (c.logo as MediaType).alt ?? null,
+                      }
                     : null,
               }))}
             />

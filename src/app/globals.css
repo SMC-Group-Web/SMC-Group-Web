@@ -126,3 +126,35 @@ select {
 .animate-fade-in {
   will-change: opacity, transform;
 }
+
+/* ── PERFORMANCE GLOBAL ── */
+
+/* GPU acceleration para animaciones */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevenir layout shifts en imágenes */
+img, video {
+  will-change: auto;
+}
+
+/* Reducir repaints en elementos animados */
+.will-change-transform {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Scroll más fluido en toda la app */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Animaciones más suaves — evitar jank */
+@media (prefers-reduced-motion: no-preference) {
+  [data-framer-component-type] {
+    transform: translateZ(0);
+  }
+}
