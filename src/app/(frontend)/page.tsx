@@ -4,6 +4,7 @@ import Image from "next/image";
 import config from "@payload-config";
 import HomeHeroCarousel from "@/components/home/HomeHeroCarousel";
 import RevealWrapper from "@/components/home/RevealWrapper";
+import ProjectsScrollGallery from "@/components/home/ProjectsScrollGallery"
 import ClientsMarquee from "@/components/home/ClientsMarquee";
 import ServiciosMapa from "@/components/servicios/ServiciosMapa";
 import type { ServicioItem } from "@/components/servicios/ServiciosMapa";
@@ -97,68 +98,22 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-white/72" />
 
         {/* ══ PROYECTOS DESTACADOS ══ */}
-        <section id="proyectos" className="relative mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
-          <RevealWrapper>
-            <div className="mb-8 text-center">
-              <h2 className="text-4xl font-bold text-[#0f172a] md:text-5xl">PROYECTOS</h2>
-              <div className="mx-auto mt-3 h-0.5 w-10" style={{ background: "var(--primary)" }} />
-            </div>
-          </RevealWrapper>
-
-          {projects.docs.length > 0 && (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.docs.map((project, i) => {
-                const cover =
-                  project.coverImage && typeof project.coverImage === "object"
-                    ? (project.coverImage as MediaType)
-                    : null;
-                return (
-                  <RevealWrapper key={project.id} delay={i * 80}>
-                    <Link href={`/proyectos/${project.slug}`}>
-                      <article className="group relative overflow-hidden rounded-2xl">
-                        <div className="relative h-80 w-full overflow-hidden bg-slate-200 md:h-96">
-                          {cover?.url ? (
-                            <Image
-                              src={cover.url}
-                              alt={cover.alt || project.title}
-                              fill
-                              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                              className="object-cover transition-transform duration-700 group-hover:scale-105"
-                            />
-                          ) : (
-                            <div className="h-full w-full" style={{ background: "linear-gradient(135deg, #0a1628 0%, #0f2233 100%)" }} />
-                          )}
-                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0a1628]/80 px-8 py-10 text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                            {project.client && (
-                              <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
-                                {project.client}
-                              </p>
-                            )}
-                            <h3 className="mb-7 max-w-[85%] text-2xl font-bold leading-snug text-white">{project.title}</h3>
-                            <span className="inline-flex items-center gap-2 rounded-xl px-7 py-3 text-sm font-semibold text-white" style={{ background: "var(--primary)" }}>
-                              Ver proyecto →
-                            </span>
-                          </div>
-                        </div>
-                      </article>
-                    </Link>
-                  </RevealWrapper>
-                );
-              })}
-            </div>
-          )}
-
-          <RevealWrapper>
-            <div className="mt-12 flex justify-center">
-              <Link
-                href="/proyectos"
-                className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-sm font-semibold transition-all hover:scale-105 hover:opacity-90 active:scale-95"
-                style={{ background: "var(--primary)", color: "white" }}
-              >
-                Ver todos los proyectos →
-              </Link>
-            </div>
-          </RevealWrapper>
+        <section id="proyectos" className="relative py-20">
+          <ProjectsScrollGallery
+            projects={projects.docs.map((p) => ({
+              id: p.id,
+              title: p.title,
+              slug: p.slug as string,
+              client: (p.client as string | null) ?? null,
+              coverImage:
+                p.coverImage && typeof p.coverImage === "object"
+                  ? {
+                      url: (p.coverImage as MediaType).url ?? null,
+                      alt: (p.coverImage as MediaType).alt ?? null,
+                    }
+                  : null,
+            }))}
+          />
         </section>
 
         {/* ══ HIGHLIGHTS (desde Payload) ══ */}

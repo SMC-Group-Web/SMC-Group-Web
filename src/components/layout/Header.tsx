@@ -292,8 +292,11 @@ export default function Header() {
           {/* CTA desktop */}
           <a
             href="/contacto"
-            className="hidden rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition hover:scale-105 active:scale-95 md:inline-flex"
-            style={{ background: "var(--primary)", color: "white" }}
+            className="hidden rounded-xl px-5 py-2.5 text-sm font-semibold transition hover:scale-105 active:scale-95 md:inline-flex"
+            style={{
+              background: isTransparent ? "white" : "var(--primary)",
+              color: isTransparent ? "var(--primary)" : "white",
+            }}
           >
             Solicitar cotización
           </a>

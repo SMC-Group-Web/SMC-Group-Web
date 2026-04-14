@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Slide = {
   mediaType?: "image" | "video" | null;
@@ -192,19 +193,35 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
         <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-8 pb-0 pt-0 md:px-16 lg:px-20">
           {/* Contenido hero */}
           <div className="flex flex-1 items-center pb-8">
-            <div
+            <motion.div
               key={animKey}
               className="w-full max-w-3xl space-y-4 text-white md:space-y-6"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.12 } },
+              }}
             >
               {currentSlide.eyebrow && (
-                <span className="hero-in hero-d1 hero-text-shadow inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white/90 backdrop-blur-sm">
+                <motion.span
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+                  }}
+                  className="hero-text-shadow inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white/90 backdrop-blur-sm"
+                >
                   <span className="h-1.5 w-1.5 rounded-full bg-(--primary)" />
                   {currentSlide.eyebrow}
-                </span>
+                </motion.span>
               )}
 
-              <h1
-                className="hero-in hero-d2 hero-text-shadow text-3xl font-extrabold uppercase tracking-tight leading-tight sm:text-4xl md:text-6xl lg:text-7xl"
+              <motion.h1
+                variants={{
+                  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
+                  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+                }}
+                className="hero-text-shadow text-3xl font-extrabold uppercase tracking-tight leading-tight sm:text-4xl md:text-6xl lg:text-7xl"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
                 <span className="text-white">{titleTop}</span>
@@ -212,76 +229,93 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
                   <>
                     {" "}
                     <span className="text-(--primary)">{titleBottom}</span>{" "}
-                    {/* ← azul SMC, visible */}
                   </>
                 )}
-              </h1>
+              </motion.h1>
 
               {currentSlide.description && (
-                <p className="hero-in hero-d3 hero-text-shadow max-w-xl text-base leading-7 text-white/90 md:text-lg md:leading-8">
+                <motion.p
+                  variants={{
+                    hidden: { opacity: 0, y: 24 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+                  }}
+                  className="hero-text-shadow max-w-xl text-base leading-7 text-white/90 md:text-lg md:leading-8"
+                >
                   {currentSlide.description}
-                </p>
+                </motion.p>
               )}
 
-              <div className="hero-in hero-d4 flex flex-wrap gap-3 pt-1 md:gap-4 md:pt-2">
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+                }}
+                className="flex flex-wrap gap-3 pt-1 md:gap-4 md:pt-2"
+              >
                 {currentSlide.buttonText && currentSlide.buttonLink && (
-                  <a
+                  <motion.a
                     href={currentSlide.buttonLink}
-                    className="inline-flex items-center rounded-xl bg-(--primary) px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-(--primary-dark) hover:scale-105 active:scale-95 md:px-7 md:py-3.5"
+                    className="relative inline-flex items-center overflow-hidden rounded-xl bg-(--primary) px-5 py-3 text-sm font-semibold text-white shadow-lg md:px-7 md:py-3.5"
+                    whileHover={{ scale: 1.05, boxShadow: "0 0 32px rgba(47,86,201,0.6)" }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
                   >
-                    {currentSlide.buttonText}
-                  </a>
+                    <motion.span
+                      className="relative z-10 flex items-center gap-2"
+                      whileHover={{ x: 3 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    >
+                      {currentSlide.buttonText}
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </motion.span>
+                  </motion.a>
                 )}
-                {currentSlide.secondButtonText &&
-                  currentSlide.secondButtonLink && (
-                    <a
-                      href={currentSlide.secondButtonLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download={currentSlide.secondButtonLink.endsWith('.pdf') ? true : undefined}
-                      className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20 hover:scale-105 active:scale-95 md:px-7 md:py-3.5"
+                {currentSlide.secondButtonText && currentSlide.secondButtonLink && (
+                  <motion.a
+                    href={currentSlide.secondButtonLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download={currentSlide.secondButtonLink.endsWith(".pdf") ? true : undefined}
+                    className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm md:px-7 md:py-3.5"
+                    whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.18)", borderColor: "rgba(255,255,255,0.6)" }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  >
+                    <motion.span
+                      className="flex items-center gap-2"
+                      whileHover={{ x: 2 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     >
                       {currentSlide.secondButtonText}
-                      {currentSlide.secondButtonLink.endsWith('.pdf') ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
+                      {currentSlide.secondButtonLink.endsWith(".pdf") ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                           <polyline points="7 10 12 15 17 10" />
                           <line x1="12" y1="15" x2="12" y2="3" />
                         </svg>
                       ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="12" cy="12" r="10" />
                           <path d="M10 8l4 4-4 4" />
                         </svg>
                       )}
-                    </a>
-                  )}
-              </div>
-            </div>
+                    </motion.span>
+                  </motion.a>
+                )}
+              </motion.div>
+            </motion.div>
           </div>
 
           {/* Stats + explorar */}
-          <div className="hero-in hero-d5 relative z-10 border-t border-white/10 py-7 md:py-8">
+          <motion.div
+            key={`stats-${animKey}`}
+            className="relative z-10 border-t border-white/10 py-7 md:py-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
             <div className="flex items-center justify-between gap-4">
               {/* Stats: 2×2 en mobile, fila en desktop */}
               <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 sm:gap-y-0 md:flex md:items-stretch md:gap-0">
@@ -336,7 +370,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
                 </svg>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Flechas — ocultas en mobile para no tapar botones */}
