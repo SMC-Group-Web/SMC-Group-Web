@@ -246,6 +246,16 @@ export interface Service {
    */
   color?: string | null;
   image?: (number | null) | Media;
+  /**
+   * Fotos adicionales que aparecen debajo del hero en la página del servicio
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   order: number;
   isFeatured?: boolean | null;
   isActive?: boolean | null;
@@ -522,6 +532,13 @@ export interface ServicesSelect<T extends boolean = true> {
   ctaLink?: T;
   color?: T;
   image?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
   order?: T;
   isFeatured?: T;
   isActive?: T;

@@ -92,6 +92,30 @@ export const Services: CollectionConfig = {
       required: false,
     },
     {
+      name: 'gallery',
+      type: 'array',
+      label: 'Galería de imágenes',
+      required: false,
+      admin: {
+        description: 'Fotos adicionales que aparecen debajo del hero en la página del servicio',
+      },
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Imagen',
+          required: true,
+        },
+        {
+          name: 'caption',
+          type: 'text',
+          label: 'Descripción (opcional)',
+          required: false,
+        },
+      ],
+    },
+    {
       name: 'order',
       type: 'number',
       label: 'Orden',

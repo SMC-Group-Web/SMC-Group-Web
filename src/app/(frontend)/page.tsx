@@ -36,7 +36,7 @@ export default async function HomePage() {
       sort: "order",
       limit: 6,
       depth: 1,
-      select: { title: true, slug: true, client: true, summary: true, description: true, coverImage: true, gallery: true },
+      select: { title: true, slug: true, client: true, summary: true, description: true, projectType: true, coverImage: true, gallery: true },
     }),
     payload.find({
       collection: "clients",
@@ -48,7 +48,7 @@ export default async function HomePage() {
     }),
     payload.find({
       collection: "services",
-      where: { isActive: { equals: true } },
+      where: { and: [{ isActive: { equals: true } }, { isFeatured: { equals: true } }] },
       sort: "order",
       limit: 10,
       depth: 1,
@@ -108,6 +108,7 @@ export default async function HomePage() {
               client: (p.client as string | null) ?? null,
               summary: (p.summary as string | null) ?? null,
               description: (p.description as string | null) ?? null,
+              projectType: (p.projectType as string | null) ?? null,
               gallery: ((p.gallery || []) as { image: unknown; caption?: string }[])
                 .map((g) =>
                   g.image && typeof g.image === "object"

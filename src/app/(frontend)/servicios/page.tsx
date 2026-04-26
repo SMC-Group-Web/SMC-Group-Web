@@ -31,6 +31,7 @@ export default async function ServiciosPage() {
       depth: 1,
       select: {
         title: true,
+        slug: true,
         summary: true,
         category: true,
         features: true,
@@ -52,24 +53,24 @@ export default async function ServiciosPage() {
 
         <div className="relative mx-auto w-full max-w-7xl px-6 py-16 md:px-10 md:py-24">
           <div className="max-w-2xl">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
+            <span className="hero-in hero-d1 mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--primary)" }} />
               SMC GROUP — Servicios
             </span>
-            <h1 className="mt-3 text-4xl font-black uppercase leading-tight tracking-tight text-white md:text-6xl">
+            <h1 className="hero-in hero-d2 mt-3 text-4xl font-black uppercase leading-tight tracking-tight text-white md:text-6xl">
               Nuestros <span style={{ color: "var(--primary)" }}>Servicios</span>
             </h1>
-            <p className="mt-4 max-w-xl text-base leading-7 text-white/60">
+            <p className="hero-in hero-d3 mt-4 max-w-xl text-base leading-7 text-white/60">
               Servicios especializados en ingeniería y construcción con los más altos estándares técnicos, calidad y cumplimiento normativo.
             </p>
 
             {/* Stats */}
             {((serviciosPage.heroStats || []) as { value: string; label: string }[]).length > 0 && (
-              <div className="mt-8 flex flex-wrap gap-8 border-t border-white/10 pt-8">
+              <div className="hero-in hero-d4 mt-8 grid grid-cols-4 gap-4 border-t border-white/10 pt-8">
                 {((serviciosPage.heroStats || []) as { value: string; label: string }[]).map((s) => (
-                  <div key={s.label}>
-                    <p className="text-2xl font-black text-white">{s.value}</p>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-white/40">{s.label}</p>
+                  <div key={s.label} className="min-w-0">
+                    <p className="text-xl font-black text-white md:text-2xl">{s.value}</p>
+                    <p className="text-[10px] font-semibold uppercase leading-4 tracking-widest text-white/40 md:text-xs">{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -167,24 +168,21 @@ export default async function ServiciosPage() {
 
                     {features.length > 0 && (
                       <ul className="mb-4 mt-auto space-y-1.5 border-t border-gray-100 pt-4">
-                        {features.slice(0, 4).map((f, fi) => (
+                        {features.map((f, fi) => (
                           <li key={fi} className="flex items-center gap-2 text-sm text-slate-600">
                             <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--primary)" }} />
                             {f.text}
                           </li>
                         ))}
-                        {features.length > 4 && (
-                          <li className="text-xs text-slate-400 pl-3.5">+{features.length - 4} más...</li>
-                        )}
                       </ul>
                     )}
 
                     <Link
-                      href={(service.ctaLink as string) || "/contacto"}
+                      href={`/servicios/${service.slug as string}`}
                       className="mt-auto inline-flex items-center gap-1.5 text-sm font-bold transition-all hover:gap-2.5"
                       style={{ color: "var(--primary)" }}
                     >
-                      Solicitar cotización →
+                      Ver servicio completo →
                     </Link>
                   </div>
                 </article>

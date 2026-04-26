@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import config from "@payload-config";
 import { getPayload } from "payload";
+import RevealWrapper from "@/components/home/RevealWrapper";
 
 export const revalidate = 3600;
 
@@ -71,17 +72,17 @@ export default async function QuienesSomosPage() {
 
         <div className="relative mx-auto w-full max-w-7xl px-6 py-14 md:px-10 md:py-16">
           <div className="max-w-2xl">
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
+            <span className="hero-in hero-d1 mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
               <span
                 className="h-1.5 w-1.5 rounded-full"
                 style={{ background: "var(--primary)" }}
               />
               SMC GROUP
             </span>
-            <h1 className="text-white! mt-2 text-4xl font-black uppercase leading-tight tracking-tight md:text-6xl">
+            <h1 className="hero-in hero-d2 text-white! mt-2 text-4xl font-black uppercase leading-tight tracking-tight md:text-6xl">
               Quiénes <span style={{ color: "var(--primary)" }}>Somos</span>
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-white/60">
+            <p className="hero-in hero-d3 mt-5 max-w-xl text-base leading-7 text-white/60">
               {aboutPage.subtitle}
             </p>
           </div>
@@ -111,7 +112,7 @@ export default async function QuienesSomosPage() {
       <section className="relative mx-auto w-full max-w-7xl px-6 py-16 md:px-10">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           {/* Texto */}
-          <div className="space-y-6">
+          <RevealWrapper className="space-y-6">
             <div>
               <p
                 className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
@@ -153,10 +154,10 @@ export default async function QuienesSomosPage() {
               ))}
             </div>
             )}
-          </div>
+          </RevealWrapper>
 
           {/* Imagen */}
-          <div className="relative">
+          <RevealWrapper delay={120} className="relative">
             {/* Borde decorativo */}
             <div
               className="absolute -right-3 -top-3 h-full w-full rounded-2xl"
@@ -195,7 +196,7 @@ export default async function QuienesSomosPage() {
                 </div>
               )}
             </div>
-          </div>
+          </RevealWrapper>
         </div>
       </section>
 

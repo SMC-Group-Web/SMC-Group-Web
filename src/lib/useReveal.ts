@@ -36,6 +36,8 @@ export function useReveal(delay = 0) {
       setTimeout(() => {
         el.style.opacity = '1'
         el.style.transform = 'translateY(0)'
+        // Libera GPU layer una vez terminada la animación
+        setTimeout(() => { el.style.willChange = 'auto' }, 600)
       }, delay)
     })
     observer.observe(el)

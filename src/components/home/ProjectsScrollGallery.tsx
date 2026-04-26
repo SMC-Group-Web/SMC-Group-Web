@@ -14,6 +14,7 @@ type Project = {
   client?: string | null;
   summary?: string | null;
   description?: string | null;
+  projectType?: string | null;
   coverImage?: { url?: string | null; alt?: string | null } | null;
   gallery?: Photo[];
 };
@@ -38,6 +39,39 @@ const photoVariants = {
     x: type === "photo" ? (dir > 0 ? -16 : 16) : 0,
   }),
 };
+
+/* Botones de navegación directa — uno por proyecto */
+function ProjectNavButtons({
+  projects,
+  active,
+  onSelect,
+}: {
+  projects: Project[];
+  active: number;
+  onSelect: (i: number) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {projects.map((p, i) => (
+        <button
+          key={p.id}
+          onClick={() => onSelect(i)}
+          title={p.title}
+          className={`rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 ${
+            active === i
+              ? "text-white shadow-sm"
+              : "border border-gray-200 bg-white text-slate-500 hover:border-(--primary) hover:text-(--primary)"
+          }`}
+          style={active === i ? { background: "var(--primary)" } : {}}
+        >
+          {/* Número + título truncado */}
+          <span className="mr-1 opacity-60">{String(i + 1).padStart(2, "0")}</span>
+          {p.client ?? p.title.split(" ").slice(0, 3).join(" ")}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export default function ProjectsScrollGallery({ projects }: Props) {
   const [active, setActive] = useState(0);
@@ -190,31 +224,26 @@ export default function ProjectsScrollGallery({ projects }: Props) {
 
   return (
     <div ref={sectionRef} className="relative w-full">
-      {/* ── MOBILE: grid animado ── */}
-      <div className="md:hidden px-4 sm:px-6">
-        {/* HEADER mobile */}
+      {/* ── MOBILE ── */}
+      <div className="md:hidden px-4 pb-10 sm:px-6">
         <motion.div
-          className="mb-8 flex flex-col gap-2"
-          initial={{ opacity: 0, y: 30 }}
-          animate={sectionVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-8"
+          initial={{ opacity: 0, y: 24 }}
+          animate={sectionVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="flex items-center gap-3">
-            <div
-              className="h-px w-10"
-              style={{ background: "var(--primary)" }}
-            />
-            <p
-              className="text-xs font-bold uppercase tracking-[0.3em]"
-              style={{ color: "var(--primary)" }}
-            >
+          <div className="mb-3 flex items-center gap-3">
+            <div className="h-px w-10" style={{ background: "var(--primary)" }} />
+            <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
               Portafolio de obras
             </p>
           </div>
           <h2 className="text-3xl font-black uppercase text-[#0f172a] sm:text-4xl">
-            PROYECTOS{" "}
-            <span style={{ color: "var(--primary)" }}>REALIZADOS</span>
+            Proyectos <span style={{ color: "var(--primary)" }}>Realizados</span>
           </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            {projects.length} proyectos destacados ejecutados con precisión técnica.
+          </p>
         </motion.div>
 
         <div className="grid gap-5 sm:grid-cols-2">
@@ -222,10 +251,11 @@ export default function ProjectsScrollGallery({ projects }: Props) {
             <MobileCard key={project.id} project={project} index={i} />
           ))}
         </div>
+
         <div className="mt-8 text-center">
           <Link
             href="/proyectos"
-            className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-sm font-semibold transition-all hover:scale-105 hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-sm font-bold transition-all hover:scale-105 hover:opacity-90"
             style={{ background: "var(--primary)", color: "white" }}
           >
             Ver todos los proyectos →
@@ -234,7 +264,7 @@ export default function ProjectsScrollGallery({ projects }: Props) {
       </div>
 
       {/* ── DESKTOP: imagen sticky izquierda full height + lista derecha ── */}
-      <div className="hidden md:flex" style={{ overflow: "clip" }}>
+      <div className="hidden md:flex">
         {/* LEFT: imagen sticky full height */}
         <motion.div
           className="w-1/2 shrink-0"
@@ -412,22 +442,19 @@ export default function ProjectsScrollGallery({ projects }: Props) {
 
         {/* RIGHT: lista scrollable */}
         <motion.div
-          className="w-1/2 px-16 py-20"
+          className="w-1/2 px-16"
           initial={{ opacity: 0, x: 40 }}
           animate={sectionVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Header dentro de la lista */}
-          <div className="mb-16">
+          {/* ── BLOQUE STICKY: título + tabs ── */}
+          <div
+            className="sticky z-20 bg-white pb-5 pt-8"
+            style={{ top: "var(--header-height, 73px)" }}
+          >
             <div className="flex items-center gap-3 mb-3">
-              <div
-                className="h-px w-10"
-                style={{ background: "var(--primary)" }}
-              />
-              <p
-                className="text-xs font-bold uppercase tracking-[0.3em]"
-                style={{ color: "var(--primary)" }}
-              >
+              <div className="h-px w-10" style={{ background: "var(--primary)" }} />
+              <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
                 Portafolio de obras
               </p>
             </div>
@@ -435,8 +462,22 @@ export default function ProjectsScrollGallery({ projects }: Props) {
               PROYECTOS{" "}
               <span style={{ color: "var(--primary)" }}>REALIZADOS</span>
             </h2>
+            <div className="mt-5">
+              <ProjectNavButtons
+                projects={projects}
+                active={active}
+                onSelect={(i) => {
+                  slideCtx.current = { type: "project", dir: i > active ? 1 : -1 };
+                  setActive(i);
+                  setPhotoIndex(0);
+                  itemRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }}
+              />
+            </div>
+            <div className="mt-5 h-px w-full bg-gray-100" />
           </div>
 
+          {/* ── LISTA SCROLLABLE ── */}
           {projects.map((project, i) => {
             const isActive = active === i;
             return (

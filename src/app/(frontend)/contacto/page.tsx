@@ -65,18 +65,18 @@ export default async function ContactoPage() {
 
         <div className="relative mx-auto w-full max-w-7xl px-6 py-14 md:px-10 md:py-16">
           <div className="max-w-2xl">
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
+            <span className="hero-in hero-d1 mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
               <span
                 className="h-1.5 w-1.5 rounded-full"
                 style={{ background: "var(--primary)" }}
               />
               SMC GROUP
             </span>
-            <h1 className="text-white! mt-2 text-4xl font-black uppercase leading-tight tracking-tight md:text-6xl">
+            <h1 className="hero-in hero-d2 text-white! mt-2 text-4xl font-black uppercase leading-tight tracking-tight md:text-6xl">
               {contactPage.title || "Contáctanos"}{" "}
               <span style={{ color: "var(--primary)" }}>con nosotros</span>
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-white/60">
+            <p className="hero-in hero-d3 mt-5 max-w-xl text-base leading-7 text-white/60">
               {contactPage.subtitle}
             </p>
           </div>

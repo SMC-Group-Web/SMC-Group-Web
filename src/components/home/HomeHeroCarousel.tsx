@@ -169,6 +169,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
               loop
               playsInline
               className="absolute inset-0 h-full w-full object-cover"
+              style={{ transform: "translateZ(0)", willChange: "auto" }}
               src={currentSlide.video.url}
             />
             <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/50 to-black/75" />

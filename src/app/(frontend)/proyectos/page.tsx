@@ -57,20 +57,20 @@ export default async function ProyectosPage() {
 
         <div className="relative mx-auto w-full max-w-7xl px-6 py-16 md:px-10 md:py-24">
           <div className="max-w-2xl">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
+            <span className="hero-in hero-d1 mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.3em] text-white/70 backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--primary)" }} />
               SMC GROUP — Proyectos
             </span>
-            <h1 className="mt-3 text-4xl font-black uppercase leading-tight tracking-tight text-white md:text-6xl">
+            <h1 className="hero-in hero-d2 mt-3 text-4xl font-black uppercase leading-tight tracking-tight text-white md:text-6xl">
               Nuestros <span style={{ color: "var(--primary)" }}>Proyectos</span>
             </h1>
-            <p className="mt-4 max-w-xl text-base leading-7 text-white/60">
+            <p className="hero-in hero-d3 mt-4 max-w-xl text-base leading-7 text-white/60">
               Obras ejecutadas con precisión técnica, calidad y cumplimiento. Cada proyecto refleja el compromiso de SMC GROUP con la excelencia.
             </p>
 
             {/* Stats */}
             {((proyectosPage.heroStats || []) as { value: string; label: string }[]).length > 0 && (
-              <div className="mt-8 flex flex-wrap gap-8 border-t border-white/10 pt-8">
+              <div className="hero-in hero-d4 mt-8 flex flex-wrap gap-8 border-t border-white/10 pt-8">
                 {((proyectosPage.heroStats || []) as { value: string; label: string }[]).map((s) => (
                   <div key={s.label}>
                     <p className="text-2xl font-black text-white">{s.value}</p>
