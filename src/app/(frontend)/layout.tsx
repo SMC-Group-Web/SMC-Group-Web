@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
 import WhatsAppButton from '@/components/layout/WhatsAppButton'
 import PageTransition from '@/components/layout/PageTransition'
+import ScrollLine from '@/components/layout/ScrollLine'
 import { OrganizationSchema, LocalBusinessSchema } from '@/components/seo/JsonLd'
 import '../globals.css'
 
@@ -30,6 +31,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <Header />
+        <ScrollLine />
         <PageTransition>{children}</PageTransition>
         <Footer />
         <WhatsAppButton />

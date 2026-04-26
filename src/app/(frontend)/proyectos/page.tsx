@@ -70,11 +70,11 @@ export default async function ProyectosPage() {
 
             {/* Stats */}
             {((proyectosPage.heroStats || []) as { value: string; label: string }[]).length > 0 && (
-              <div className="hero-in hero-d4 mt-8 flex flex-wrap gap-8 border-t border-white/10 pt-8">
+              <div className="hero-in hero-d4 mt-8 grid grid-cols-4 gap-4 border-t border-white/10 pt-8">
                 {((proyectosPage.heroStats || []) as { value: string; label: string }[]).map((s) => (
-                  <div key={s.label}>
-                    <p className="text-2xl font-black text-white">{s.value}</p>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-white/40">{s.label}</p>
+                  <div key={s.label} className="min-w-0">
+                    <p className="text-xl font-black text-white md:text-2xl">{s.value}</p>
+                    <p className="text-[10px] font-semibold uppercase leading-4 tracking-widest text-white/40 md:text-xs">{s.label}</p>
                   </div>
                 ))}
               </div>

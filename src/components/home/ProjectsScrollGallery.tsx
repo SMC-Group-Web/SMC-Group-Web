@@ -225,14 +225,16 @@ export default function ProjectsScrollGallery({ projects }: Props) {
   return (
     <div ref={sectionRef} className="relative w-full">
       {/* ── MOBILE ── */}
-      <div className="md:hidden px-4 pb-10 sm:px-6">
+      <div className="md:hidden pb-10">
+        {/* Header sticky mobile */}
         <motion.div
-          className="mb-8"
+          className="sticky z-20 bg-white px-4 pb-4 pt-6 sm:px-6"
+          style={{ top: "var(--header-height, 73px)" }}
           initial={{ opacity: 0, y: 24 }}
           animate={sectionVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="mb-3 flex items-center gap-3">
+          <div className="mb-2 flex items-center gap-3">
             <div className="h-px w-10" style={{ background: "var(--primary)" }} />
             <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "var(--primary)" }}>
               Portafolio de obras
@@ -241,18 +243,19 @@ export default function ProjectsScrollGallery({ projects }: Props) {
           <h2 className="text-3xl font-black uppercase text-[#0f172a] sm:text-4xl">
             Proyectos <span style={{ color: "var(--primary)" }}>Realizados</span>
           </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
+          <p className="mt-1.5 text-sm leading-6 text-slate-500">
             {projects.length} proyectos destacados ejecutados con precisión técnica.
           </p>
+          <div className="mt-4 h-px w-full bg-gray-100" />
         </motion.div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-5 px-4 sm:grid-cols-2 sm:px-6">
           {projects.map((project, i) => (
             <MobileCard key={project.id} project={project} index={i} />
           ))}
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-8 px-4 text-center sm:px-6">
           <Link
             href="/proyectos"
             className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-sm font-bold transition-all hover:scale-105 hover:opacity-90"
