@@ -190,7 +190,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
           <div className="absolute inset-0 bg-(--charcoal)" />
         )}
 
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-8 pb-0 pt-0 md:px-16 lg:px-20">
+        <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-between px-4 pb-0 pt-0 sm:px-8 md:px-16 lg:px-20">
           {/* Contenido hero */}
           <div className="flex flex-1 items-center pb-8">
             <motion.div
@@ -218,8 +218,8 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
 
               <motion.h1
                 variants={{
-                  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
-                  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+                  hidden: { opacity: 0, y: 40 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
                 }}
                 className="hero-text-shadow text-3xl font-extrabold uppercase tracking-tight leading-tight sm:text-4xl md:text-6xl lg:text-7xl"
                 style={{ fontFamily: "var(--font-heading)" }}
@@ -250,59 +250,40 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
                 }}
-                className="flex flex-wrap gap-3 pt-1 md:gap-4 md:pt-2"
+                className="flex flex-wrap gap-3 pt-2 md:gap-5 md:pt-4"
               >
                 {currentSlide.buttonText && currentSlide.buttonLink && (
-                  <motion.a
+                  <a
                     href={currentSlide.buttonLink}
-                    className="relative inline-flex items-center overflow-hidden rounded-xl bg-(--primary) px-5 py-3 text-sm font-semibold text-white shadow-lg md:px-7 md:py-3.5"
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 32px rgba(47,86,201,0.6)" }}
-                    whileTap={{ scale: 0.96 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    className="inline-flex items-center gap-3 rounded-2xl bg-(--primary) px-5 py-3 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95 sm:px-8 sm:py-4 sm:text-base md:px-10 md:py-5 md:text-lg"
                   >
-                    <motion.span
-                      className="relative z-10 flex items-center gap-2"
-                      whileHover={{ x: 3 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    >
-                      {currentSlide.buttonText}
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </motion.span>
-                  </motion.a>
+                    {currentSlide.buttonText}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </a>
                 )}
                 {currentSlide.secondButtonText && currentSlide.secondButtonLink && (
-                  <motion.a
+                  <a
                     href={currentSlide.secondButtonLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     download={currentSlide.secondButtonLink.endsWith(".pdf") ? true : undefined}
-                    className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm md:px-7 md:py-3.5"
-                    whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.18)", borderColor: "rgba(255,255,255,0.6)" }}
-                    whileTap={{ scale: 0.96 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    className="inline-flex items-center gap-3 rounded-2xl border border-white/35 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all hover:border-white/65 hover:bg-white/20 active:scale-95 sm:px-8 sm:py-4 sm:text-base md:px-10 md:py-5 md:text-lg"
                   >
-                    <motion.span
-                      className="flex items-center gap-2"
-                      whileHover={{ x: 2 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                    >
-                      {currentSlide.secondButtonText}
-                      {currentSlide.secondButtonLink.endsWith(".pdf") ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M10 8l4 4-4 4" />
-                        </svg>
-                      )}
-                    </motion.span>
-                  </motion.a>
+                    {currentSlide.secondButtonText}
+                    {currentSlide.secondButtonLink.endsWith(".pdf") ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" /><path d="M10 8l4 4-4 4" />
+                      </svg>
+                    )}
+                  </a>
                 )}
               </motion.div>
             </motion.div>

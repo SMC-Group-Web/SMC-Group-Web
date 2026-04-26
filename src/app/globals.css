@@ -95,6 +95,36 @@ select {
   to   { transform: translateX(-50%); }
 }
 
+/* Fondo principal — fixed en desktop, scroll en mobile (iOS fix) */
+.fondo-bg {
+  background-image: url('/fondo.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-attachment: scroll;
+}
+
+@media (min-width: 768px) {
+  .fondo-bg {
+    background-attachment: fixed;
+  }
+}
+
+/* Hero sections — misma imagen pero sin fixed en mobile (iOS no lo soporta) */
+.fondo-hero {
+  background-image: url('/fondo.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: scroll;
+}
+
+@media (min-width: 768px) {
+  .fondo-hero {
+    background-attachment: fixed;
+  }
+}
+
 .hero-text-shadow {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.4);
 }
@@ -129,32 +159,33 @@ select {
 
 /* ── PERFORMANCE GLOBAL ── */
 
-/* GPU acceleration para animaciones */
-* {
+/* Font smoothing solo en body — propiedad heredada, no necesita * */
+body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Prevenir layout shifts en imágenes */
-img, video {
-  will-change: auto;
-}
-
-/* Reducir repaints en elementos animados */
+/* GPU layer explícito solo en elementos que realmente animan */
 .will-change-transform {
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
-/* Scroll más fluido en toda la app */
-* {
-  -webkit-overflow-scrolling: touch;
+/* Marquee: forzar composite layer para que CSS animation sea GPU-only */
+.marquee-track {
+  will-change: transform;
+  transform: translateZ(0);
 }
 
-/* Animaciones más suaves — evitar jank */
-@media (prefers-reduced-motion: no-preference) {
-  [data-framer-component-type] {
-    transform: translateZ(0);
+/* Respetar preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  .hero-in, .animate-fade-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .marquee-track {
+    animation-play-state: paused;
   }
 }

@@ -33,17 +33,9 @@ export default async function ContactoPage() {
   const mapsEmbed = `https://maps.google.com/maps?q=${siteConfig.coordinates.lat},${siteConfig.coordinates.lng}&z=17&output=embed`;
 
   return (
-    <main className="min-h-screen bg-[#f7f9fc] text-[#0f172a]">
+    <main className="min-h-screen text-[#0f172a]">
       {/* ── HERO ── */}
-      <div
-        className="relative overflow-hidden pt-(--header-height)"
-        style={{
-          backgroundImage: "url('/fondo.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <div className="fondo-hero relative overflow-hidden pt-(--header-height)">
         <div
           className="absolute inset-0"
           style={{
@@ -105,18 +97,14 @@ export default async function ContactoPage() {
         </div>
       </div>
 
+      {/* ── FONDO CONTINUO ── */}
+      <div className="fondo-bg relative w-full">
+        <div className="absolute inset-0 bg-white/72" />
+
       {/* ── CONTENIDO PRINCIPAL ── */}
       {/* ── ¿POR QUÉ ELEGIRNOS? ── */}
       {contactPage.infoCards && contactPage.infoCards.length > 0 && (
-        <section
-          className="relative w-full py-16"
-          style={{
-            backgroundImage: "url('/fondo.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="absolute inset-0 bg-white/88" />
+        <section className="relative w-full py-16">
           <div className="relative mx-auto w-full max-w-7xl px-6 md:px-10">
             <div className="mb-10 text-center">
               <p
@@ -164,7 +152,7 @@ export default async function ContactoPage() {
           </div>
         </section>
       )}
-      <section className="mx-auto w-full max-w-7xl px-6 py-16 pb-24 md:px-10">
+      <section className="relative mx-auto w-full max-w-7xl px-6 py-16 pb-24 md:px-10">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-start">
           {/* ══ COLUMNA IZQUIERDA ══ */}
           <div className="space-y-6">
@@ -559,6 +547,7 @@ export default async function ContactoPage() {
           </div>
         </div>
       </section>
+      </div>
     </main>
   );
 }

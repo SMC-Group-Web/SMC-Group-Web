@@ -5,24 +5,45 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
+type Photo = { url: string; alt?: string | null };
+
 type Project = {
   id: string | number;
   title: string;
   slug: string;
   client?: string | null;
-  coverImage?: {
-    url?: string | null;
-    alt?: string | null;
-  } | null;
+  summary?: string | null;
+  description?: string | null;
+  coverImage?: { url?: string | null; alt?: string | null } | null;
+  gallery?: Photo[];
 };
 
 type Props = {
   projects: Project[];
 };
 
+// dir: 1=derecha, -1=izquierda; type: "project"=vertical, "photo"=horizontal
+type SlideCtx = { type: "project" | "photo"; dir: 1 | -1 };
+
+const photoVariants = {
+  enter: ({ type, dir }: SlideCtx) => ({
+    opacity: 0,
+    y: type === "project" ? 16 : 0,
+    x: type === "photo" ? (dir > 0 ? 16 : -16) : 0,
+  }),
+  center: { opacity: 1, y: 0, x: 0 },
+  exit: ({ type, dir }: SlideCtx) => ({
+    opacity: 0,
+    y: type === "project" ? -16 : 0,
+    x: type === "photo" ? (dir > 0 ? -16 : 16) : 0,
+  }),
+};
+
 export default function ProjectsScrollGallery({ projects }: Props) {
   const [active, setActive] = useState(0);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const [sectionVisible, setSectionVisible] = useState(false);
+  const slideCtx = useRef<SlideCtx>({ type: "project", dir: 1 });
   const sectionRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -32,7 +53,7 @@ export default function ProjectsScrollGallery({ projects }: Props) {
       if (!el) return;
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) setActive(i);
+          if (entry.isIntersecting) { slideCtx.current = { type: "project", dir: 1 }; setActive(i); setPhotoIndex(0); }
         },
         { root: null, rootMargin: "-45% 0px -45% 0px", threshold: 0 },
       );
@@ -124,42 +145,14 @@ export default function ProjectsScrollGallery({ projects }: Props) {
 
               {/* Esquinas técnicas */}
               <div className="pointer-events-none absolute inset-0">
-                <motion.div
-                  className="absolute left-3 top-3"
-                  initial={{ opacity: 0 }}
-                  animate={visible ? { opacity: 1 } : { opacity: 0 }}
-                  transition={{
-                    delay: visible ? 0.3 + (index % 2) * 0.1 : 0,
-                    duration: 0.3,
-                  }}
-                >
-                  <div
-                    className="h-4 w-px"
-                    style={{ background: "var(--primary)" }}
-                  />
-                  <div
-                    className="h-px w-4"
-                    style={{ background: "var(--primary)" }}
-                  />
-                </motion.div>
-                <motion.div
-                  className="absolute right-3 top-3 flex flex-col items-end"
-                  initial={{ opacity: 0 }}
-                  animate={visible ? { opacity: 1 } : { opacity: 0 }}
-                  transition={{
-                    delay: visible ? 0.3 + (index % 2) * 0.1 : 0,
-                    duration: 0.3,
-                  }}
-                >
-                  <div
-                    className="h-4 w-px"
-                    style={{ background: "var(--primary)" }}
-                  />
-                  <div
-                    className="h-px w-4"
-                    style={{ background: "var(--primary)" }}
-                  />
-                </motion.div>
+                <div className="absolute left-3 top-3" style={{ opacity: visible ? 1 : 0, transition: "opacity 0.3s" }}>
+                  <div className="h-4 w-px" style={{ background: "var(--primary)" }} />
+                  <div className="h-px w-4" style={{ background: "var(--primary)" }} />
+                </div>
+                <div className="absolute right-3 top-3 flex flex-col items-end" style={{ opacity: visible ? 1 : 0, transition: "opacity 0.3s" }}>
+                  <div className="h-4 w-px" style={{ background: "var(--primary)" }} />
+                  <div className="h-px w-4" style={{ background: "var(--primary)" }} />
+                </div>
               </div>
 
               {/* Texto abajo siempre visible */}
@@ -198,7 +191,7 @@ export default function ProjectsScrollGallery({ projects }: Props) {
   return (
     <div ref={sectionRef} className="relative w-full">
       {/* ── MOBILE: grid animado ── */}
-      <div className="md:hidden px-6">
+      <div className="md:hidden px-4 sm:px-6">
         {/* HEADER mobile */}
         <motion.div
           className="mb-8 flex flex-col gap-2"
@@ -218,7 +211,7 @@ export default function ProjectsScrollGallery({ projects }: Props) {
               Portafolio de obras
             </p>
           </div>
-          <h2 className="text-4xl font-black uppercase text-[#0f172a]">
+          <h2 className="text-3xl font-black uppercase text-[#0f172a] sm:text-4xl">
             PROYECTOS{" "}
             <span style={{ color: "var(--primary)" }}>REALIZADOS</span>
           </h2>
@@ -245,11 +238,9 @@ export default function ProjectsScrollGallery({ projects }: Props) {
         {/* LEFT: imagen sticky full height */}
         <motion.div
           className="w-1/2 shrink-0"
-          initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-          animate={sectionVisible
-            ? { clipPath: "inset(0 0% 0 0)", opacity: 1 }
-            : { clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, x: -40 }}
+          animate={sectionVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
             className="sticky"
@@ -262,117 +253,159 @@ export default function ProjectsScrollGallery({ projects }: Props) {
           >
             {/* Imagen a pantalla completa */}
             <div className="relative h-full w-full overflow-hidden bg-slate-900">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={active}
-                  className="absolute inset-0"
-                  initial={{ clipPath: "inset(100% 0% 0% 0%)", opacity: 0 }}
-                  animate={{ clipPath: "inset(0% 0% 0% 0%)", opacity: 1 }}
-                  exit={{ clipPath: "inset(0% 0% 100% 0%)", opacity: 0 }}
-                  transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
-                >
-                  {projects[active]?.coverImage?.url ? (
-                    <Image
-                      src={projects[active].coverImage!.url!}
-                      alt={
-                        projects[active].coverImage?.alt ||
-                        projects[active].title
-                      }
-                      fill
-                      sizes="50vw"
-                      quality={92}
-                      className="object-cover"
-                      priority={active === 0}
-                    />
-                  ) : (
-                    <div
-                      className="h-full w-full"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #0a1628 0%, #0f2233 100%)",
-                      }}
-                    />
-                  )}
+              {(() => {
+                const proj = projects[active];
+                const cover = proj?.coverImage?.url
+                  ? { url: proj.coverImage.url, alt: proj.coverImage.alt }
+                  : null;
+                const allPhotos: Photo[] = [
+                  ...(cover ? [cover as Photo] : []),
+                  ...(proj?.gallery ?? []),
+                ];
+                const currentPhoto = allPhotos[photoIndex] ?? null;
+                const hasMultiple = allPhotos.length > 1;
 
-                  {/* Overlay sutil */}
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(10,22,40,0.15) 0%, transparent 50%)",
-                    }}
-                  />
+                return (
+                  <>
+                    <AnimatePresence mode="wait" custom={slideCtx.current}>
+                      <motion.div
+                        key={`${active}-${photoIndex}`}
+                        custom={slideCtx.current}
+                        variants={photoVariants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+                        className="absolute inset-0"
+                      >
+                        {currentPhoto?.url ? (
+                          <Image
+                            src={currentPhoto.url}
+                            alt={currentPhoto.alt || proj?.title || ""}
+                            fill
+                            sizes="50vw"
+                            quality={92}
+                            className="object-cover"
+                            priority={active === 0 && photoIndex === 0}
+                          />
+                        ) : (
+                          <div className="h-full w-full" style={{ background: "linear-gradient(135deg, #0a1628 0%, #0f2233 100%)" }} />
+                        )}
 
-                  {/* Esquinas técnicas */}
-                  <div className="pointer-events-none absolute inset-0">
-                    <motion.div
-                      key={`tl-${active}`}
-                      className="absolute left-6 top-6"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4, duration: 0.3 }}
-                    >
-                      <div
-                        className="h-8 w-px"
-                        style={{ background: "var(--primary)" }}
-                      />
-                      <div
-                        className="h-px w-8"
-                        style={{ background: "var(--primary)" }}
-                      />
-                    </motion.div>
-                    <motion.div
-                      key={`tr-${active}`}
-                      className="absolute right-6 top-6 flex flex-col items-end"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4, duration: 0.3 }}
-                    >
-                      <div
-                        className="h-8 w-px"
-                        style={{ background: "var(--primary)" }}
-                      />
-                      <div
-                        className="h-px w-8"
-                        style={{ background: "var(--primary)" }}
-                      />
-                    </motion.div>
-                  </div>
+                        {/* Overlay */}
+                        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(10,22,40,0.15) 0%, transparent 50%)" }} />
 
-                  {/* Progress bar lateral */}
-                  <div className="absolute bottom-0 right-0 top-0 w-1 bg-white/10">
-                    <motion.div
-                      className="w-full origin-top"
-                      style={{ background: "var(--primary)" }}
-                      animate={{
-                        height: `${((active + 1) / projects.length) * 100}%`,
-                      }}
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    />
-                  </div>
-                </motion.div>
-              </AnimatePresence>
+                        {/* Esquinas técnicas */}
+                        <div className="pointer-events-none absolute inset-0">
+                          <div className="absolute left-6 top-6">
+                            <div className="h-8 w-px" style={{ background: "var(--primary)" }} />
+                            <div className="h-px w-8" style={{ background: "var(--primary)" }} />
+                          </div>
+                          <div className="absolute right-6 top-6 flex flex-col items-end">
+                            <div className="h-8 w-px" style={{ background: "var(--primary)" }} />
+                            <div className="h-px w-8" style={{ background: "var(--primary)" }} />
+                          </div>
+                        </div>
 
-              {/* Contador top-left */}
-              <div className="absolute left-8 top-8 z-10 flex items-center gap-3">
-                <motion.span
-                  key={`count-${active}`}
-                  className="text-5xl font-black tabular-nums text-white"
-                  style={{
-                    lineHeight: 1,
-                    textShadow: "0 2px 12px rgba(0,0,0,0.5)",
-                  }}
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  {String(active + 1).padStart(2, "0")}
-                </motion.span>
-                <span className="text-xl font-light text-white/40">/</span>
-                <span className="text-lg font-semibold text-white/40">
-                  {String(projects.length).padStart(2, "0")}
-                </span>
-              </div>
+                        {/* Progress bar lateral */}
+                        <div className="absolute bottom-0 right-0 top-0 w-1 bg-white/10">
+                          <motion.div
+                            className="w-full origin-top"
+                            style={{ background: "var(--primary)" }}
+                            animate={{ height: `${((active + 1) / projects.length) * 100}%` }}
+                            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                          />
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+
+                    {/* Badge indicador de galería — aparece solo cuando hay más fotos */}
+                    {hasMultiple && (
+                      <motion.div
+                        key={`badge-${active}`}
+                        className="absolute left-6 bottom-16 z-20 flex items-center gap-1.5 rounded-full px-3 py-1.5 backdrop-blur-sm"
+                        style={{ background: "rgba(0,0,0,0.5)", border: "1px solid rgba(255,255,255,0.15)" }}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5, duration: 0.4 }}
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7">
+                          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                          <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                        <span className="text-[11px] font-semibold text-white/80">
+                          {photoIndex + 1} / {allPhotos.length} fotos
+                        </span>
+                      </motion.div>
+                    )}
+
+                    {/* Flechas navegación */}
+                    {hasMultiple && (
+                      <>
+                        <button
+                          onClick={() => {
+                            slideCtx.current = { type: "photo", dir: -1 };
+                            setPhotoIndex((p) => (p - 1 + allPhotos.length) % allPhotos.length);
+                          }}
+                          className="absolute left-4 top-1/2 z-20 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition hover:bg-black/60"
+                          aria-label="Foto anterior"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <button
+                          onClick={() => {
+                            slideCtx.current = { type: "photo", dir: 1 };
+                            setPhotoIndex((p) => (p + 1) % allPhotos.length);
+                          }}
+                          className="absolute right-6 top-1/2 z-20 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition hover:bg-black/60"
+                          aria-label="Foto siguiente"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                      </>
+                    )}
+
+                    {/* Dots */}
+                    {hasMultiple && (
+                      <div className="absolute bottom-6 left-0 right-6 z-20 flex justify-center gap-2">
+                        {allPhotos.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              slideCtx.current = { type: "photo", dir: idx > photoIndex ? 1 : -1 };
+                              setPhotoIndex(idx);
+                            }}
+                            className="h-1.5 rounded-full transition-all duration-300"
+                            style={{
+                              width: idx === photoIndex ? "1.5rem" : "0.375rem",
+                              background: idx === photoIndex ? "var(--primary)" : "rgba(255,255,255,0.4)",
+                            }}
+                            aria-label={`Foto ${idx + 1}`}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Contador top-left */}
+                    <div className="absolute left-8 top-8 z-10 flex items-center gap-3">
+                      <motion.span
+                        key={`count-${active}`}
+                        className="text-5xl font-black tabular-nums text-white"
+                        style={{ lineHeight: 1, textShadow: "0 2px 12px rgba(0,0,0,0.5)" }}
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        {String(active + 1).padStart(2, "0")}
+                      </motion.span>
+                      <span className="text-xl font-light text-white/40">/</span>
+                      <span className="text-lg font-semibold text-white/40">
+                        {String(projects.length).padStart(2, "0")}
+                      </span>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </motion.div>
@@ -380,11 +413,9 @@ export default function ProjectsScrollGallery({ projects }: Props) {
         {/* RIGHT: lista scrollable */}
         <motion.div
           className="w-1/2 px-16 py-20"
-          initial={{ clipPath: "inset(0 0 0 100%)", opacity: 0 }}
-          animate={sectionVisible
-            ? { clipPath: "inset(0 0 0 0%)", opacity: 1 }
-            : { clipPath: "inset(0 0 0 100%)", opacity: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, x: 40 }}
+          animate={sectionVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
           {/* Header dentro de la lista */}
           <div className="mb-16">
@@ -455,6 +486,15 @@ export default function ProjectsScrollGallery({ projects }: Props) {
                       >
                         {project.title}
                       </motion.h3>
+                      {(project.description || project.summary) && (
+                        <motion.p
+                          className="mt-3 text-sm leading-6 text-slate-500"
+                          animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 6 }}
+                          transition={{ duration: 0.3, delay: isActive ? 0.05 : 0 }}
+                        >
+                          {project.description || project.summary}
+                        </motion.p>
+                      )}
                       <motion.div
                         className="mt-5 flex items-center gap-2 text-sm font-bold"
                         animate={{

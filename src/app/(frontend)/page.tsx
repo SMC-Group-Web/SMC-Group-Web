@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
 import config from "@payload-config";
 import HomeHeroCarousel from "@/components/home/HomeHeroCarousel";
 import RevealWrapper from "@/components/home/RevealWrapper";
 import ProjectsScrollGallery from "@/components/home/ProjectsScrollGallery";
 import ClientsMarquee from "@/components/home/ClientsMarquee";
-import ServiciosMapa from "@/components/servicios/ServiciosMapa";
-import type { ServicioItem } from "@/components/servicios/ServiciosMapa";
+import QuienesSomosSection from "@/components/home/QuienesSomosSection";
+import ServiciosScrollGallery from "@/components/servicios/ServiciosScrollGallery";
 import { getPayload } from "payload";
 import type { MediaType } from "@/lib/types";
 
@@ -38,7 +36,7 @@ export default async function HomePage() {
       sort: "order",
       limit: 6,
       depth: 1,
-      select: { title: true, slug: true, client: true, coverImage: true },
+      select: { title: true, slug: true, client: true, summary: true, description: true, coverImage: true, gallery: true },
     }),
     payload.find({
       collection: "clients",
@@ -53,27 +51,29 @@ export default async function HomePage() {
       where: { isActive: { equals: true } },
       sort: "order",
       limit: 10,
-      depth: 0,
+      depth: 1,
       select: {
         title: true,
         slug: true,
         category: true,
         summary: true,
-        description: true,
         features: true,
-        color: true,
+        image: true,
       },
     }),
   ]);
 
-  // Map services to ServiciosMapa format
-  const mapaServices: ServicioItem[] = servicesRaw.docs.map((s) => ({
-    slug: s.slug as string,
+  const galleryServices = servicesRaw.docs.map((s) => ({
+    id: s.id,
     title: s.title,
-    cat: (s.category as string | null) ?? null,
-    color: (s.color as string | null) ?? null,
-    desc: (s.summary as string) || (s.description as string) || "",
-    specs: ((s.features || []) as { text: string }[]).map((f) => f.text),
+    slug: s.slug as string,
+    category: (s.category as string | null) ?? null,
+    summary: (s.summary as string | null) ?? null,
+    features: ((s.features || []) as { text: string }[]),
+    image:
+      s.image && typeof s.image === "object"
+        ? { url: (s.image as MediaType).url ?? null, alt: (s.image as MediaType).alt ?? null }
+        : null,
   }));
 
   // Highlights from CMS (fallback to empty array if not yet configured)
@@ -95,15 +95,7 @@ export default async function HomePage() {
       />
 
       {/* ══ FONDO CONTINUO ══ */}
-      <div
-        className="relative w-full"
-        style={{
-          backgroundImage: "url('/fondo.png')",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center top",
-        }}
-      >
+      <div className="fondo-bg relative w-full">
         <div className="absolute inset-0 bg-white/72" />
 
         {/* ══ PROYECTOS DESTACADOS ══ */}
@@ -114,6 +106,15 @@ export default async function HomePage() {
               title: p.title,
               slug: p.slug as string,
               client: (p.client as string | null) ?? null,
+              summary: (p.summary as string | null) ?? null,
+              description: (p.description as string | null) ?? null,
+              gallery: ((p.gallery || []) as { image: unknown; caption?: string }[])
+                .map((g) =>
+                  g.image && typeof g.image === "object"
+                    ? { url: (g.image as MediaType).url ?? null, alt: (g.image as MediaType).alt ?? null }
+                    : null
+                )
+                .filter(Boolean) as { url: string; alt: string | null }[],
               coverImage:
                 p.coverImage && typeof p.coverImage === "object"
                   ? {
@@ -127,8 +128,8 @@ export default async function HomePage() {
 
         {/* ══ HIGHLIGHTS (desde Payload) ══ */}
         {highlights.length > 0 && (
-          <section className="relative mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
-            <div className="grid gap-5 md:grid-cols-3">
+          <section className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 md:px-10 md:py-20">
+            <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
               {highlights.map((h, i) => {
                 const icons = [
                   // Experiencia técnica — casco de obra
@@ -189,10 +190,10 @@ export default async function HomePage() {
                         style={{ background: "var(--primary)" }}
                       />
                       {/* Número de fondo decorativo */}
-                      <span className="pointer-events-none absolute right-4 top-2 select-none text-7xl font-black text-slate-50">
+                      <span className="pointer-events-none absolute right-4 top-2 select-none text-5xl font-black text-slate-50 md:text-7xl">
                         {numbers[i]}
                       </span>
-                      <div className="relative p-7">
+                      <div className="relative p-5 md:p-7">
                         {/* Ícono */}
                         <div
                           className="mb-5 inline-flex items-center justify-center rounded-xl p-3 text-white"
@@ -215,53 +216,17 @@ export default async function HomePage() {
           </section>
         )}
 
-        {/* ══ SERVICIOS (mapa desde Payload) ══ */}
-        <section
-          id="servicios"
-          className="relative mx-auto w-full max-w-5xl px-6 py-20 md:px-10"
-        >
-          <RevealWrapper>
-            <div className="mb-4 flex items-center gap-3">
-              <div
-                className="h-px w-10"
-                style={{ background: "var(--primary)" }}
-              />
-              <p
-                className="text-xs font-bold uppercase tracking-[0.3em]"
-                style={{ color: "var(--primary)" }}
-              >
-                Capacidades técnicas
-              </p>
-            </div>
-            <h2 className="text-4xl font-black uppercase leading-tight text-[#0f172a] md:text-5xl">
-              Soluciones integrales{" "}
-              <span style={{ color: "var(--primary)" }}>de ingeniería</span>
-            </h2>
-            <p className="mt-3 text-sm text-slate-500">
-              Selecciona un servicio para ver todos los detalles
-            </p>
-          </RevealWrapper>
-
-          <div className="mt-10">
-            <ServiciosMapa services={mapaServices} />
-          </div>
-
-          <RevealWrapper>
-            <div className="mt-10 text-center">
-              <Link
-                href="/servicios"
-                className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-sm font-semibold transition-all hover:scale-105 hover:opacity-90 active:scale-95"
-                style={{ background: "var(--primary)", color: "white" }}
-              >
-                Ver todos los servicios →
-              </Link>
-            </div>
-          </RevealWrapper>
+        {/* ══ SERVICIOS ══ */}
+        <section id="servicios" className="relative w-full py-10 md:py-0">
+          <ServiciosScrollGallery services={galleryServices} />
         </section>
+
+      {/* ══ QUIÉNES SOMOS ══ */}
+      <QuienesSomosSection />
 
         {/* ══ CLIENTES ══ */}
         {clients.docs.length > 0 && (
-          <section className="relative mx-auto w-full max-w-7xl px-6 py-20 md:px-10">
+          <section className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 md:px-10 md:py-20">
             <RevealWrapper>
               <div className="mb-12 text-center">
                 <p

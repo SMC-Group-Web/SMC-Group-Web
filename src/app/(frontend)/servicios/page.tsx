@@ -42,18 +42,10 @@ export default async function ServiciosPage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-[#f7f9fc] text-[#0f172a]">
+    <main className="min-h-screen text-[#0f172a]">
 
       {/* ── HERO ── */}
-      <div
-        className="relative overflow-hidden pt-(--header-height)"
-        style={{
-          backgroundImage: "url('/fondo.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <div className="fondo-hero relative overflow-hidden pt-(--header-height)">
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #0a1628f0 0%, #0f2233e0 60%, #0d1b2ad0 100%)" }} />
         <div className="pointer-events-none absolute inset-0 opacity-10" style={{ backgroundImage: `linear-gradient(var(--primary) 1px, transparent 1px), linear-gradient(90deg, var(--primary) 1px, transparent 1px)`, backgroundSize: "60px 60px" }} />
         <div className="absolute left-0 top-0 h-0.5 w-full" style={{ background: "var(--primary)" }} />
@@ -93,8 +85,12 @@ export default async function ServiciosPage() {
         </div>
       </div>
 
+      {/* ── FONDO CONTINUO ── */}
+      <div className="fondo-bg relative w-full">
+        <div className="absolute inset-0 bg-white/72" />
+
       {/* ── GRID DE SERVICIOS ── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-16 pb-28 md:px-10">
+      <section className="relative mx-auto w-full max-w-7xl px-6 py-16 pb-28 md:px-10">
         {services.docs.length === 0 ? (
           <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center shadow-sm">
             <p className="text-slate-400">Aún no hay servicios activos registrados en el panel.</p>
@@ -197,6 +193,7 @@ export default async function ServiciosPage() {
           </div>
         )}
       </section>
+      </div>
     </main>
   );
 }

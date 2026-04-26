@@ -43,41 +43,40 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
     setMenuOpen(false);
     setExpandedMobile(null);
   }, [pathname]);
 
   useEffect(() => {
-    if (!isHome) {
-      setActiveSection("");
-      return;
-    }
-    const handleSectionTracking = () => {
-      const headerHeight = headerRef.current?.offsetHeight || 73;
-      if (window.scrollY < 200) {
-        setActiveSection("");
-        return;
-      }
-      const sections = ["proyectos", "servicios"];
-      let current = "";
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        if (el.getBoundingClientRect().top <= headerHeight + 100) {
-          current = id;
+    if (!isHome) setActiveSection("");
+
+    let rafId = 0;
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+
+      if (!isHome) return;
+
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const headerHeight = headerRef.current?.offsetHeight || 73;
+        if (window.scrollY < 200) { setActiveSection(""); return; }
+        const sections = ["proyectos", "servicios"];
+        let current = "";
+        for (const id of sections) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top <= headerHeight + 100) current = id;
         }
-      }
-      setActiveSection(current);
+        setActiveSection(current);
+      });
     };
-    handleSectionTracking();
-    window.addEventListener("scroll", handleSectionTracking, { passive: true });
-    return () => window.removeEventListener("scroll", handleSectionTracking);
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, [isHome]);
 
   useEffect(() => {
@@ -289,17 +288,6 @@ export default function Header() {
             })}
           </nav>
 
-          {/* CTA desktop */}
-          <a
-            href="/contacto"
-            className="hidden rounded-xl px-5 py-2.5 text-sm font-semibold transition hover:scale-105 active:scale-95 md:inline-flex"
-            style={{
-              background: isTransparent ? "white" : "var(--primary)",
-              color: isTransparent ? "var(--primary)" : "white",
-            }}
-          >
-            Solicitar cotización
-          </a>
 
           {/* Botón hamburguesa mobile */}
           <button
@@ -486,12 +474,15 @@ export default function Header() {
           {/* CTAs */}
           <div className="mt-auto space-y-3 pt-8">
             <a
-              href="/contacto"
+              href="/proyectos"
               onClick={closeMenu}
-              className="flex items-center justify-center rounded-2xl px-5 py-3.5 text-sm font-semibold text-white shadow-lg transition hover:scale-[1.01] hover:opacity-90 active:scale-[0.99]"
+              className="flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-sm font-semibold text-white shadow-lg transition hover:scale-[1.01] hover:opacity-90 active:scale-[0.99]"
               style={{ background: "var(--primary)" }}
             >
-              Solicitar cotización
+              Ver Portafolio
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
             </a>
 
             <a
@@ -499,7 +490,7 @@ export default function Header() {
               target="_blank"
               rel="noreferrer"
               onClick={closeMenu}
-              className="flex items-center justify-center rounded-2xl border border-white/15 bg-white/5 px-5 py-3.5 text-sm font-medium text-white/85 backdrop-blur transition hover:bg-white/10"
+              className="flex items-center justify-center gap-2.5 rounded-2xl border border-white/15 bg-white/5 px-5 py-3.5 text-sm font-medium text-white/85 backdrop-blur transition hover:bg-white/10"
             >
               WhatsApp
             </a>

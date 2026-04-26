@@ -32,17 +32,9 @@ export default async function QuienesSomosPage() {
       : null;
 
   return (
-    <main className="min-h-screen bg-[#f7f9fc] text-[#0f172a]">
+    <main className="min-h-screen text-[#0f172a]">
       {/* ── HERO OSCURO CON TEXTURA TÉCNICA ── */}
-      <div
-        className="relative overflow-hidden pt-(--header-height)"
-        style={{
-          backgroundImage: "url('/fondo.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <div className="fondo-hero relative overflow-hidden pt-(--header-height)">
         {/* Overlay oscuro */}
         <div
           className="absolute inset-0"
@@ -111,8 +103,12 @@ export default async function QuienesSomosPage() {
         </div>
       </div>
 
+      {/* ── FONDO CONTINUO ── */}
+      <div className="fondo-bg relative w-full">
+        <div className="absolute inset-0 bg-white/72" />
+
       {/* ── SECCIÓN PRINCIPAL — Texto + Imagen ── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-16 md:px-10">
+      <section className="relative mx-auto w-full max-w-7xl px-6 py-16 md:px-10">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           {/* Texto */}
           <div className="space-y-6">
@@ -204,14 +200,7 @@ export default async function QuienesSomosPage() {
       </section>
 
       {/* ── FORTALEZAS ── */}
-      <section
-        className="relative w-full py-20"
-        style={{
-          backgroundImage: "url('/fondo.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
+      <section className="fondo-hero relative w-full py-20">
         <div className="absolute inset-0 bg-white/88" />
 
         <div className="relative mx-auto w-full max-w-7xl px-6 md:px-10">
@@ -279,7 +268,7 @@ export default async function QuienesSomosPage() {
       </section>
 
       {/* ── CTA FINAL ── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-20 text-center md:px-10">
+      <section className="relative mx-auto w-full max-w-7xl px-6 py-20 text-center md:px-10">
         <p
           className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
           style={{ color: "var(--primary)" }}
@@ -309,6 +298,7 @@ export default async function QuienesSomosPage() {
           </a>
         </div>
       </section>
+      </div>
     </main>
   );
 }

@@ -114,7 +114,7 @@ export default async function ProyectoDetailPage({ params }: Props) {
   ];
 
   return (
-    <main className="min-h-screen bg-[#f7f9fc] text-[#0f172a]">
+    <main className="min-h-screen text-[#0f172a]">
       <BreadcrumbSchema
         items={[
           { name: "Inicio", url: siteConfig.website },
@@ -137,15 +137,7 @@ export default async function ProyectoDetailPage({ params }: Props) {
       />
 
       {/* ── HERO ── */}
-      <div
-        className="relative overflow-hidden pt-(--header-height)"
-        style={{
-          backgroundImage: "url('/fondo.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <div className="fondo-hero relative overflow-hidden pt-(--header-height)">
         <div
           className="absolute inset-0"
           style={{
@@ -236,9 +228,13 @@ export default async function ProyectoDetailPage({ params }: Props) {
         </div>
       </div>
 
+      {/* ── FONDO CONTINUO ── */}
+      <div className="fondo-bg relative w-full">
+        <div className="absolute inset-0 bg-white/72" />
+
       {/* ── DESCRIPCIÓN PRINCIPAL ── */}
       {project.description && (
-        <section className="mx-auto w-full max-w-7xl px-6 py-14 md:px-10">
+        <section className="relative mx-auto w-full max-w-7xl px-6 py-14 md:px-10">
           <div className="mx-auto max-w-3xl">
             <div className="mb-4 flex items-center gap-3">
               <div
@@ -261,7 +257,7 @@ export default async function ProyectoDetailPage({ params }: Props) {
 
       {/* ── BLOQUES ALTERNADOS IMAGEN / TEXTO ── */}
       {blocks.length > 0 && (
-        <section className="mx-auto w-full max-w-7xl px-6 pb-28 md:px-10">
+        <section className="relative mx-auto w-full max-w-7xl px-6 pb-28 md:px-10">
           <div className="space-y-0">
             {blocks.map((block, i) => {
               const isEven = i % 2 === 0;
@@ -350,7 +346,7 @@ export default async function ProyectoDetailPage({ params }: Props) {
       )}
 
       {/* ── CTA FINAL ── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-20 text-center md:px-10">
+      <section className="relative mx-auto w-full max-w-7xl px-6 py-20 text-center md:px-10">
         <p
           className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
           style={{ color: "var(--primary)" }}
@@ -380,6 +376,7 @@ export default async function ProyectoDetailPage({ params }: Props) {
           </Link>
         </div>
       </section>
+      </div>
     </main>
   );
 }
