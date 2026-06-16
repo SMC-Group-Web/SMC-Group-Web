@@ -53,7 +53,7 @@ function RevealText({ children, delay = 0, className = "" }: {
   );
 }
 
-function RevealImage({ src, alt, delay = 0 }: { src: string; alt: string; delay?: number }) {
+function RevealImage({ src, alt, sizes, delay = 0 }: { src: string; alt: string; sizes?: string; delay?: number }) {
   const { ref, visible } = useReveal(0.1);
   return (
     <div
@@ -66,7 +66,11 @@ function RevealImage({ src, alt, delay = 0 }: { src: string; alt: string; delay?
       }}
     >
       <Image
-        src={src} alt={alt} fill sizes="100vw"
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes || "100vw"}
+        quality={90}
         className={`object-cover transition-transform duration-700 ${visible ? "scale-100" : "scale-105"}`}
       />
     </div>

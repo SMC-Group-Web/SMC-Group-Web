@@ -95,17 +95,17 @@ select {
   to   { transform: translateX(-50%); }
 }
 
-/* Fondo principal — fixed en desktop, scroll en mobile (iOS fix) */
+/* Fondo principal — blanco en mobile, fondo.png en desktop */
 .fondo-bg {
-  background-image: url('/fondo.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center top;
-  background-attachment: scroll;
+  background: white;
 }
 
 @media (min-width: 768px) {
   .fondo-bg {
+    background-image: url('/fondo.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
     background-attachment: fixed;
   }
 }

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import AnimatedTitle from "@/components/ui/AnimatedTitle";
 
 const team = [
   { name: "Carlos López",  role: "Operario",          x: 7  },
@@ -52,9 +53,7 @@ export default function QuienesSomosSection() {
             </p>
             <div className="h-px w-8" style={{ background: "var(--primary)" }} />
           </div>
-          <h2 className="text-3xl font-black uppercase text-[#0f172a] md:text-4xl">
-            Nuestro <span style={{ color: "var(--primary)" }}>Equipo</span>
-          </h2>
+          <AnimatedTitle text="Nuestro Equipo" highlight="Equipo" className="text-3xl font-black uppercase text-[#0f172a] md:text-4xl" />
         </motion.div>
           {/* Nombres desktop — dentro del sticky */}
           <div className="relative mt-6 hidden h-12 w-full md:block">

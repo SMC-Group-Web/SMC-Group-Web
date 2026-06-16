@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
+import AnimatedTitle from "@/components/ui/AnimatedTitle";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -65,7 +66,7 @@ function MobileCard({
                 alt={servicio.image.alt || servicio.title}
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"
-                quality={85}
+                quality={90}
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
             ) : (
@@ -268,9 +269,7 @@ export default function ServiciosScrollGallery({ services }: Props) {
               Capacidades técnicas
             </p>
           </div>
-          <h2 className="text-3xl font-black uppercase text-[#0f172a] sm:text-4xl">
-            Nuestros <span style={{ color: "var(--primary)" }}>Servicios</span>
-          </h2>
+          <AnimatedTitle text="Nuestros Servicios" highlight="Servicios" className="text-3xl font-black uppercase text-[#0f172a] sm:text-4xl" />
           <div className="mt-2 flex items-center gap-2">
             <svg className="h-3.5 w-3.5 shrink-0" fill="currentColor" style={{ color: "var(--primary)" }} viewBox="0 0 24 24">
               <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
@@ -332,10 +331,7 @@ export default function ServiciosScrollGallery({ services }: Props) {
                   Capacidades técnicas
                 </p>
               </div>
-              <h2 className="text-5xl font-black uppercase text-[#0f172a]">
-                NUESTROS{" "}
-                <span style={{ color: "var(--primary)" }}>SERVICIOS</span>
-              </h2>
+              <AnimatedTitle text="Nuestros Servicios" highlight="Servicios" className="text-5xl font-black uppercase text-[#0f172a]" />
             </div>
 
             {/* Retail leader badge */}

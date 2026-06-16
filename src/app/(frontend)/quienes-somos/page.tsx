@@ -3,6 +3,7 @@ import Image from "next/image";
 import config from "@payload-config";
 import { getPayload } from "payload";
 import RevealWrapper from "@/components/home/RevealWrapper";
+import AnimatedTitle from "@/components/ui/AnimatedTitle";
 
 export const revalidate = 3600;
 
@@ -212,9 +213,7 @@ export default async function QuienesSomosPage() {
             >
               Nuestro Enfoque
             </p>
-            <h2 className="text-3xl font-black uppercase md:text-4xl">
-              Principios que nos definen
-            </h2>
+            <AnimatedTitle text="Principios que nos definen" className="text-3xl font-black uppercase md:text-4xl" />
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500">
               Valores y fortalezas que guían cada proyecto que desarrollamos.
             </p>
@@ -276,9 +275,7 @@ export default async function QuienesSomosPage() {
         >
           ¿Listo para trabajar juntos?
         </p>
-        <h2 className="text-3xl font-black uppercase md:text-4xl">
-          Hablemos de tu Proyecto
-        </h2>
+        <AnimatedTitle text="Hablemos de tu Proyecto" highlight="Proyecto" className="text-3xl font-black uppercase md:text-4xl" />
         <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-500">
           Contáctanos y cuéntanos sobre tu proyecto. Nuestro equipo está listo
           para ofrecerte la mejor solución de ingeniería.

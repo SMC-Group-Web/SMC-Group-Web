@@ -42,11 +42,10 @@ function useReveal(threshold = 0.15) {
 
 /* Imagen con reveal animado */
 function RevealImage({
-  src, alt, fill, sizes, priority, className = "",
-  delay = 0,
+  src, alt, sizes, priority, delay = 0,
 }: {
-  src: string; alt: string; fill?: boolean; sizes?: string;
-  priority?: boolean; className?: string; delay?: number;
+  src: string; alt: string; sizes?: string;
+  priority?: boolean; delay?: number;
 }) {
   const { ref, visible } = useReveal(0.1);
   return (
@@ -59,18 +58,15 @@ function RevealImage({
         transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms`,
       }}
     >
-      {fill ? (
-        <Image
-          src={src} alt={alt} fill sizes={sizes}
-          priority={priority}
-          className={`object-cover transition-transform duration-700 ${visible ? "scale-100" : "scale-105"} ${className}`}
-        />
-      ) : (
-        <Image src={src} alt={alt} width={1200} height={800}
-          sizes={sizes} priority={priority}
-          className={`h-full w-full object-cover ${className}`}
-        />
-      )}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes || "100vw"}
+        quality={90}
+        priority={priority}
+        className={`object-cover transition-transform duration-700 ${visible ? "scale-100" : "scale-105"}`}
+      />
     </div>
   );
 }
@@ -287,7 +283,7 @@ export default function ProyectoDetail({
                     <RevealImage
                       src={group.image.url}
                       alt={group.image.alt || title}
-                      fill sizes="100vw"
+                      sizes="100vw"
                       priority={group.index === 0}
                     />
                     {/* Overlay + caption */}
@@ -317,7 +313,7 @@ export default function ProyectoDetail({
                         <RevealImage
                           src={img.url}
                           alt={img.alt || title}
-                          fill sizes="50vw"
+                          sizes="50vw"
                           delay={ii * 100}
                         />
                         {img.caption && (
@@ -342,7 +338,7 @@ export default function ProyectoDetail({
                       <RevealImage
                         src={group.images[0].url}
                         alt={group.images[0].alt || title}
-                        fill sizes="(max-width: 768px) 100vw, 60vw"
+                        sizes="(max-width: 768px) 100vw, 60vw"
                       />
                       {group.images[0].caption && (
                         <div className="absolute bottom-0 left-0 right-0 z-10 bg-linear-to-t from-black/65 to-transparent px-5 pb-5 pt-12">
@@ -360,7 +356,7 @@ export default function ProyectoDetail({
                           <RevealImage
                             src={img.url}
                             alt={img.alt || title}
-                            fill sizes="(max-width: 768px) 50vw, 40vw"
+                            sizes="(max-width: 768px) 50vw, 40vw"
                             delay={(ii + 1) * 100}
                           />
                           <div className="absolute right-3 top-3 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-[9px] font-bold text-white backdrop-blur-sm">
