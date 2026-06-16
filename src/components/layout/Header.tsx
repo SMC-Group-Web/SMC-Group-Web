@@ -60,12 +60,16 @@ export default function Header() {
       cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
         const headerHeight = headerRef.current?.offsetHeight || 73;
-        if (window.scrollY < 200) { setActiveSection(""); return; }
+        if (window.scrollY < 200) {
+          setActiveSection("");
+          return;
+        }
         const sections = ["proyectos", "servicios"];
         let current = "";
         for (const id of sections) {
           const el = document.getElementById(id);
-          if (el && el.getBoundingClientRect().top <= headerHeight + 100) current = id;
+          if (el && el.getBoundingClientRect().top <= headerHeight + 100)
+            current = id;
         }
         setActiveSection(current);
       });
@@ -118,9 +122,15 @@ export default function Header() {
   const isActive = (href: string) => {
     if (href === "/") return isHome && activeSection === "";
     if (href === "/servicios")
-      return (isHome && activeSection === "servicios") || pathname.startsWith("/servicios");
+      return (
+        (isHome && activeSection === "servicios") ||
+        pathname.startsWith("/servicios")
+      );
     if (href === "/proyectos")
-      return (isHome && activeSection === "proyectos") || pathname.startsWith("/proyectos");
+      return (
+        (isHome && activeSection === "proyectos") ||
+        pathname.startsWith("/proyectos")
+      );
     if (href.startsWith("/#")) return false;
     return pathname === href || pathname.startsWith(`${href}/`);
   };
@@ -197,13 +207,19 @@ export default function Header() {
                         strokeWidth={2.5}
                         viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                       <span
                         className="absolute bottom-0 left-0 h-0.5 rounded-full transition-all duration-300"
                         style={{
                           width: active ? "100%" : "0%",
-                          background: isTransparent ? "white" : "var(--primary)",
+                          background: isTransparent
+                            ? "white"
+                            : "var(--primary)",
                         }}
                       />
                     </Link>
@@ -223,8 +239,18 @@ export default function Header() {
                         onClick={closeMenu}
                       >
                         <span>Todos los {item.label.toLowerCase()}</span>
-                        <svg className="h-3.5 w-3.5 shrink-0 text-slate-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        <svg
+                          className="h-3.5 w-3.5 shrink-0 text-slate-400"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                          />
                         </svg>
                       </Link>
 
@@ -235,12 +261,27 @@ export default function Header() {
                         <a
                           key={sub.href}
                           href={sub.href}
-                          onClick={(e) => handleAnchorClick(e as React.MouseEvent<HTMLAnchorElement>, sub.href)}
+                          onClick={(e) =>
+                            handleAnchorClick(
+                              e as React.MouseEvent<HTMLAnchorElement>,
+                              sub.href,
+                            )
+                          }
                           className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-700"
                         >
                           {/* Home icon */}
-                          <svg className="h-3.5 w-3.5 shrink-0 text-slate-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                          <svg
+                            className="h-3.5 w-3.5 shrink-0 text-slate-400"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                            />
                           </svg>
                           {sub.label}
                         </a>
@@ -254,7 +295,12 @@ export default function Header() {
                 <a
                   key={item.href}
                   href={item.href}
-                  onClick={(e) => handleAnchorClick(e as React.MouseEvent<HTMLAnchorElement>, item.href)}
+                  onClick={(e) =>
+                    handleAnchorClick(
+                      e as React.MouseEvent<HTMLAnchorElement>,
+                      item.href,
+                    )
+                  }
                   className="relative flex cursor-pointer items-center gap-1 pb-2 text-base font-medium transition-colors duration-300"
                   style={{
                     color: isTransparent
@@ -273,7 +319,11 @@ export default function Header() {
                       strokeWidth={2}
                       viewBox="0 0 24 24"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                      />
                     </svg>
                   )}
                   <span
@@ -287,7 +337,6 @@ export default function Header() {
               );
             })}
           </nav>
-
 
           {/* Botón hamburguesa mobile */}
           <button
@@ -303,15 +352,21 @@ export default function Header() {
           >
             <span
               className={`block h-0.5 w-6 rounded-full transition-all duration-300 ${menuOpen ? "translate-y-2 rotate-45" : ""}`}
-              style={{ background: isTransparent ? "white" : "var(--foreground)" }}
+              style={{
+                background: isTransparent ? "white" : "var(--foreground)",
+              }}
             />
             <span
               className={`block h-0.5 w-6 rounded-full transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`}
-              style={{ background: isTransparent ? "white" : "var(--foreground)" }}
+              style={{
+                background: isTransparent ? "white" : "var(--foreground)",
+              }}
             />
             <span
               className={`block h-0.5 w-6 rounded-full transition-all duration-300 ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`}
-              style={{ background: isTransparent ? "white" : "var(--foreground)" }}
+              style={{
+                background: isTransparent ? "white" : "var(--foreground)",
+              }}
             />
           </button>
         </div>
@@ -348,7 +403,9 @@ export default function Header() {
         <div className="pointer-events-none absolute -right-4 top-36 h-44 w-44 rounded-full border border-white/10" />
         <div
           className="pointer-events-none absolute right-0 top-0 h-full w-40"
-          style={{ background: `linear-gradient(to bottom, var(--primary)25, transparent)` }}
+          style={{
+            background: `linear-gradient(to bottom, var(--primary)25, transparent)`,
+          }}
         />
         <div className="pointer-events-none absolute left-0 top-0 h-px w-full bg-linear-to-r from-transparent via-white/20 to-transparent" />
 
@@ -384,9 +441,13 @@ export default function Header() {
                           href={item.href}
                           onClick={closeMenu}
                           className={`flex flex-1 items-center py-4 text-base font-medium transition ${
-                            active ? "text-white" : "text-white/75 hover:text-white"
+                            active
+                              ? "text-white"
+                              : "text-white/75 hover:text-white"
                           }`}
-                          style={{ color: active ? "var(--primary)" : undefined }}
+                          style={{
+                            color: active ? "var(--primary)" : undefined,
+                          }}
                         >
                           {item.label}
                         </Link>
@@ -406,19 +467,34 @@ export default function Header() {
                             strokeWidth={2.5}
                             viewBox="0 0 24 24"
                           >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19 9l-7 7-7-7"
+                            />
                           </svg>
                         </button>
                       </>
                     ) : (
                       <a
                         href={item.href}
-                        onClick={(e) => handleAnchorClick(e as React.MouseEvent<HTMLAnchorElement>, item.href)}
+                        onClick={(e) =>
+                          handleAnchorClick(
+                            e as React.MouseEvent<HTMLAnchorElement>,
+                            item.href,
+                          )
+                        }
                         className={`group flex flex-1 cursor-pointer items-center justify-between py-4 text-base font-medium transition ${
-                          active ? "text-white" : "text-white/75 hover:text-white"
+                          active
+                            ? "text-white"
+                            : "text-white/75 hover:text-white"
                         }`}
                       >
-                        <span style={{ color: active ? "var(--primary)" : undefined }}>
+                        <span
+                          style={{
+                            color: active ? "var(--primary)" : undefined,
+                          }}
+                        >
                           {item.label}
                         </span>
                         {/* Indicador de página para Quiénes somos y Contacto */}
@@ -428,7 +504,9 @@ export default function Header() {
                               ? "translate-x-0 opacity-100"
                               : "translate-x-1 opacity-40 group-hover:translate-x-0 group-hover:opacity-100"
                           }`}
-                          style={{ color: active ? "var(--primary)" : undefined }}
+                          style={{
+                            color: active ? "var(--primary)" : undefined,
+                          }}
                         >
                           ↗
                         </span>
@@ -446,8 +524,18 @@ export default function Header() {
                         className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-white/90 transition hover:text-white"
                       >
                         <span>Todos los {item.label.toLowerCase()}</span>
-                        <svg className="h-3.5 w-3.5 shrink-0 opacity-60" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        <svg
+                          className="h-3.5 w-3.5 shrink-0 opacity-60"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                          />
                         </svg>
                       </Link>
                       {/* Ver en inicio */}
@@ -455,11 +543,26 @@ export default function Header() {
                         <a
                           key={sub.href}
                           href={sub.href}
-                          onClick={(e) => handleAnchorClick(e as React.MouseEvent<HTMLAnchorElement>, sub.href)}
+                          onClick={(e) =>
+                            handleAnchorClick(
+                              e as React.MouseEvent<HTMLAnchorElement>,
+                              sub.href,
+                            )
+                          }
                           className="flex items-center gap-2.5 px-4 py-3 text-sm text-white/55 transition hover:text-white/80"
                         >
-                          <svg className="h-3.5 w-3.5 shrink-0 opacity-60" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                          <svg
+                            className="h-3.5 w-3.5 shrink-0 opacity-60"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                            />
                           </svg>
                           {sub.label}
                         </a>
@@ -480,8 +583,17 @@ export default function Header() {
               style={{ background: "var(--primary)" }}
             >
               Ver Portafolio
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </a>
 

@@ -103,10 +103,7 @@ export default function ProjectsScrollGallery({ projects }: Props) {
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setSectionVisible(true);
-          observer.disconnect();
-        }
+        setSectionVisible(entry.isIntersecting);
       },
       { threshold: 0.1 },
     );
@@ -132,7 +129,7 @@ export default function ProjectsScrollGallery({ projects }: Props) {
       const el = ref.current;
       if (!el) return;
       const observer = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+        ([entry]) => { setVisible(entry.isIntersecting); },
         { threshold: 0.15 },
       );
       observer.observe(el);

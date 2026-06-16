@@ -35,10 +35,7 @@ function MobileCard({
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
+        setVisible(entry.isIntersecting);
       },
       { threshold: 0.15 },
     );
@@ -238,10 +235,7 @@ export default function ServiciosScrollGallery({ services }: Props) {
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setSectionVisible(true);
-          obs.disconnect();
-        }
+        setSectionVisible(entry.isIntersecting);
       },
       { threshold: 0.1 },
     );

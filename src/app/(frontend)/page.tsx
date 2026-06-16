@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import config from "@payload-config";
+import Link from "next/link";
 import HomeHeroCarousel from "@/components/home/HomeHeroCarousel";
 import RevealWrapper from "@/components/home/RevealWrapper";
 import ProjectsScrollGallery from "@/components/home/ProjectsScrollGallery";
 import ClientsMarquee from "@/components/home/ClientsMarquee";
-import QuienesSomosSection from "@/components/home/QuienesSomosSection";
 import ServiciosScrollGallery from "@/components/servicios/ServiciosScrollGallery";
 import { getPayload } from "payload";
 import type { MediaType } from "@/lib/types";
@@ -99,7 +99,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-white/72" />
 
         {/* ══ PROYECTOS DESTACADOS ══ */}
-        <section id="proyectos" className="relative pt-16 md:pt-0">
+        <section id="proyectos" className="relative pt-20 pb-24 md:pt-28 md:pb-32">
           <ProjectsScrollGallery
             projects={projects.docs.map((p) => ({
               id: p.id,
@@ -129,7 +129,7 @@ export default async function HomePage() {
 
         {/* ══ HIGHLIGHTS (desde Payload) ══ */}
         {highlights.length > 0 && (
-          <section className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 md:px-10 md:py-20">
+          <section className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:px-10 md:py-28">
             <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
               {highlights.map((h, i) => {
                 const icons = [
@@ -218,16 +218,77 @@ export default async function HomePage() {
         )}
 
         {/* ══ SERVICIOS ══ */}
-        <section id="servicios" className="relative w-full py-10 md:py-0">
+        <section id="servicios" className="relative w-full py-20 md:py-28">
           <ServiciosScrollGallery services={galleryServices} />
         </section>
 
-      {/* ══ QUIÉNES SOMOS ══ */}
-      <QuienesSomosSection />
+        {/* ══ CTA FINAL ══ */}
+        <section className="relative w-full py-28 md:py-36">
+
+          <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+
+            <RevealWrapper>
+              <div className="mb-6 flex items-center justify-center gap-3">
+                <div className="h-px w-12" style={{ background: 'var(--primary)' }} />
+                <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: 'var(--primary)' }}>
+                  Trabajemos Juntos
+                </p>
+                <div className="h-px w-12" style={{ background: 'var(--primary)' }} />
+              </div>
+            </RevealWrapper>
+
+            <RevealWrapper delay={100}>
+              <h2
+                style={{ fontFamily: 'var(--font-heading)', lineHeight: 1.1 }}
+                className="text-4xl font-black uppercase md:text-6xl lg:text-7xl"
+              >
+                <span style={{ color: '#0f172a' }}>¿Tienes un</span>
+                <br />
+                <span style={{ color: 'var(--primary)' }}>Proyecto en Mente?</span>
+              </h2>
+            </RevealWrapper>
+
+            <RevealWrapper delay={200}>
+              <p className="mx-auto mt-6 max-w-xl text-base leading-7 md:text-lg" style={{ color: '#5b6470' }}>
+                Contáctanos y un especialista de SMC GROUP evaluará tu proyecto
+                sin costo ni compromiso.
+              </p>
+            </RevealWrapper>
+
+            <RevealWrapper delay={300}>
+              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <Link
+                  href="/contacto"
+                  className="inline-flex items-center gap-2 rounded-lg px-8 py-3.5 text-sm font-bold uppercase tracking-[0.15em] transition-all duration-300 hover:scale-105 hover:gap-4 hover:opacity-90"
+                  style={{ background: 'var(--primary)', color: '#ffffff' }}
+                >
+                  Iniciar Proyecto
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <a
+                  href="https://wa.me/51953860041"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg px-8 py-3.5 text-sm font-bold uppercase tracking-[0.15em] transition-all duration-300 hover:scale-105 hover:opacity-90"
+                  style={{ background: 'var(--primary)', color: '#ffffff' }}
+                >
+                  WhatsApp
+                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.523 5.851L.057 23.882l6.19-1.438A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.894a9.898 9.898 0 01-5.032-1.378l-.36-.214-3.733.867.933-3.417-.235-.373A9.86 9.86 0 012.106 12C2.106 6.58 6.58 2.106 12 2.106c5.421 0 9.894 4.474 9.894 9.894 0 5.421-4.473 9.894-9.894 9.894z"/>
+                  </svg>
+                </a>
+              </div>
+            </RevealWrapper>
+
+          </div>
+        </section>
 
         {/* ══ CLIENTES ══ */}
         {clients.docs.length > 0 && (
-          <section className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 md:px-10 md:py-20">
+          <section className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:px-10 md:py-28">
             <RevealWrapper>
               <div className="mb-12 text-center">
                 <p

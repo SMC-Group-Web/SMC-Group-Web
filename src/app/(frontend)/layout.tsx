@@ -29,7 +29,7 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
         <OrganizationSchema />
         <LocalBusinessSchema />
       </head>
-      <body>
+      <body className="overflow-x-hidden">
         <Header />
         <ScrollLine />
         <PageTransition>{children}</PageTransition>
