@@ -3,7 +3,13 @@ import type { GlobalConfig } from 'payload'
 export const ServiciosPage: GlobalConfig = {
   slug: 'servicios-page',
   label: 'Página de Servicios',
-  access: { read: () => true },
+  access: {
+    read: () => true,
+    update: ({ req: { user } }) => user?.role === 'admin',
+  },
+  admin: {
+    hidden: ({ user }) => user?.role !== 'admin',
+  },
   fields: [
     {
       name: 'heroStats',

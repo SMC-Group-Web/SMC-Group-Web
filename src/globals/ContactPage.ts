@@ -5,6 +5,10 @@ export const ContactPage: GlobalConfig = {
   label: 'Contacto',
   access: {
     read: () => true,
+    update: ({ req: { user } }) => user?.role === 'admin',
+  },
+  admin: {
+    hidden: ({ user }) => user?.role !== 'admin',
   },
   fields: [
     {

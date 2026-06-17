@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import config from "@payload-config";
 import { getPayload } from "payload";
 import { siteConfig } from "@/lib/site";
+import RevealWrapper from "@/components/home/RevealWrapper";
+import ContactForm from "@/components/contacto/ContactForm";
 
 export const revalidate = 3600;
 
@@ -29,7 +31,7 @@ export default async function ContactoPage() {
       )}`
     : null;
 
-  const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteConfig.address.full)}`;
+  const mapsLink = `https://www.google.com/maps?q=${siteConfig.coordinates.lat},${siteConfig.coordinates.lng}`;
   const mapsEmbed = `https://maps.google.com/maps?q=${siteConfig.coordinates.lat},${siteConfig.coordinates.lng}&z=17&output=embed`;
 
   return (
@@ -101,452 +103,262 @@ export default async function ContactoPage() {
       <div className="fondo-bg relative w-full">
         <div className="absolute inset-0 bg-white/72" />
 
-      {/* ── CONTENIDO PRINCIPAL ── */}
-      {/* ── ¿POR QUÉ ELEGIRNOS? ── */}
-      {contactPage.infoCards && contactPage.infoCards.length > 0 && (
-        <section className="relative w-full py-16">
-          <div className="relative mx-auto w-full max-w-7xl px-6 md:px-10">
-            <div className="mb-10 text-center">
-              <p
-                className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
-                style={{ color: "var(--primary)" }}
-              >
-                ¿Por qué elegirnos?
-              </p>
-              <h2 className="text-3xl font-black uppercase">
-                Razones para trabajar{" "}
-                <span style={{ color: "var(--primary)" }}>con nosotros</span>
-              </h2>
+        {/* ── ¿POR QUÉ ELEGIRNOS? ── */}
+        {contactPage.infoCards && contactPage.infoCards.length > 0 && (
+          <section className="relative w-full py-16">
+            <div className="relative mx-auto w-full max-w-7xl px-6 md:px-10">
+              <RevealWrapper>
+                <div className="mb-10 text-center">
+                  <p
+                    className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
+                    style={{ color: "var(--primary)" }}
+                  >
+                    ¿Por qué elegirnos?
+                  </p>
+                  <h2 className="text-3xl font-black uppercase">
+                    Razones para trabajar{" "}
+                    <span style={{ color: "var(--primary)" }}>con nosotros</span>
+                  </h2>
+                </div>
+              </RevealWrapper>
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {contactPage.infoCards.map((item, index) => (
+                  <RevealWrapper key={index} delay={index * 100}>
+                    <article className="group relative h-full overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-(--primary) hover:shadow-[0_20px_40px_rgba(47,86,201,0.12)]">
+                      <span className="absolute right-4 top-3 select-none text-6xl font-black leading-none text-gray-100 transition-colors group-hover:text-blue-50">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <div
+                        className="absolute bottom-0 left-0 h-0.75 w-0 transition-all duration-500 group-hover:w-full"
+                        style={{ background: "var(--primary)" }}
+                      />
+                      <div
+                        className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl"
+                        style={{ background: "var(--primary)" + "15" }}
+                      >
+                        <div
+                          className="h-3 w-3 rounded-full"
+                          style={{ background: "var(--primary)" }}
+                        />
+                      </div>
+                      <h3 className="mb-2 text-base font-bold text-[#0f172a]">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm leading-6 text-slate-500">
+                        {item.description}
+                      </p>
+                    </article>
+                  </RevealWrapper>
+                ))}
+              </div>
             </div>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {contactPage.infoCards.map((item, index) => (
-                <article
-                  key={index}
-                  className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-(--primary) hover:shadow-[0_20px_40px_rgba(47,86,201,0.12)]"
-                >
-                  <span className="absolute right-4 top-3 select-none text-6xl font-black leading-none text-gray-100 transition-colors group-hover:text-blue-50">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div
-                    className="absolute bottom-0 left-0 h-0.75 w-0 transition-all duration-500 group-hover:w-full"
-                    style={{ background: "var(--primary)" }}
-                  />
-                  <div
-                    className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl"
-                    style={{ background: "var(--primary)" + "15" }}
+          </section>
+        )}
+
+        <section className="relative mx-auto w-full max-w-7xl px-6 py-16 pb-24 md:px-10">
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-start">
+
+            {/* ══ COLUMNA IZQUIERDA ══ */}
+            <div className="space-y-6">
+              <RevealWrapper>
+                <div>
+                  <p
+                    className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
+                    style={{ color: "var(--primary)" }}
+                  >
+                    Información de contacto
+                  </p>
+                  <h2 className="text-2xl font-black uppercase text-[#0f172a]">
+                    Hablemos de tu{" "}
+                    <span style={{ color: "var(--primary)" }}>Proyecto</span>
+                  </h2>
+                  {contactPage.description && (
+                    <p className="mt-3 text-sm leading-6 text-slate-500">
+                      {contactPage.description}
+                    </p>
+                  )}
+                </div>
+              </RevealWrapper>
+
+              {/* Ficha técnica unificada */}
+              <RevealWrapper delay={100}>
+                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                  {contactPage.phone && (
+                    <div className="flex items-center gap-4 border-b border-gray-100 px-5 py-4">
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                        style={{ background: "var(--primary)" + "12" }}
+                      >
+                        <svg className="h-4 w-4" style={{ color: "var(--primary)" }} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                        </svg>
+                      </div>
+                      <div className="flex flex-1 items-center justify-between">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Teléfono</p>
+                        <p className="text-sm font-bold text-[#0f172a]">{contactPage.phone}</p>
+                      </div>
+                    </div>
+                  )}
+                  {contactPage.email && (
+                    <div className="flex items-center gap-4 border-b border-gray-100 px-5 py-4">
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                        style={{ background: "var(--primary)" + "12" }}
+                      >
+                        <svg className="h-4 w-4" style={{ color: "var(--primary)" }} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                        </svg>
+                      </div>
+                      <div className="flex flex-1 items-center justify-between">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Email</p>
+                        <a href={`mailto:${contactPage.email}`} className="text-sm font-bold text-[#0f172a] transition hover:text-(--primary) break-all">{contactPage.email}</a>
+                      </div>
+                    </div>
+                  )}
+                  {contactPage.schedule && (
+                    <div className="flex items-center gap-4 border-b border-gray-100 px-5 py-4">
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                        style={{ background: "var(--primary)" + "12" }}
+                      >
+                        <svg className="h-4 w-4" style={{ color: "var(--primary)" }} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                      </div>
+                      <div className="flex flex-1 items-center justify-between">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Horario</p>
+                        <p className="text-sm font-bold text-[#0f172a]">{contactPage.schedule}</p>
+                      </div>
+                    </div>
+                  )}
+                  {contactPage.address && (
+                    <div className="flex items-center gap-4 px-5 py-4">
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                        style={{ background: "var(--primary)" + "12" }}
+                      >
+                        <svg className="h-4 w-4" style={{ color: "var(--primary)" }} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                      </div>
+                      <div className="flex flex-1 items-center justify-between">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Dirección</p>
+                        <p className="text-sm font-bold text-[#0f172a]">{contactPage.address}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </RevealWrapper>
+
+              {/* WhatsApp CTA */}
+              {whatsappHref && (
+                <RevealWrapper delay={150}>
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-4 rounded-2xl border-2 p-4 transition-all duration-300 hover:scale-[1.01] hover:shadow-lg"
+                    style={{
+                      borderColor: "var(--primary)",
+                      background: "var(--primary)" + "06",
+                    }}
                   >
                     <div
-                      className="h-3 w-3 rounded-full"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                       style={{ background: "var(--primary)" }}
+                    >
+                      <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: "var(--primary)" }}>
+                        Respuesta inmediata
+                      </p>
+                      <p className="text-sm font-bold text-[#0f172a]">Escribir por WhatsApp →</p>
+                    </div>
+                  </a>
+                </RevealWrapper>
+              )}
+
+              {/* Mapa */}
+              <RevealWrapper delay={200}>
+                <div className="overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
+                  <div className="relative">
+                    <iframe
+                      src={mapsEmbed}
+                      width="100%"
+                      height="200"
+                      style={{ border: 0, display: "block", filter: "grayscale(0.3) saturate(1.3)" }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Ubicación SMC GROUP"
+                    />
+                    <div
+                      className="pointer-events-none absolute inset-0"
+                      style={{ background: "linear-gradient(180deg, var(--primary)10 0%, transparent 30%)" }}
                     />
                   </div>
-                  <h3 className="mb-2 text-base font-bold text-[#0f172a]">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm leading-6 text-slate-500">
-                    {item.description}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-      <section className="relative mx-auto w-full max-w-7xl px-6 py-16 pb-24 md:px-10">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-start">
-          {/* ══ COLUMNA IZQUIERDA ══ */}
-          <div className="space-y-6">
-            {/* Header info */}
-            <div>
-              <p
-                className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
-                style={{ color: "var(--primary)" }}
-              >
-                Información de contacto
-              </p>
-              <h2 className="text-2xl font-black uppercase text-[#0f172a]">
-                Hablemos de tu{" "}
-                <span style={{ color: "var(--primary)" }}>Proyecto</span>
-              </h2>
-              {contactPage.description && (
-                <p className="mt-3 text-sm leading-6 text-slate-500">
-                  {contactPage.description}
-                </p>
-              )}
-            </div>
-
-            {/* Cards de contacto del CMS */}
-            <div className="grid gap-3 sm:grid-cols-2">
-              {contactPage.phone && (
-                <div className="group flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-(--primary) hover:shadow-md">
-                  <div
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: "var(--primary)" + "12" }}
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      style={{ color: "var(--primary)" }}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                      Teléfono
-                    </p>
-                    <p className="mt-0.5 text-sm font-bold text-[#0f172a]">
-                      {contactPage.phone}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {contactPage.email && (
-                <div className="group flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-(--primary) hover:shadow-md">
-                  <div
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: "var(--primary)" + "12" }}
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      style={{ color: "var(--primary)" }}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                      Email
-                    </p>
+                  <div className="flex items-center justify-between bg-white px-4 py-3">
+                    <div>
+                      <p className="text-xs font-bold text-[#0f172a]">{siteConfig.address.full}</p>
+                      <p className="text-xs text-slate-400">Lima, Perú</p>
+                    </div>
                     <a
-                      href={`mailto:${contactPage.email}`}
-                      className="mt-0.5 block text-sm font-bold text-[#0f172a] transition hover:text-(--primary) break-all"
+                      href={mapsLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition hover:opacity-80"
+                      style={{ background: "var(--primary)" + "12", color: "var(--primary)" }}
                     >
-                      {contactPage.email}
+                      Abrir en Maps →
                     </a>
                   </div>
                 </div>
-              )}
+              </RevealWrapper>
 
-              {contactPage.schedule && (
-                <div className="group flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-(--primary) hover:shadow-md">
-                  <div
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: "var(--primary)" + "12" }}
+              <RevealWrapper delay={250}>
+                <div className="flex items-center gap-3">
+                  <p className="text-xs text-slate-400">Síguenos en</p>
+                  <a
+                    href={siteConfig.social.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-400 shadow-sm transition hover:border-(--primary) hover:bg-(--primary) hover:text-white"
                   >
-                    <svg
-                      className="h-4 w-4"
-                      style={{ color: "var(--primary)" }}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
+                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                      Horario
-                    </p>
-                    <p className="mt-0.5 text-sm font-bold text-[#0f172a]">
-                      {contactPage.schedule}
-                    </p>
-                  </div>
+                  </a>
                 </div>
-              )}
-
-              {contactPage.address && (
-                <div className="group flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-(--primary) hover:shadow-md">
-                  <div
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: "var(--primary)" + "12" }}
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      style={{ color: "var(--primary)" }}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                      Dirección
-                    </p>
-                    <p className="mt-0.5 text-sm font-bold text-[#0f172a]">
-                      {contactPage.address}
-                    </p>
-                  </div>
-                </div>
-              )}
+              </RevealWrapper>
             </div>
 
-            {/* WhatsApp CTA */}
-            {whatsappHref && (
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-4 rounded-2xl border-2 p-4 transition-all hover:shadow-lg"
-                style={{
-                  borderColor: "var(--primary)",
-                  background: "var(--primary)" + "06",
-                }}
-              >
-                <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                  style={{ background: "var(--primary)" }}
-                >
-                  <svg
-                    className="h-5 w-5 text-white"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
-                  </svg>
-                </div>
-                <div>
-                  <p
-                    className="text-[10px] font-bold uppercase tracking-wider"
-                    style={{ color: "var(--primary)" }}
-                  >
-                    Respuesta inmediata
+            {/* ══ COLUMNA DERECHA — Formulario ══ */}
+            <RevealWrapper delay={100} className="block">
+              <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-md">
+                <div className="px-8 py-6" style={{ background: "var(--primary)" }}>
+                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/60">
+                    Formulario de contacto
                   </p>
-                  <p className="text-sm font-bold text-[#0f172a]">
-                    Escribir por WhatsApp →
+                  <h2 className="text-white! mt-1 text-2xl font-black uppercase">
+                    Solicitud de Cotización
+                  </h2>
+                  <p className="mt-1 text-sm text-white/70">
+                    Complete el formulario y un ingeniero se contactará en menos de 24 horas hábiles.
                   </p>
                 </div>
-              </a>
-            )}
 
-            {/* Mapa */}
-            <div className="overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
-              <iframe
-                src={mapsEmbed}
-                width="100%"
-                height="200"
-                style={{ border: 0, display: "block" }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación SMC GROUP"
-              />
-              <div className="flex items-center justify-between bg-white px-4 py-3">
-                <div>
-                  <p className="text-xs font-bold text-[#0f172a]">
-                    {siteConfig.address.full}
-                  </p>
-                  <p className="text-xs text-slate-400">Lima, Perú</p>
+                <div className="p-7 md:p-8">
+                  <ContactForm />
                 </div>
-                <a
-                  href={mapsLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition hover:opacity-80"
-                  style={{
-                    background: "var(--primary)" + "12",
-                    color: "var(--primary)",
-                  }}
-                >
-                  Abrir en Maps →
-                </a>
               </div>
-            </div>
+            </RevealWrapper>
 
-            {/* LinkedIn */}
-            <div className="flex items-center gap-3">
-              <p className="text-xs text-slate-400">Síguenos en</p>
-              <a
-                href={siteConfig.social.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-slate-400 shadow-sm transition hover:border-(--primary) hover:bg-(--primary) hover:text-white"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-              </a>
-            </div>
           </div>
-
-          {/* ══ COLUMNA DERECHA — Formulario ══ */}
-          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-md">
-            <div className="px-8 py-6" style={{ background: "var(--primary)" }}>
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/60">
-                Formulario de contacto
-              </p>
-              <h2 className="text-white! mt-1 text-2xl font-black uppercase">
-                Solicitud de Cotización
-              </h2>
-              <p className="mt-1 text-sm text-white/70">
-                Complete el formulario y un ingeniero se contactará en menos de
-                24 horas hábiles.
-              </p>
-            </div>
-
-            <div className="p-7 md:p-8">
-              <form className="space-y-5">
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div className="space-y-1.5">
-                    <label htmlFor="nombre" className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                      Nombre Completo
-                    </label>
-                    <input
-                      id="nombre"
-                      type="text"
-                      placeholder="Ej: Juan Pérez"
-                      className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label htmlFor="empresa" className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                      Empresa
-                    </label>
-                    <input
-                      id="empresa"
-                      type="text"
-                      placeholder="Nombre de su organización"
-                      className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <div className="space-y-1.5">
-                    <label htmlFor="correo" className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                      Correo Electrónico
-                    </label>
-                    <input
-                      id="correo"
-                      type="email"
-                      placeholder="email@empresa.com"
-                      className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label htmlFor="telefono" className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                      Teléfono de Contacto
-                    </label>
-                    <input
-                      id="telefono"
-                      type="tel"
-                      placeholder="+51 999 999 999"
-                      className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="tipo-proyecto" className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Tipo de Proyecto
-                  </label>
-                  <select id="tipo-proyecto" className="w-full rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm text-slate-500 outline-none transition focus:border-(--primary) focus:bg-white">
-                    <option value="">Selecciona una opción</option>
-                    <option>Ingeniería estructural</option>
-                    <option>Construcción industrial</option>
-                    <option>Fabricación metalmecánica</option>
-                    <option>Montaje industrial</option>
-                    <option>Mantenimiento</option>
-                    <option>Otro</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="descripcion" className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Descripción del Requerimiento
-                  </label>
-                  <textarea
-                    id="descripcion"
-                    placeholder="Cuéntenos sobre su proyecto, dimensiones, materiales o plazos estimados..."
-                    rows={5}
-                    className="w-full resize-none rounded-xl border border-gray-200 bg-[#f7f9fc] px-4 py-3 text-sm outline-none transition focus:border-(--primary) focus:bg-white"
-                  />
-                </div>
-
-                <label htmlFor="urgente" className="flex cursor-pointer items-center gap-3">
-                  <input
-                    id="urgente"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 accent-(--primary)"
-                  />
-                  <span className="text-sm text-slate-500">
-                    Este proyecto es de carácter{" "}
-                    <span
-                      className="font-bold"
-                      style={{ color: "var(--primary)" }}
-                    >
-                      urgente
-                    </span>
-                  </span>
-                </label>
-
-                <p className="text-xs text-slate-400">
-                  Al enviar, usted acepta que nos comuniquemos para atender su
-                  consulta.
-                </p>
-
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-center gap-3 rounded-xl py-4 text-sm font-black uppercase tracking-widest transition hover:opacity-90 hover:scale-[1.01] active:scale-[0.99]"
-                  style={{ background: "var(--primary)", color: "white" }}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
-                    />
-                  </svg>
-                  Enviar Solicitud de Cotización
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
       </div>
     </main>
   );

@@ -168,6 +168,7 @@ export default function Header() {
               alt="SMC GROUP"
               width={200}
               height={64}
+              sizes="200px"
               className="h-10 w-auto object-contain transition-opacity duration-300"
               priority
             />

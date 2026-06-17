@@ -53,6 +53,7 @@ export default function Footer() {
               alt="SMC GROUP"
               width={160}
               height={50}
+              sizes="160px"
               className="h-10 w-auto object-contain brightness-0 invert"
             />
             <p className="text-sm italic text-white/40 tracking-wide">

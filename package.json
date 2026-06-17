@@ -14,6 +14,7 @@
     "@payloadcms/db-postgres": "^3.79.0",
     "@payloadcms/next": "^3.79.0",
     "@payloadcms/richtext-lexical": "^3.79.0",
+    "@payloadcms/translations": "^3.85.1",
     "framer-motion": "^12.38.0",
     "graphql": "^16.13.1",
     "next": "15.4.11",

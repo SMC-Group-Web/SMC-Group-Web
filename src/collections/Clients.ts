@@ -5,9 +5,13 @@ export const Clients: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'order', 'isActive', 'updatedAt'],
+    hidden: ({ user }) => user?.role !== 'admin',
   },
   access: {
     read: () => true,
+    create: ({ req: { user } }) => user?.role === 'admin',
+    update: ({ req: { user } }) => user?.role === 'admin',
+    delete: ({ req: { user } }) => user?.role === 'admin',
   },
   fields: [
     {

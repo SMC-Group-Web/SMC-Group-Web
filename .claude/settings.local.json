@@ -3,7 +3,11 @@
     "allow": [
       "Bash(npx tsc:*)",
       "Bash(cat /Users/tonydzpineda/SMC-Group-Web/src/app/\\\\\\(payload\\\\\\)/admin/importMap.js)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(curl -s http://localhost:3000/contacto -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3001/contacto -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3001/admin -o /dev/null -w \"%{http_code}\")",
+      "Bash(docker exec *)"
     ]
   }
 }

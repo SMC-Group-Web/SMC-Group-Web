@@ -5,9 +5,13 @@ export const Projects: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'year', 'client', 'isFeatured', 'isActive', 'updatedAt'],
+    hidden: ({ user }) => user?.role !== 'admin',
   },
   access: {
     read: () => true,
+    create: ({ req: { user } }) => user?.role === 'admin',
+    update: ({ req: { user } }) => user?.role === 'admin',
+    delete: ({ req: { user } }) => user?.role === 'admin',
   },
   fields: [
     {

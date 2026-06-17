@@ -72,6 +72,7 @@ export interface Config {
     services: Service;
     projects: Project;
     clients: Client;
+    leads: Lead;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     services: ServicesSelect<false> | ServicesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     clients: ClientsSelect<false> | ClientsSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -141,6 +143,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  role: 'admin' | 'ventas';
+  name?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -344,6 +348,36 @@ export interface Client {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  name: string;
+  company?: string | null;
+  email: string;
+  phone?: string | null;
+  projectType?:
+    | (
+        | 'Ingeniería estructural'
+        | 'Construcción industrial'
+        | 'Fabricación metalmecánica'
+        | 'Montaje industrial'
+        | 'Mantenimiento'
+        | 'Otro'
+      )
+    | null;
+  description?: string | null;
+  urgent?: boolean | null;
+  status?: ('nuevo' | 'en_contacto' | 'cotizado' | 'cerrado' | 'descartado') | null;
+  /**
+   * Notas del equipo de ventas, no visibles para el cliente
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -385,6 +419,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'clients';
         value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: number | Lead;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -433,6 +471,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -599,6 +639,23 @@ export interface ClientsSelect<T extends boolean = true> {
   website?: T;
   order?: T;
   isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  company?: T;
+  email?: T;
+  phone?: T;
+  projectType?: T;
+  description?: T;
+  urgent?: T;
+  status?: T;
+  notes?: T;
   updatedAt?: T;
   createdAt?: T;
 }

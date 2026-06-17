@@ -1,6 +1,7 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
+import { es } from '@payloadcms/translations/languages/es'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -15,13 +16,14 @@ import { HomePage } from './src/globals/HomePage'
 import { ServiciosPage } from './src/globals/ServiciosPage'
 import { ProyectosPage } from './src/globals/ProyectosPage'
 import { Clients } from './src/collections/Clients'
+import { Leads } from './src/collections/Leads'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   editor: lexicalEditor(),
-  collections: [Users, Media, Services, Projects, Clients],
+  collections: [Users, Media, Services, Projects, Clients, Leads],
   globals: [HomePage, AboutPage, ContactPage, ServiciosPage, ProyectosPage],
   secret: process.env.PAYLOAD_SECRET || '',
   db: postgresAdapter({
@@ -30,6 +32,10 @@ export default buildConfig({
     },
   }),
   sharp,
+  i18n: {
+    supportedLanguages: { es },
+    fallbackLanguage: 'es',
+  },
   admin: {
     user: 'users',
     components: {

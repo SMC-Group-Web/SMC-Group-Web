@@ -5,6 +5,10 @@ export const AboutPage: GlobalConfig = {
   label: 'Quiénes somos',
   access: {
     read: () => true,
+    update: ({ req: { user } }) => user?.role === 'admin',
+  },
+  admin: {
+    hidden: ({ user }) => user?.role !== 'admin',
   },
   fields: [
     {

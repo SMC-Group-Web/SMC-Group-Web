@@ -4,9 +4,13 @@ export const Media: CollectionConfig = {
   slug: 'media',
   access: {
     read: () => true,
+    create: ({ req: { user } }) => user?.role === 'admin',
+    update: ({ req: { user } }) => user?.role === 'admin',
+    delete: ({ req: { user } }) => user?.role === 'admin',
   },
   admin: {
     useAsTitle: 'alt',
+    hidden: ({ user }) => user?.role !== 'admin',
   },
   upload: {
     staticDir: 'media',

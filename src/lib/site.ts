@@ -18,8 +18,8 @@ export const siteConfig = {
     full: 'Calle Las Gaviotas 122, Ofi. 401, Surquillo, Lima, Perú',
   },
   coordinates: {
-    lat: -12.1162,
-    lng: -77.0282,
+    lat: -12.103934967760534,
+    lng: -77.02154060821528,
   },
   social: {
     instagram: 'https://www.instagram.com/smcgroupperu',
