@@ -3,6 +3,7 @@ import config from "@payload-config";
 import { getPayload } from "payload";
 import Link from "next/link";
 import Image from "next/image";
+import RevealWrapper from "@/components/home/RevealWrapper";
 import type { MediaType } from "@/lib/types";
 
 export const revalidate = 3600;
@@ -67,11 +68,13 @@ export default async function ServiciosPage() {
             {/* Stats */}
             {((serviciosPage.heroStats || []) as { value: string; label: string }[]).length > 0 && (
               <div className="hero-in hero-d4 mt-8 grid grid-cols-4 gap-4 border-t border-white/10 pt-8">
-                {((serviciosPage.heroStats || []) as { value: string; label: string }[]).map((s) => (
-                  <div key={s.label} className="min-w-0">
-                    <p className="text-xl font-black text-white md:text-2xl">{s.value}</p>
-                    <p className="text-[10px] font-semibold uppercase leading-4 tracking-widest text-white/40 md:text-xs">{s.label}</p>
-                  </div>
+                {((serviciosPage.heroStats || []) as { value: string; label: string }[]).map((s, i) => (
+                  <RevealWrapper key={s.label} delay={i * 80}>
+                    <div className="min-w-0">
+                      <p className="text-xl font-black text-white md:text-2xl">{s.value}</p>
+                      <p className="text-[10px] font-semibold uppercase leading-4 tracking-widest text-white/40 md:text-xs">{s.label}</p>
+                    </div>
+                  </RevealWrapper>
                 ))}
               </div>
             )}
@@ -106,8 +109,8 @@ export default async function ServiciosPage() {
               const features = (service.features || []) as { text: string }[];
 
               return (
+                <RevealWrapper key={service.id} delay={(services.docs.indexOf(service) % 6) * 100}>
                 <article
-                  key={service.id}
                   className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-(--primary)/30"
                 >
                   {/* Foto grande */}
@@ -186,6 +189,7 @@ export default async function ServiciosPage() {
                     </Link>
                   </div>
                 </article>
+                </RevealWrapper>
               );
             })}
           </div>

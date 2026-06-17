@@ -222,8 +222,8 @@ export default async function QuienesSomosPage() {
           {aboutPage.strengths && aboutPage.strengths.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {aboutPage.strengths.map((item, index) => (
+                <RevealWrapper key={index} delay={index * 100}>
                 <article
-                  key={index}
                   className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-(--primary) hover:shadow-[0_20px_40px_rgba(47,86,201,0.12)]"
                 >
                   {/* Número decorativo */}
@@ -255,6 +255,7 @@ export default async function QuienesSomosPage() {
                     style={{ background: "var(--primary)" }}
                   />
                 </article>
+                </RevealWrapper>
               ))}
             </div>
           ) : (
@@ -269,6 +270,7 @@ export default async function QuienesSomosPage() {
 
       {/* ── CTA FINAL ── */}
       <section className="relative mx-auto w-full max-w-7xl px-6 py-20 text-center md:px-10">
+        <RevealWrapper>
         <p
           className="mb-2 text-xs font-bold uppercase tracking-[0.3em]"
           style={{ color: "var(--primary)" }}
@@ -295,6 +297,7 @@ export default async function QuienesSomosPage() {
             Ver Proyectos
           </a>
         </div>
+        </RevealWrapper>
       </section>
       </div>
     </main>

@@ -99,7 +99,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-white/72" />
 
         {/* ══ PROYECTOS DESTACADOS ══ */}
-        <section id="proyectos" className="relative pt-20 pb-24 md:pt-28 md:pb-32">
+        <section id="proyectos" className="relative pt-20 pb-16 md:pt-28 md:pb-20">
           <ProjectsScrollGallery
             projects={projects.docs.map((p) => ({
               id: p.id,
@@ -127,103 +127,8 @@ export default async function HomePage() {
           />
         </section>
 
-        {/* ══ HIGHLIGHTS (desde Payload) ══ */}
-        {highlights.length > 0 && (
-          <section className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:px-10 md:py-28">
-            <div className="grid gap-4 sm:gap-5 md:grid-cols-3">
-              {highlights.map((h, i) => {
-                const icons = [
-                  // Experiencia técnica — casco de obra
-                  <svg
-                    key="0"
-                    className="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"
-                    />
-                  </svg>,
-                  // Cumplimiento — checklist
-                  <svg
-                    key="1"
-                    className="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                    />
-                  </svg>,
-                  // Calidad — estrella
-                  <svg
-                    key="2"
-                    className="h-6 w-6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-                    />
-                  </svg>,
-                ];
-                const icon = icons[i % icons.length];
-                const numbers = ["01", "02", "03", "04", "05", "06"];
-
-                return (
-                  <RevealWrapper key={h.title} delay={i * 120}>
-                    <div className="group relative h-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_24px_48px_rgba(47,86,201,0.14)]">
-                      {/* Línea azul superior animada */}
-                      <div
-                        className="absolute left-0 top-0 h-0.5 w-0 transition-all duration-500 group-hover:w-full"
-                        style={{ background: "var(--primary)" }}
-                      />
-                      {/* Número de fondo decorativo */}
-                      <span className="pointer-events-none absolute right-4 top-2 select-none text-5xl font-black text-slate-50 md:text-7xl">
-                        {numbers[i]}
-                      </span>
-                      <div className="relative p-5 md:p-7">
-                        {/* Ícono */}
-                        <div
-                          className="mb-5 inline-flex items-center justify-center rounded-xl p-3 text-white"
-                          style={{ background: "var(--primary)" }}
-                        >
-                          {icon}
-                        </div>
-                        <h3 className="mb-2 text-base font-bold text-[#0f172a]">
-                          {h.title}
-                        </h3>
-                        <p className="text-sm leading-6 text-slate-500">
-                          {h.description}
-                        </p>
-                      </div>
-                    </div>
-                  </RevealWrapper>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {/* ══ SERVICIOS ══ */}
-        <section id="servicios" className="relative w-full py-20 md:py-28">
-          <ServiciosScrollGallery services={galleryServices} />
-        </section>
-
         {/* ══ CTA FINAL ══ */}
-        <section className="relative w-full py-28 md:py-36">
+        <section className="relative w-full py-20 md:py-28">
 
           <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
 
@@ -284,6 +189,11 @@ export default async function HomePage() {
             </RevealWrapper>
 
           </div>
+        </section>
+
+        {/* ══ SERVICIOS ══ */}
+        <section id="servicios" className="relative w-full py-14 md:py-20">
+          <ServiciosScrollGallery services={galleryServices} />
         </section>
 
         {/* ══ CLIENTES ══ */}

@@ -45,8 +45,8 @@ export default function Footer() {
       />
 
       <div className="relative mx-auto w-full max-w-7xl px-6 pt-14 pb-10 md:px-10">
-        {/* TOP — Logo + Slogan + Certificaciones */}
-        <div className="mb-12 flex flex-col items-start gap-6 border-b border-white/10 pb-10 md:flex-row md:items-end md:justify-between">
+        {/* TOP — Logo + Slogan | Sello ISO */}
+        <div className="mb-12 flex flex-row items-center justify-between gap-4 border-b border-white/10 pb-10 md:items-end">
           <div className="space-y-3">
             <Image
               src="/logo-smc.png"
@@ -60,6 +60,15 @@ export default function Footer() {
               "Construimos con precisión. Entregamos con compromiso."
             </p>
           </div>
+          {/* Sello ISO */}
+          <Image
+            src="/izo.jpeg"
+            alt="ISO 9001:2015 Certificación"
+            width={80}
+            height={80}
+            className="h-14 w-14 shrink-0 object-contain opacity-80 md:h-20 md:w-20"
+            style={{ filter: "invert(1)" }}
+          />
         </div>
 
         {/* GRID — 3 columnas */}
