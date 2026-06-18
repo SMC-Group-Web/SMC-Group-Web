@@ -64,10 +64,21 @@ export default function PageTransition({ children }: { children: React.ReactNode
               <Image
                 src="/logo-smc.png"
                 alt="SMC GROUP"
-                width={180}
-                height={60}
+                width={280}
+                height={90}
                 priority
-                className="object-contain"
+                className="h-14 w-auto object-contain"
+                style={{
+                  filter: [
+                    "brightness(1.2)",
+                    "contrast(1.15)",
+                    "saturate(1.2)",
+                    "drop-shadow(1px 0 0 rgba(255,255,255,0.25))",
+                    "drop-shadow(-1px 0 0 rgba(255,255,255,0.25))",
+                    "drop-shadow(0 1px 0 rgba(255,255,255,0.25))",
+                    "drop-shadow(0 -1px 0 rgba(255,255,255,0.25))",
+                  ].join(" "),
+                }}
               />
               <div className="h-0.5 w-24 overflow-hidden rounded-full bg-white/30">
                 <motion.div

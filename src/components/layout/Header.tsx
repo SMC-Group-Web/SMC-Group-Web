@@ -173,10 +173,13 @@ export default function Header() {
               style={{
                 filter: isTransparent
                   ? [
-                      "drop-shadow(1px 0 0 white)",
-                      "drop-shadow(-1px 0 0 white)",
-                      "drop-shadow(0 1px 0 white)",
-                      "drop-shadow(0 -1px 0 white)",
+                      "brightness(1.2)",
+                      "contrast(1.15)",
+                      "saturate(1.2)",
+                      "drop-shadow(1px 0 0 rgba(255,255,255,0.25))",
+                      "drop-shadow(-1px 0 0 rgba(255,255,255,0.25))",
+                      "drop-shadow(0 1px 0 rgba(255,255,255,0.25))",
+                      "drop-shadow(0 -1px 0 rgba(255,255,255,0.25))",
                     ].join(" ")
                   : "none",
               }}
