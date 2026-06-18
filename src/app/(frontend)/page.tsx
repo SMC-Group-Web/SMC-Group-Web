@@ -99,7 +99,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-white/72" />
 
         {/* ══ PROYECTOS DESTACADOS ══ */}
-        <section id="proyectos" className="relative pt-20 pb-16 md:pt-28 md:pb-20">
+        <section id="proyectos" className="relative pt-12 pb-8 md:pt-28 md:pb-20">
           <ProjectsScrollGallery
             projects={projects.docs.map((p) => ({
               id: p.id,
@@ -128,7 +128,7 @@ export default async function HomePage() {
         </section>
 
         {/* ══ CTA FINAL ══ */}
-        <section className="relative w-full py-20 md:py-28">
+        <section className="relative w-full py-14 md:py-24">
 
           <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
 
@@ -192,7 +192,7 @@ export default async function HomePage() {
         </section>
 
         {/* ══ SERVICIOS ══ */}
-        <section id="servicios" className="relative w-full py-14 md:py-20">
+        <section id="servicios" className="relative w-full py-8 md:py-20">
           <ServiciosScrollGallery services={galleryServices} />
         </section>
 

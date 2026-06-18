@@ -56,7 +56,7 @@ function MobileCard({
     >
       <Link href={`/servicios/${servicio.slug}`}>
         <article className="group relative overflow-hidden rounded-2xl">
-          <div className="relative h-64 w-full overflow-hidden bg-slate-200">
+          <div className="relative h-52 w-full overflow-hidden bg-slate-200 sm:h-64">
             {servicio.image?.url ? (
               <Image
                 src={servicio.image.url}
@@ -122,7 +122,7 @@ function MobileCard({
             >
               {servicio.category && (
                 <p
-                  className="mb-1 text-[10px] font-bold uppercase tracking-[0.25em]"
+                  className="mb-1 text-xs font-bold uppercase tracking-[0.2em]"
                   style={{ color: "var(--primary)" }}
                 >
                   {servicio.category}
@@ -248,7 +248,7 @@ export default function ServiciosScrollGallery({ services }: Props) {
   return (
     <div ref={sectionRef} className="relative w-full">
       {/* ── MOBILE ── */}
-      <div className="pb-10 md:hidden">
+      <div className="pb-6 md:hidden">
         {/* Header sticky mobile */}
         <motion.div
           className="sticky z-20 bg-white px-4 pb-4 pt-6 sm:px-6"
@@ -277,7 +277,7 @@ export default function ServiciosScrollGallery({ services }: Props) {
         </motion.div>
 
         {/* Grid */}
-        <div className="grid gap-5 px-4 sm:grid-cols-2 sm:px-6">
+        <div className="grid gap-4 px-4 sm:grid-cols-2 sm:px-6">
           {services.map((s, i) => (
             <MobileCard key={s.id} servicio={s} index={i} />
           ))}
@@ -502,18 +502,20 @@ export default function ServiciosScrollGallery({ services }: Props) {
                           style={{ color: "var(--primary)" }}
                         >
                           Ver servicio completo
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                          </svg>
+                          <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-2">
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                          </span>
                         </motion.div>
                       </div>
                     </div>

@@ -152,83 +152,86 @@ export default function ProjectsScrollGallery({ projects }: Props) {
         animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
         transition={{ duration: 0.6, delay: visible ? (index % 2) * 0.1 : 0, ease: [0.22, 1, 0.36, 1] }}
       >
-        <Link href={`/proyectos/${project.slug}`}>
-          <article className="group relative overflow-hidden rounded-2xl">
-            <div className="relative h-64 w-full overflow-hidden bg-slate-200">
+        <article className="group isolate relative overflow-hidden rounded-2xl">
+          <div className="relative h-52 w-full overflow-hidden bg-slate-200 sm:h-64">
 
-              {/* Foto activa */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={photoIdx}
-                  className="absolute inset-0"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {current?.url ? (
-                    <Image
-                      src={current.url}
-                      alt={current.alt || project.title}
-                      fill
-                      sizes="(max-width: 640px) 100vw, 50vw"
-                      quality={90}
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="h-full w-full" style={{ background: "linear-gradient(135deg, #0a1628 0%, #0f2233 100%)" }} />
-                  )}
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Overlay */}
-              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,22,40,0.88) 0%, rgba(10,22,40,0.15) 60%, transparent 100%)" }} />
-
-              {/* Flechas navegación */}
-              {hasMultiple && (
-                <>
-                  <button
-                    onClick={prev}
-                    className="absolute left-2 top-1/2 z-20 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm"
-                    aria-label="Foto anterior"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                  </button>
-                  <button
-                    onClick={next}
-                    className="absolute right-2 top-1/2 z-20 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm"
-                    aria-label="Foto siguiente"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-                  </button>
-                </>
-              )}
-
-              {/* Dots */}
-              {hasMultiple && (
-                <div className="absolute bottom-14 left-0 right-0 z-20 flex justify-center gap-1.5">
-                  {allPhotos.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={e => { e.preventDefault(); e.stopPropagation(); setPhotoIdx(idx); }}
-                      className="h-1.5 rounded-full transition-all duration-300"
-                      style={{ width: idx === photoIdx ? "1.5rem" : "0.375rem", background: idx === photoIdx ? "var(--primary)" : "rgba(255,255,255,0.5)" }}
-                      aria-label={`Foto ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {/* Contador */}
-              {hasMultiple && (
-                <div className="absolute right-3 top-3 z-20 flex h-6 items-center rounded-full bg-black/50 px-2 text-[10px] font-bold text-white backdrop-blur-sm">
-                  {photoIdx + 1}/{allPhotos.length}
-                </div>
-              )}
-
-              {/* Texto */}
+            {/* Foto activa */}
+            <AnimatePresence mode="wait">
               <motion.div
-                className="absolute bottom-0 left-0 right-0 p-4"
+                key={photoIdx}
+                className="absolute inset-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {current?.url ? (
+                  <Image
+                    src={current.url}
+                    alt={current.alt || project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    quality={90}
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full" style={{ background: "linear-gradient(135deg, #0a1628 0%, #0f2233 100%)" }} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Gradiente */}
+            <div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,22,40,0.88) 0%, rgba(10,22,40,0.15) 60%, transparent 100%)" }} />
+
+            {/* Flechas navegación */}
+            {hasMultiple && (
+              <>
+                <button
+                  type="button"
+                  onClick={prev}
+                  className="absolute left-2 top-1/2 z-2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm"
+                  aria-label="Foto anterior"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={next}
+                  className="absolute right-2 top-1/2 z-2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm"
+                  aria-label="Foto siguiente"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+              </>
+            )}
+
+            {/* Dots */}
+            {hasMultiple && (
+              <div className="absolute bottom-14 left-0 right-0 z-2 flex justify-center gap-1.5">
+                {allPhotos.map((_, idx) => (
+                  <button
+                    type="button"
+                    key={idx}
+                    onClick={() => setPhotoIdx(idx)}
+                    className="h-1.5 rounded-full transition-all duration-300"
+                    style={{ width: idx === photoIdx ? "1.5rem" : "0.375rem", background: idx === photoIdx ? "var(--primary)" : "rgba(255,255,255,0.5)" }}
+                    aria-label={`Foto ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Contador */}
+            {hasMultiple && (
+              <div className="pointer-events-none absolute right-3 top-3 z-2 flex h-6 items-center rounded-full bg-black/50 px-2 text-[10px] font-bold text-white backdrop-blur-sm">
+                {photoIdx + 1}/{allPhotos.length}
+              </div>
+            )}
+
+            {/* Texto + link al proyecto */}
+            <Link href={`/proyectos/${project.slug}`} className="absolute inset-x-0 bottom-0 z-1 p-4 block">
+              <motion.div
+                className="pointer-events-none"
                 initial={{ opacity: 0, y: 12 }}
                 animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
                 transition={{ delay: visible ? 0.2 + (index % 2) * 0.1 : 0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -241,9 +244,9 @@ export default function ProjectsScrollGallery({ projects }: Props) {
                 <h3 className="text-sm font-bold leading-snug text-white">{project.title}</h3>
                 <p className="mt-1 text-xs font-semibold text-white/60">Ver proyecto →</p>
               </motion.div>
-            </div>
-          </article>
-        </Link>
+            </Link>
+          </div>
+        </article>
       </motion.div>
     );
   }
@@ -251,7 +254,7 @@ export default function ProjectsScrollGallery({ projects }: Props) {
   return (
     <div ref={sectionRef} className="relative w-full">
       {/* ── MOBILE ── */}
-      <div className="md:hidden pb-10">
+      <div className="md:hidden pb-6">
         {/* Header sticky mobile */}
         <motion.div
           className="sticky z-20 bg-white px-4 pb-4 pt-6 sm:px-6"
@@ -273,7 +276,7 @@ export default function ProjectsScrollGallery({ projects }: Props) {
           <div className="mt-4 h-px w-full bg-gray-100" />
         </motion.div>
 
-        <div className="grid gap-5 px-4 sm:grid-cols-2 sm:px-6">
+        <div className="grid gap-4 px-4 sm:grid-cols-2 sm:px-6">
           {projects.map((project, i) => (
             <MobileCard key={project.id} project={project} index={i} />
           ))}
@@ -573,18 +576,20 @@ export default function ProjectsScrollGallery({ projects }: Props) {
                         style={{ color: "var(--primary)" }}
                       >
                         Ver proyecto completo
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
+                        <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-2">
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                          </svg>
+                        </span>
                       </motion.div>
                     </div>
                   </div>

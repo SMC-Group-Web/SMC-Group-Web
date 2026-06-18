@@ -166,10 +166,20 @@ export default function Header() {
             <Image
               src="/logo-smc.png"
               alt="SMC GROUP"
-              width={200}
-              height={64}
-              sizes="200px"
-              className="h-10 w-auto object-contain transition-opacity duration-300"
+              width={280}
+              height={90}
+              sizes="280px"
+              className="h-14 w-auto object-contain transition-all duration-500"
+              style={{
+                filter: isTransparent
+                  ? [
+                      "drop-shadow(1px 0 0 white)",
+                      "drop-shadow(-1px 0 0 white)",
+                      "drop-shadow(0 1px 0 white)",
+                      "drop-shadow(0 -1px 0 white)",
+                    ].join(" ")
+                  : "none",
+              }}
               priority
             />
           </Link>

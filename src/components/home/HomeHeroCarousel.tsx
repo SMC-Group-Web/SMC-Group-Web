@@ -103,7 +103,7 @@ function AnimatedStat({
         <p className="text-2xl font-extrabold text-white sm:text-3xl md:text-5xl">
           {started ? `${count}${suffix}` : value}
         </p>
-        <p className="mt-1 text-[9px] font-semibold uppercase tracking-widest text-white/50 sm:text-[10px] md:text-xs">
+        <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-white/50 md:text-xs">
           {label}
         </p>
       </div>
@@ -222,7 +222,7 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
                   hidden: { opacity: 0, y: 40 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
                 }}
-                className="hero-text-shadow text-3xl font-extrabold uppercase tracking-tight leading-tight sm:text-4xl md:text-6xl lg:text-7xl"
+                className="hero-text-shadow text-2xl font-extrabold uppercase tracking-tight leading-tight sm:text-4xl md:text-6xl lg:text-7xl"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
                 <span className="text-white">{titleTop}</span>
@@ -293,14 +293,14 @@ export default function HomeHeroCarousel({ slides, stats }: Props) {
           {/* Stats + explorar */}
           <motion.div
             key={`stats-${animKey}`}
-            className="relative z-10 border-t border-white/10 py-7 md:py-8"
+            className="relative z-10 border-t border-white/10 py-4 md:py-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="flex items-center justify-between gap-4">
               {/* Stats: 2×2 en mobile, fila en desktop */}
-              <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4 sm:gap-y-0 md:flex md:items-stretch md:gap-0">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4 sm:gap-y-0 md:flex md:items-stretch md:gap-0">
                 {activeStats.map((stat, index) => (
                   <AnimatedStat
                     key={stat.label}
