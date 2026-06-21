@@ -3,6 +3,8 @@ import config from "@payload-config";
 import { getPayload } from "payload";
 import { notFound } from "next/navigation";
 import { BreadcrumbSchema, ProyectoSchema } from "@/components/seo/JsonLd";
+
+export const revalidate = 3600;
 import type { MediaType, GalleryItem } from "@/lib/types";
 import { siteConfig } from "@/lib/site";
 import ProyectoDetail from "@/components/proyectos/ProyectoDetail";

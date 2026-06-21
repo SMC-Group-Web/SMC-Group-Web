@@ -80,14 +80,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
                   ].join(" "),
                 }}
               />
-              <div className="h-0.5 w-24 overflow-hidden rounded-full bg-white/30">
-                <motion.div
-                  className="h-full bg-white"
-                  initial={{ width: "0%" }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 0.7, ease: "easeInOut" }}
-                />
-              </div>
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/30 border-t-white" />
             </motion.div>
           </motion.div>
         )}

@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-type ImageBlock = { url: string; alt?: string | null; caption?: string | null };
+import { type ImageBlock, buildGroups } from "@/lib/buildGroups";
+import { RevealText, RevealImage } from "@/components/shared/GalleryReveal";
 
 type Props = {
   title: string;
@@ -18,99 +17,9 @@ type Props = {
   ctaLink?: string | null;
 };
 
-function useReveal(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-}
-
-function RevealText({ children, delay = 0, className = "" }: {
-  children: React.ReactNode; delay?: number; className?: string;
-}) {
-  const { ref, visible } = useReveal(0.15);
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
-        transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function RevealImage({ src, alt, sizes, delay = 0 }: { src: string; alt: string; sizes?: string; delay?: number }) {
-  const { ref, visible } = useReveal(0.1);
-  return (
-    <div
-      ref={ref}
-      className="h-full w-full overflow-hidden"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(32px)",
-        transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms`,
-      }}
-    >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes={sizes || "100vw"}
-        quality={90}
-        className={`object-cover transition-transform duration-700 ${visible ? "scale-100" : "scale-105"}`}
-      />
-    </div>
-  );
-}
-
 export default function ServicioDetail({
   title, category, summary, description, features, image, gallery = [], ctaLink,
 }: Props) {
-  /* Mismo buildGroups que ProyectoDetail */
-  type GalleryGroup =
-    | { type: "full"; image: ImageBlock; index: number }
-    | { type: "duo"; images: [ImageBlock, ImageBlock]; indices: [number, number] }
-    | { type: "trio"; images: [ImageBlock, ImageBlock, ImageBlock]; indices: [number, number, number] };
-
-  const buildGroups = (images: ImageBlock[]): GalleryGroup[] => {
-    const groups: GalleryGroup[] = [];
-    let i = 0;
-    let cycle = 0;
-    while (i < images.length) {
-      const rem = images.length - i;
-      const pat = cycle % 4;
-      if (pat === 0 || rem === 1) {
-        groups.push({ type: "full", image: images[i], index: i }); i++;
-      } else if (pat === 1 && rem >= 2) {
-        groups.push({ type: "duo", images: [images[i], images[i+1]], indices: [i, i+1] }); i += 2;
-      } else if (pat === 2 || rem === 1) {
-        groups.push({ type: "full", image: images[i], index: i }); i++;
-      } else if (pat === 3 && rem >= 3) {
-        groups.push({ type: "trio", images: [images[i], images[i+1], images[i+2]], indices: [i, i+1, i+2] }); i += 3;
-      } else if (rem >= 2) {
-        groups.push({ type: "duo", images: [images[i], images[i+1]], indices: [i, i+1] }); i += 2;
-      } else {
-        groups.push({ type: "full", image: images[i], index: i }); i++;
-      }
-      cycle++;
-    }
-    return groups;
-  };
-
   const groups = buildGroups(gallery);
   const hasGallery = gallery.length > 0;
 
@@ -308,9 +217,9 @@ export default function ServicioDetail({
                   <div className="flex flex-row gap-2 md:w-[40%] md:flex-col">
                     {[group.images[1], group.images[2]].map((img, ii) => (
                       <div key={ii} className="relative flex-1" style={{ minHeight: "clamp(140px, 27vh, 316px)" }}>
-                        <RevealImage src={img.url} alt={img.alt || title} delay={(ii+1)*100} />
+                        <RevealImage src={img.url} alt={img.alt || title} delay={(ii + 1) * 100} />
                         <div className="absolute right-3 top-3 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-[9px] font-bold text-white backdrop-blur-sm">
-                          {String(group.indices[ii+1] + 1).padStart(2, "0")}
+                          {String(group.indices[ii + 1] + 1).padStart(2, "0")}
                         </div>
                       </div>
                     ))}

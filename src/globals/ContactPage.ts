@@ -42,7 +42,7 @@ export const ContactPage: GlobalConfig = {
     },
     {
       name: 'email',
-      type: 'text',
+      type: 'email',
       label: 'Correo',
       required: false,
     },

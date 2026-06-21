@@ -1,14 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-type ImageBlock = {
-  url: string;
-  alt?: string | null;
-  caption?: string | null;
-};
+import { type ImageBlock, buildGroups } from "@/lib/buildGroups";
+import { RevealText, RevealImage } from "@/components/shared/GalleryReveal";
 
 type Props = {
   title: string;
@@ -23,122 +18,12 @@ type Props = {
   gallery: ImageBlock[];
 };
 
-/* Hook simple de reveal al hacer scroll */
-function useReveal(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-}
-
-/* Imagen con reveal animado */
-function RevealImage({
-  src, alt, sizes, priority, delay = 0,
-}: {
-  src: string; alt: string; sizes?: string;
-  priority?: boolean; delay?: number;
-}) {
-  const { ref, visible } = useReveal(0.1);
-  return (
-    <div
-      ref={ref}
-      className="h-full w-full overflow-hidden"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(32px)",
-        transition: `opacity 0.7s ease ${delay}ms, transform 0.7s ease ${delay}ms`,
-      }}
-    >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes={sizes || "100vw"}
-        quality={90}
-        priority={priority}
-        className={`object-cover transition-transform duration-700 ${visible ? "scale-100" : "scale-105"}`}
-      />
-    </div>
-  );
-}
-
-/* Texto con reveal */
-function RevealText({ children, delay = 0, className = "" }: {
-  children: React.ReactNode; delay?: number; className?: string;
-}) {
-  const { ref, visible } = useReveal(0.2);
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(20px)",
-        transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
 export default function ProyectoDetail({
   title, slug, client, year, location, projectType,
   summary, description, cover, gallery,
 }: Props) {
-  // La portada solo va en el hero. La galería muestra solo las fotos adicionales.
   const allImages: ImageBlock[] = gallery;
   const hasImages = allImages.length > 0;
-
-  /* Agrupa la galería en bloques de layout variado */
-  type GalleryGroup =
-    | { type: "full"; image: ImageBlock; index: number }
-    | { type: "duo"; images: [ImageBlock, ImageBlock]; indices: [number, number] }
-    | { type: "trio"; images: [ImageBlock, ImageBlock, ImageBlock]; indices: [number, number, number] };
-
-  const buildGroups = (images: ImageBlock[]): GalleryGroup[] => {
-    const groups: GalleryGroup[] = [];
-    let i = 0;
-    let layoutCycle = 0;
-
-    while (i < images.length) {
-      const remaining = images.length - i;
-      // Ciclo: full → duo → full → trio → repeat
-      const pattern = layoutCycle % 4;
-
-      if (pattern === 0 || remaining === 1) {
-        groups.push({ type: "full", image: images[i], index: i });
-        i += 1;
-      } else if (pattern === 1 && remaining >= 2) {
-        groups.push({ type: "duo", images: [images[i], images[i + 1]], indices: [i, i + 1] });
-        i += 2;
-      } else if (pattern === 2 || remaining === 1) {
-        groups.push({ type: "full", image: images[i], index: i });
-        i += 1;
-      } else if (pattern === 3 && remaining >= 3) {
-        groups.push({ type: "trio", images: [images[i], images[i + 1], images[i + 2]], indices: [i, i + 1, i + 2] });
-        i += 3;
-      } else if (remaining >= 2) {
-        groups.push({ type: "duo", images: [images[i], images[i + 1]], indices: [i, i + 1] });
-        i += 2;
-      } else {
-        groups.push({ type: "full", image: images[i], index: i });
-        i += 1;
-      }
-      layoutCycle++;
-    }
-    return groups;
-  };
-
   const groups = buildGroups(allImages);
 
   const metaChips = [
@@ -153,7 +38,6 @@ export default function ProyectoDetail({
 
       {/* ══ HERO — imagen real del proyecto a pantalla completa ══ */}
       <section className="relative h-screen min-h-150 w-full overflow-hidden">
-        {/* Imagen de fondo */}
         {cover?.url ? (
           <Image
             src={cover.url}

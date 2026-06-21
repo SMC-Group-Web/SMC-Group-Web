@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "npx tsx --env-file=.env src/seed.ts"
+    "seed": "npx tsx --env-file=.env src/seed.ts",
+    "vercel-build": "DATABASE_URL=$DATABASE_URL_UNPOOLED npx payload migrate && next build"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.79.0",

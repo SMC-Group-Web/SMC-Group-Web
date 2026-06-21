@@ -31,6 +31,7 @@ export const Users: CollectionConfig = {
       name: 'name',
       type: 'text',
       label: 'Nombre completo',
+      required: true,
     },
   ],
 }

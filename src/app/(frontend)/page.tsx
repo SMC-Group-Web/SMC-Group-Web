@@ -76,12 +76,6 @@ export default async function HomePage() {
         : null,
   }));
 
-  // Highlights from CMS (fallback to empty array if not yet configured)
-  const highlights = (homePage.highlights || []) as {
-    title: string;
-    description: string;
-  }[];
-
   return (
     <main className="min-h-screen text-[#0f172a]">
       {/* ══ HERO ══ */}

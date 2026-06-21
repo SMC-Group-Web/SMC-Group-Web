@@ -79,16 +79,6 @@ export const Services: CollectionConfig = {
       },
     },
     {
-      name: 'color',
-      type: 'text',
-      label: 'Color del mapa (hex)',
-      required: false,
-      defaultValue: '#2f56c9',
-      admin: {
-        description: 'Color hexadecimal para el nodo en el mapa de servicios. Ej: #2563EB, #059669',
-      },
-    },
-    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',

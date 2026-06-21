@@ -75,23 +75,7 @@ async function seed() {
         { value: '50+',  label: 'Clientes satisfechos' },
         { value: '100%', label: 'Compromiso con calidad' },
       ],
-      highlights: [
-        {
-          title: 'Experiencia Técnica',
-          description:
-            'Equipo multidisciplinario con más de 10 años ejecutando proyectos de ingeniería y construcción en Lima y el interior del país.',
-        },
-        {
-          title: 'Cumplimiento y Eficiencia',
-          description:
-            'Garantizamos entregas dentro del plazo y presupuesto establecidos, sin comprometer la calidad ni la seguridad en ninguna etapa.',
-        },
-        {
-          title: 'Calidad en Cada Detalle',
-          description:
-            'Ejecutamos cada proyecto bajo estándares técnicos rigurosos con control de calidad en cada componente y especialidad.',
-        },
-      ],
+
     },
   })
 

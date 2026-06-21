@@ -27,6 +27,7 @@ export default buildConfig({
   globals: [HomePage, AboutPage, ContactPage, ServiciosPage, ProyectosPage],
   secret: process.env.PAYLOAD_SECRET || '',
   db: postgresAdapter({
+    push: process.env.NODE_ENV !== 'production',
     pool: {
       connectionString: process.env.DATABASE_URL,
     },

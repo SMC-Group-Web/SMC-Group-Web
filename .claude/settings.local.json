@@ -8,7 +8,19 @@
       "Bash(curl -s http://localhost:3001/contacto -o /dev/null -w \"%{http_code}\")",
       "Bash(curl -s http://localhost:3001/admin -o /dev/null -w \"%{http_code}\")",
       "Bash(docker exec *)",
-      "Bash(CLAUDE_CODE_TMPDIR=/tmp grep -r \"TIENES UN PROYECTO\\\\|tienes un proyecto\" /Users/tonydzpineda/SMC-Group-Web/src --include=\"*.tsx\" -l)"
+      "Bash(CLAUDE_CODE_TMPDIR=/tmp grep -r \"TIENES UN PROYECTO\\\\|tienes un proyecto\" /Users/tonydzpineda/SMC-Group-Web/src --include=\"*.tsx\" -l)",
+      "Bash(npm run dev > /tmp/smc-dev.log 2>&1 & *)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(echo \"Done: $?\")",
+      "Bash(npm run dev > /tmp/smc-dev2.log 2>&1 & *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \" %{http_code}\" http://localhost:3000/admin)",
+      "Bash(npx payload *)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
     ]
   }
 }

@@ -144,7 +144,7 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   role: 'admin' | 'ventas';
-  name?: string | null;
+  name: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -245,10 +245,6 @@ export interface Service {
    * Ej: /contacto o /servicios/ingenieria
    */
   ctaLink?: string | null;
-  /**
-   * Color hexadecimal para el nodo en el mapa de servicios. Ej: #2563EB, #059669
-   */
-  color?: string | null;
   image?: (number | null) | Media;
   /**
    * Fotos adicionales que aparecen debajo del hero en la página del servicio
@@ -570,7 +566,6 @@ export interface ServicesSelect<T extends boolean = true> {
         id?: T;
       };
   ctaLink?: T;
-  color?: T;
   image?: T;
   gallery?:
     | T
@@ -730,16 +725,6 @@ export interface HomePage {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Aparecen debajo de los proyectos en la home. Máximo 6.
-   */
-  highlights?:
-    | {
-        title: string;
-        description: string;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -863,13 +848,6 @@ export interface HomePageSelect<T extends boolean = true> {
     | {
         value?: T;
         label?: T;
-        id?: T;
-      };
-  highlights?:
-    | T
-    | {
-        title?: T;
-        description?: T;
         id?: T;
       };
   updatedAt?: T;
