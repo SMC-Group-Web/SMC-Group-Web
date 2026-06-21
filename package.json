@@ -12,14 +12,15 @@
     "vercel-build": "DATABASE_URL=$DATABASE_URL_UNPOOLED npx payload migrate && next build"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.79.0",
-    "@payloadcms/next": "^3.79.0",
-    "@payloadcms/richtext-lexical": "^3.79.0",
+    "@payloadcms/db-postgres": "^3.85.1",
+    "@payloadcms/next": "^3.85.1",
+    "@payloadcms/richtext-lexical": "^3.85.1",
+    "@payloadcms/storage-vercel-blob": "^3.85.1",
     "@payloadcms/translations": "^3.85.1",
     "framer-motion": "^12.38.0",
     "graphql": "^16.13.1",
     "next": "15.4.11",
-    "payload": "^3.79.0",
+    "payload": "^3.85.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "sharp": "^0.34.5"
