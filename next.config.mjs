@@ -4,6 +4,29 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   compress: true,
   poweredByHeader: false,
+  webpack: (config, { isServer, webpack }) => {
+    if (!isServer) {
+      // Bug in @payloadcms/plugin-cloud-storage@3.85.1: the utilities barrel
+      // re-exports resolveSignedURLKey which imports payload/dist/exports/internal
+      // (server-only — pino, undici, migrations, telemetry). The client upload
+      // handler only needs getFileKey from that barrel; resolveSignedURLKey is
+      // only called server-side. Replace it with an empty stub in browser bundles.
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /resolveSignedURLKey\.js$/,
+          new URL('./src/webpack-stubs/resolveSignedURLKey.js', import.meta.url).pathname,
+        ),
+      )
+
+      // @vercel/blob uses undici's fetch as a polyfill — forward to native
+      // browser fetch so the direct-to-Blob upload works without Node.js APIs.
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        undici: new URL('./src/webpack-stubs/undici.js', import.meta.url).pathname,
+      }
+    }
+    return config
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2560, 3840],

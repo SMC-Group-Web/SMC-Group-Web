@@ -39,6 +39,15 @@ export default function PageTransition({ children }: { children: React.ReactNode
     return () => clearTimeout(timer);
   }, [pathname]);
 
+  useEffect(() => {
+    // Safety fallback: if loading stays true for 3s (e.g. a server-side 307
+    // redirect that the client router doesn't resolve as a pathname change),
+    // force-hide the overlay so the user is never permanently blocked.
+    if (!loading) return;
+    const fallback = setTimeout(() => setLoading(false), 3000);
+    return () => clearTimeout(fallback);
+  }, [loading]);
+
   return (
     <>
       {children}

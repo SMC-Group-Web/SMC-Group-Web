@@ -16,6 +16,7 @@ import { ContactPage } from './src/globals/ContactPage'
 import { HomePage } from './src/globals/HomePage'
 import { ServiciosPage } from './src/globals/ServiciosPage'
 import { ProyectosPage } from './src/globals/ProyectosPage'
+import { SiteSettings } from './src/globals/SiteSettings'
 import { Clients } from './src/collections/Clients'
 import { Leads } from './src/collections/Leads'
 
@@ -35,7 +36,7 @@ export default buildConfig({
     }),
   ],
   collections: [Users, Media, Services, Projects, Clients, Leads],
-  globals: [HomePage, AboutPage, ContactPage, ServiciosPage, ProyectosPage],
+  globals: [HomePage, AboutPage, ContactPage, ServiciosPage, ProyectosPage, SiteSettings],
   secret: process.env.PAYLOAD_SECRET || '',
   db: postgresAdapter({
     push: process.env.NODE_ENV !== 'production',

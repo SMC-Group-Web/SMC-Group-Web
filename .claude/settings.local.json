@@ -21,7 +21,17 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001)",
       "WebFetch(domain:github.com)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/admin)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/admin)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/admin)",
+      "Bash(curl -s http://localhost:3000/api/globals/site-settings)",
+      "Bash(curl -s http://localhost:3002/admin/globals/site-settings)",
+      "Bash(lsof -i :3000 -sTCP:LISTEN)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/admin/globals/site-settings)",
+      "Bash(ps -p 49967 -o pid,command)",
+      "Bash(grep -v \"^$\")",
+      "Bash(curl -s http://localhost:3000/admin/globals/site-settings)",
+      "Bash(python3 -c \"import sys,json; data=sys.stdin.read\\(\\); print\\(data[:500] if len\\(data\\)<1000 else 'Large HTML response \\(working\\)'\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/admin/globals/site-settings)",
+      "Bash(pnpm install *)"
     ],
     "additionalDirectories": [
       "/tmp"

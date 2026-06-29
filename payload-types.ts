@@ -101,6 +101,7 @@ export interface Config {
     'contact-page': ContactPage;
     'servicios-page': ServiciosPage;
     'proyectos-page': ProyectosPage;
+    'site-settings': SiteSetting;
   };
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
@@ -108,6 +109,7 @@ export interface Config {
     'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
     'servicios-page': ServiciosPageSelect<false> | ServiciosPageSelect<true>;
     'proyectos-page': ProyectosPageSelect<false> | ProyectosPageSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -822,6 +824,19 @@ export interface ProyectosPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * Activa esta opción para mostrar la página de mantenimiento a los visitantes mientras realizas cambios. Desactívala cuando termines.
+   */
+  maintenanceMode?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -933,6 +948,16 @@ export interface ProyectosPageSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  maintenanceMode?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
