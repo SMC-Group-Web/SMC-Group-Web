@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Module-level cache — persists within the same Edge worker instance
 let cached: { maintenanceMode: boolean; ts: number } | null = null
 const CACHE_TTL = 5_000 // 5 seconds
 
@@ -16,17 +15,18 @@ export async function middleware(request: NextRequest) {
       if (res.ok) {
         const data = await res.json()
         cached = { maintenanceMode: Boolean(data?.maintenanceMode), ts: now }
+      } else {
+        // API error (e.g. table not created yet, 500, 404) — fail open.
+        // Must update ts so we don't hammer the failing API on every request.
+        cached = { maintenanceMode: false, ts: now }
       }
     } catch {
-      // Fetch failed — fail open so users aren't blocked on API errors
-      return NextResponse.next()
+      // Network error — fail open. Cache the result to avoid hammering.
+      cached = { maintenanceMode: false, ts: now }
     }
   }
 
-  if (cached?.maintenanceMode) {
-    // 307 Temporary Redirect — NOT browser-cached, so turning off maintenance
-    // mode takes effect immediately without users needing to clear browser cache.
-    // (301 Permanent would be cached and require manual cache clearing.)
+  if (cached.maintenanceMode) {
     return NextResponse.redirect(new URL('/mantenimiento', request.url), 307)
   }
 
@@ -35,8 +35,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Run on all frontend routes except admin, API, /mantenimiento itself,
-    // Next.js internals, and common static file extensions.
-    '/((?!admin|api|mantenimiento|_next/static|_next/image|favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpe?g|gif|svg|ico|webp|woff2?|ttf|otf)).*)',
+    // Exclude admin, API routes, maintenance page, ALL Next.js internals,
+    // and static file extensions. Everything else gets maintenance-mode checked.
+    '/((?!admin|api|mantenimiento|_next|favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.(?:png|jpe?g|gif|svg|ico|webp|woff2?|ttf|otf)).*)',
   ],
 }
