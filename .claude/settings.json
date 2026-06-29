@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(psql postgresql://postgres:postgres@localhost:5432/smc_db -c \"SELECT 1\")",
+      "Bash(node -e \"const {Client} = require\\('pg'\\); const c = new Client\\({connectionString:'postgresql://postgres:postgres@localhost:5432/smc_db'}\\); c.connect\\(\\).then\\(\\(\\)=>c.query\\('SELECT 1'\\)\\).then\\(\\(\\)=>{console.log\\('ok'\\); c.end\\(\\)}\\).catch\\(e=>{console.log\\('error:',e.message\\); c.end\\(\\)}\\)\")",
+      "Bash(npx payload *)"
+    ]
+  }
+}
